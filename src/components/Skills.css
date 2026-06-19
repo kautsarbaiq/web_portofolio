@@ -57,8 +57,17 @@
   gap: clamp(1.5rem, 4vw, 3rem);
 }
 .skillcat {
-  border-top: 1px solid var(--line-strong);
-  padding-top: 1.4rem;
+  padding: 1.6rem 1.7rem;
+  border-radius: var(--radius-lg);
+  background: var(--glass);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), var(--glass-inset);
+  transition: transform 0.4s var(--ease);
+}
+.skillcat:hover {
+  transform: translateY(-4px);
 }
 .skillcat__title {
   display: flex;
@@ -112,10 +121,17 @@
 .creds {
   display: grid;
   grid-template-columns: 1fr 1.4fr;
-  gap: clamp(1.5rem, 5vw, 4rem);
-  margin-top: clamp(3rem, 7vh, 5rem);
-  padding-top: clamp(2rem, 5vh, 3rem);
-  border-top: 1px solid var(--line);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.creds__col {
+  padding: 1.7rem 1.8rem;
+  border-radius: var(--radius-lg);
+  background: var(--glass);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), var(--glass-inset);
 }
 .creds__title {
   display: flex;

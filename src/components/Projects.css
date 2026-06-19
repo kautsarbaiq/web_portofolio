@@ -29,8 +29,11 @@
   --mx: 50%;
   --my: 50%;
   border-radius: var(--radius-lg);
-  border: 1px solid var(--line);
-  background: linear-gradient(180deg, var(--surface), var(--bg-2));
+  border: 1px solid var(--glass-border);
+  background: var(--glass);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  box-shadow: var(--glass-shadow), var(--glass-inset);
   overflow: hidden;
   transform: perspective(1000px) rotateX(var(--rx)) rotateY(var(--ry));
   transform-style: preserve-3d;
@@ -38,8 +41,8 @@
   will-change: transform;
 }
 .pcard:hover {
-  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
-  box-shadow: 0 30px 80px -40px color-mix(in srgb, var(--accent) 60%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--glass-border));
+  box-shadow: 0 32px 70px -34px color-mix(in srgb, var(--accent) 55%, transparent), var(--glass-inset);
 }
 
 .pcard__link {
@@ -63,9 +66,9 @@
   aspect-ratio: 16 / 10;
   height: 100%;
   background:
-    radial-gradient(120% 120% at 20% 10%, color-mix(in srgb, var(--accent) 55%, transparent), transparent 55%),
-    radial-gradient(100% 100% at 90% 90%, color-mix(in srgb, var(--accent) 35%, #22d3ee 20%), transparent 60%),
-    linear-gradient(160deg, #11141d, #0a0c12);
+    radial-gradient(120% 120% at 18% 8%, color-mix(in srgb, var(--accent) 85%, transparent), transparent 58%),
+    radial-gradient(110% 110% at 92% 92%, color-mix(in srgb, var(--sky) 70%, transparent), transparent 62%),
+    linear-gradient(160deg, #f3f5fd, #e3e8f5);
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -79,7 +82,7 @@
   font-weight: 700;
   letter-spacing: -0.05em;
   color: transparent;
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.25);
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.65);
   z-index: 1;
   transition: transform 0.5s var(--ease);
 }
@@ -91,8 +94,8 @@
   inset: -20%;
   background:
     repeating-radial-gradient(circle at var(--mx) var(--my),
-      rgba(255, 255, 255, 0.07) 0,
-      rgba(255, 255, 255, 0.07) 1px,
+      rgba(255, 255, 255, 0.18) 0,
+      rgba(255, 255, 255, 0.18) 1px,
       transparent 1px,
       transparent 26px);
   opacity: 0.7;
@@ -166,7 +169,8 @@
   font-size: 0.72rem;
   color: var(--text-dim);
   padding: 0.3rem 0.7rem;
-  border: 1px solid var(--line);
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.5);
   border-radius: 100px;
 }
 .pcard__cta {
