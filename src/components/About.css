@@ -20,7 +20,7 @@
   line-height: 0.8;
   letter-spacing: -0.05em;
   color: transparent;
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.14);
+  -webkit-text-stroke: 1px rgba(13, 19, 32, 0.12);
   position: relative;
 }
 .about__mark span {
@@ -28,7 +28,7 @@
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  opacity: 0.14;
+  opacity: 0.35;
 }
 
 .about__body {
@@ -54,15 +54,24 @@
 .about__stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-  margin-top: 2rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid var(--line);
+  gap: 1rem;
+  margin-top: 2.5rem;
 }
 .about__stat {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+  padding: 1.3rem 1.2rem;
+  border-radius: var(--radius);
+  background: var(--glass);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), var(--glass-inset);
+  transition: transform 0.4s var(--ease);
+}
+.about__stat:hover {
+  transform: translateY(-4px);
 }
 .about__stat-value {
   font-family: var(--font-display);

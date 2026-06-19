@@ -114,11 +114,11 @@ void main(){
   float d = length(gl_PointCoord - 0.5);
   if (d > 0.5) discard;
   float soft = smoothstep(0.5, 0.0, d);
-  float core = smoothstep(0.2, 0.0, d);
   vec3 col = mix(uColorA, uColorB, vMix);
   col = mix(col, uColorC, smoothstep(0.62, 1.0, vMix) * 0.7);
-  col += core * 0.7;
-  float alpha = soft * uOpacity * vGlow;
+  // slight core deepening for dimension on a light backdrop
+  col *= 0.8 + (1.0 - d) * 0.28;
+  float alpha = soft * uOpacity * clamp(vGlow, 0.0, 1.25) * 0.6;
   gl_FragColor = vec4(col, alpha);
 }
 `
@@ -198,8 +198,8 @@ export default function Scene3D() {
       uShockPos: { value: new THREE.Vector3(0, 0, 0) },
       uRot: { value: new THREE.Matrix3() },
       uColorA: { value: new THREE.Color('#7c5cff') },
-      uColorB: { value: new THREE.Color('#22d3ee') },
-      uColorC: { value: new THREE.Color('#ff5c87') },
+      uColorB: { value: new THREE.Color('#1ba3ef') },
+      uColorC: { value: new THREE.Color('#ec4899') },
       uOpacity: { value: 0.0 },
     }
 
@@ -209,7 +209,7 @@ export default function Scene3D() {
       fragmentShader: FRAG,
       transparent: true,
       depthWrite: false,
-      blending: THREE.AdditiveBlending,
+      blending: THREE.NormalBlending,
     })
 
     const points = new THREE.Points(geometry, material)
@@ -222,7 +222,7 @@ export default function Scene3D() {
         color: new THREE.Color('#7c5cff'),
         transparent: true,
         opacity: 0.0,
-        blending: THREE.AdditiveBlending,
+        blending: THREE.NormalBlending,
         depthWrite: false,
       }),
     )

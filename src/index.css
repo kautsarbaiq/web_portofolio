@@ -1,31 +1,44 @@
 /* =========================================================================
    KAUTSAR — Portfolio
-   Global design system. Tokens, reset, typography, helpers.
+   Global design system — LIGHT / GLASSMORPHISM.
+   White-dominant, frosted glass panels, soft pastel refraction.
    ========================================================================= */
 
 :root {
-  /* --- Surfaces (deep, slightly blue ink) --- */
-  --bg: #06070b;
-  --bg-2: #090b11;
-  --surface: #0d1018;
-  --surface-2: #131722;
-  --line: rgba(255, 255, 255, 0.07);
-  --line-strong: rgba(255, 255, 255, 0.14);
+  /* --- Base surfaces (light) --- */
+  --bg: #eef0f7;
+  --bg-2: #e7eaf3;
+  --ink: #0d1320;
+
+  /* --- Glass --- */
+  --glass: rgba(255, 255, 255, 0.55);
+  --glass-strong: rgba(255, 255, 255, 0.72);
+  --glass-faint: rgba(255, 255, 255, 0.38);
+  --glass-border: rgba(255, 255, 255, 0.7);
+  --glass-edge: rgba(13, 19, 32, 0.06);
+  --glass-blur: 18px;
+  --glass-shadow: 0 10px 40px -12px rgba(31, 38, 80, 0.28);
+  --glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+
+  /* --- Lines / legacy surface aliases (light) --- */
+  --line: rgba(13, 19, 32, 0.08);
+  --line-strong: rgba(13, 19, 32, 0.14);
+  --surface: rgba(255, 255, 255, 0.5);
+  --surface-2: rgba(255, 255, 255, 0.72);
+  --glow-violet: rgba(124, 92, 255, 0.35);
 
   /* --- Text --- */
-  --text: #edeff4;
-  --text-dim: #99a0af;
-  --text-faint: #5a6070;
+  --text: #0d1320;
+  --text-dim: #545d73;
+  --text-faint: #97a0b4;
 
   /* --- Accents / glow --- */
-  --violet: #7c5cff;
-  --cyan: #22d3ee;
-  --rose: #ff5c87;
+  --violet: #6d5efc;
+  --sky: #2dd4ff;
+  --pink: #f472b6;
   --accent: var(--violet);
-  --grad: linear-gradient(115deg, #8b6dff 0%, #22d3ee 100%);
-  --grad-soft: linear-gradient(115deg, rgba(139, 109, 255, 0.9), rgba(34, 211, 238, 0.9));
-  --glow-violet: rgba(124, 92, 255, 0.55);
-  --glow-cyan: rgba(34, 211, 238, 0.45);
+  --grad: linear-gradient(115deg, #7c5cff 0%, #2dd4ff 100%);
+  --grad-soft: linear-gradient(115deg, rgba(124, 92, 255, 0.9), rgba(45, 212, 255, 0.9));
 
   /* --- Type --- */
   --font-display: 'Space Grotesk', system-ui, sans-serif;
@@ -52,7 +65,7 @@
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 /* ----------------------------- Reset ----------------------------- */
@@ -95,7 +108,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Hide native cursor on devices that have a fine pointer (custom cursor takes over) */
 @media (hover: hover) and (pointer: fine) {
   body.has-custom-cursor,
   body.has-custom-cursor * {
@@ -133,15 +145,33 @@ button {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #20242f;
+  background: rgba(13, 19, 32, 0.18);
   border-radius: 10px;
-  border: 2px solid var(--bg);
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2c313e;
+  background: rgba(13, 19, 32, 0.3);
+  background-clip: padding-box;
+}
+
+/* ----------------------------- Glass ----------------------------- */
+.glass {
+  background: var(--glass);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), var(--glass-inset);
+}
+.glass-strong {
+  background: var(--glass-strong);
+  backdrop-filter: blur(26px) saturate(190%);
+  -webkit-backdrop-filter: blur(26px) saturate(190%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), var(--glass-inset);
 }
 
 /* ----------------------------- Helpers ----------------------------- */
@@ -171,7 +201,7 @@ button {
   content: '';
   width: 26px;
   height: 1px;
-  background: var(--text-faint);
+  background: var(--accent);
 }
 
 .gradient-text {
@@ -198,7 +228,6 @@ button {
   border: 0;
 }
 
-/* App is hidden until preloader finishes painting (prevents flash) */
 #root {
   position: relative;
   isolation: isolate;
