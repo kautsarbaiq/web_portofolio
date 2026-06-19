@@ -3,14 +3,17 @@ import * as THREE from 'three'
 import './Scene3D.css'
 
 /* -------------------------------------------------------------------------
-   Scene3D — a bespoke particle sphere written directly against three.js.
-   ~7k points distributed on a Fibonacci sphere, displaced by 3D simplex
-   noise in the vertex shader and tinted violet→cyan. Additive blending
-   gives the glow. The whole cloud drifts toward the cursor.
-   Imperative (no react-three-fiber) so it's framework-version-proof.
+   Scene3D — an interactive particle nebula (imperative three.js).
+   ~7k points on a Fibonacci sphere, driven by multi-octave simplex
+   turbulence. The cloud:
+     • repels in 3D away from the cursor (a bulge that tracks the pointer)
+     • emits an expanding shockwave on click
+     • disperses + spins faster as you scroll the hero
+     • glows hotter where the cursor is near
+   A faint wireframe icosahedron sits inside as structure. All rotation
+   happens in the shader (uRot) so the cursor math stays in world space.
    ------------------------------------------------------------------------- */
 
-// Classic Ashima 3D simplex noise — used inside the vertex shader.
 const SIMPLEX = /* glsl */ `
 vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x,289.0);}
 vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-0.85373472095314*r;}
@@ -34,35 +37,68 @@ float snoise(vec3 v){
   vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0); m=m*m;
   return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
 }
+float fbm(vec3 p){
+  float v=0.0; float a=0.5;
+  for(int i=0;i<4;i++){ v+=a*snoise(p); p*=2.02; a*=0.5; }
+  return v;
+}
 `
 
 const VERT = /* glsl */ `
 uniform float uTime;
 uniform float uSize;
 uniform float uPixelRatio;
-uniform float uDisplace;
+uniform float uScroll;
+uniform float uMouseStrength;
+uniform float uShock;
+uniform float uShockPhase;
 uniform vec3 uMouse;
+uniform vec3 uShockPos;
+uniform mat3 uRot;
 attribute float aSeed;
 attribute float aScale;
 varying float vMix;
 varying float vGlow;
 ${SIMPLEX}
 void main(){
-  vec3 pos = position;
-  float n = snoise(pos * 1.1 + vec3(uTime * 0.18));
-  float n2 = snoise(pos * 2.4 - vec3(uTime * 0.12));
-  float disp = n * 0.55 + n2 * 0.22;
-  pos += normalize(pos) * disp * uDisplace;
+  vec3 base = position;
+  vec3 nrm = normalize(base);
+  float t = uTime * 0.16;
 
-  // gentle pull toward the cursor direction
-  pos += uMouse * (0.18 + 0.12 * n);
+  // multi-octave turbulence sampled in stable (un-rotated) space
+  float f = fbm(base * 0.55 + vec3(t));
+  float f2 = fbm(base * 1.6 - vec3(t * 1.25));
+  float disp = f * 0.6 + f2 * 0.4;
 
-  vMix = clamp(0.5 + n * 0.6, 0.0, 1.0);
-  vGlow = 0.45 + 0.55 * smoothstep(-0.2, 0.6, n);
+  // rotate the whole cloud in the shader (keeps cursor math in world space)
+  vec3 p = uRot * base;
+  vec3 wn = uRot * nrm;
 
-  vec4 mv = modelViewMatrix * vec4(pos, 1.0);
+  // radial turbulence + scroll-driven dispersion
+  p += wn * disp * (0.95 + uScroll * 2.2);
+
+  // tangential swirl => flowing motion
+  vec3 tang = normalize(cross(wn, vec3(0.0, 1.0, 0.0)) + 1e-4);
+  p += tang * f2 * (0.45 + uScroll * 0.6);
+
+  // 3D cursor repulsion — a bulge that follows the pointer
+  vec3 toM = p - uMouse;
+  float dM = length(toM);
+  float push = uMouseStrength * exp(-dM * dM * 0.6);
+  p += normalize(toM) * push;
+  float near = exp(-dM * dM * 0.5);
+
+  // click shockwave — an expanding ring from the click point
+  float dS = length(p - uShockPos);
+  float ring = sin(dS * 5.0 - uShockPhase);
+  p += wn * ring * uShock * exp(-dS * 0.55) * 0.8;
+
+  vMix = clamp(0.5 + f * 0.7 + sin(t * 0.5 + aSeed * 6.28) * 0.12, 0.0, 1.0);
+  vGlow = 0.38 + 0.55 * smoothstep(-0.2, 0.6, f) + near * 0.9 + uShock * abs(ring) * 0.4;
+
+  vec4 mv = modelViewMatrix * vec4(p, 1.0);
   gl_Position = projectionMatrix * mv;
-  gl_PointSize = uSize * aScale * uPixelRatio * (12.0 / -mv.z);
+  gl_PointSize = uSize * aScale * uPixelRatio * (12.0 / -mv.z) * (1.0 + near * 1.8 + uScroll * 0.6);
 }
 `
 
@@ -70,6 +106,7 @@ const FRAG = /* glsl */ `
 precision highp float;
 uniform vec3 uColorA;
 uniform vec3 uColorB;
+uniform vec3 uColorC;
 uniform float uOpacity;
 varying float vMix;
 varying float vGlow;
@@ -77,9 +114,10 @@ void main(){
   float d = length(gl_PointCoord - 0.5);
   if (d > 0.5) discard;
   float soft = smoothstep(0.5, 0.0, d);
-  float core = smoothstep(0.22, 0.0, d);
+  float core = smoothstep(0.2, 0.0, d);
   vec3 col = mix(uColorA, uColorB, vMix);
-  col += core * 0.6;                 // hot white-ish core
+  col = mix(col, uColorC, smoothstep(0.62, 1.0, vMix) * 0.7);
+  col += core * 0.7;
   float alpha = soft * uOpacity * vGlow;
   gl_FragColor = vec4(col, alpha);
 }
@@ -98,7 +136,7 @@ function fibonacciSphere(count, radius) {
     positions[i * 3 + 1] = y * radius
     positions[i * 3 + 2] = Math.sin(theta) * r * radius
     seeds[i] = Math.random()
-    scales[i] = 0.5 + Math.random() * 1.6
+    scales[i] = 0.5 + Math.random() * 1.7
   }
   return { positions, seeds, scales }
 }
@@ -116,22 +154,32 @@ export default function Scene3D() {
     try {
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' })
     } catch (e) {
-      // No WebGL — fail silently, the CSS aurora still carries the look.
-      return
+      return // no WebGL — CSS aurora still carries the look
     }
 
+    // Fall back to viewport size if the container hasn't been laid out yet
+    // (can happen on lazy mount before the hero has width).
+    const sizeOf = () => ({
+      w: mount.clientWidth || window.innerWidth,
+      h: mount.clientHeight || window.innerHeight,
+    })
+
     const dpr = Math.min(window.devicePixelRatio || 1, 2)
+    const init = sizeOf()
     renderer.setPixelRatio(dpr)
-    renderer.setSize(mount.clientWidth, mount.clientHeight)
+    renderer.setSize(init.w, init.h)
     renderer.setClearColor(0x000000, 0)
     mount.appendChild(renderer.domElement)
 
     const scene = new THREE.Scene()
-    const camera = new THREE.PerspectiveCamera(45, mount.clientWidth / mount.clientHeight, 0.1, 100)
-    camera.position.set(0, 0, 9)
+    const FOV = 42
+    const camera = new THREE.PerspectiveCamera(FOV, init.w / init.h, 0.1, 100)
+    const CAM_Z = 10
+    camera.position.set(0, 0, CAM_Z)
 
-    const COUNT = window.innerWidth < 720 ? 4200 : 7200
-    const { positions, seeds, scales } = fibonacciSphere(COUNT, 3.2)
+    const RADIUS = 3.2
+    const COUNT = window.innerWidth < 720 ? 4500 : 7400
+    const { positions, seeds, scales } = fibonacciSphere(COUNT, RADIUS)
 
     const geometry = new THREE.BufferGeometry()
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
@@ -140,13 +188,19 @@ export default function Scene3D() {
 
     const uniforms = {
       uTime: { value: 0 },
-      uSize: { value: 9.0 },
+      uSize: { value: 10.0 },
       uPixelRatio: { value: dpr },
-      uDisplace: { value: 0.9 },
-      uMouse: { value: new THREE.Vector3(0, 0, 0) },
+      uScroll: { value: 0 },
+      uMouseStrength: { value: 0.5 },
+      uShock: { value: 0 },
+      uShockPhase: { value: 0 },
+      uMouse: { value: new THREE.Vector3(99, 99, 99) },
+      uShockPos: { value: new THREE.Vector3(0, 0, 0) },
+      uRot: { value: new THREE.Matrix3() },
       uColorA: { value: new THREE.Color('#7c5cff') },
       uColorB: { value: new THREE.Color('#22d3ee') },
-      uOpacity: { value: 0.0 }, // fades in
+      uColorC: { value: new THREE.Color('#ff5c87') },
+      uOpacity: { value: 0.0 },
     }
 
     const material = new THREE.ShaderMaterial({
@@ -161,60 +215,122 @@ export default function Scene3D() {
     const points = new THREE.Points(geometry, material)
     scene.add(points)
 
+    // faint wireframe core for structure
+    const wire = new THREE.LineSegments(
+      new THREE.WireframeGeometry(new THREE.IcosahedronGeometry(RADIUS * 0.62, 1)),
+      new THREE.LineBasicMaterial({
+        color: new THREE.Color('#7c5cff'),
+        transparent: true,
+        opacity: 0.0,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      }),
+    )
+    scene.add(wire)
+
+    // --- view-space mapping for the cursor ---
+    let halfH = Math.tan((FOV / 2) * (Math.PI / 180)) * CAM_Z
+    let halfW = halfH * camera.aspect
+    const computeExtent = () => {
+      halfH = Math.tan((FOV / 2) * (Math.PI / 180)) * CAM_Z
+      halfW = halfH * camera.aspect
+    }
+    computeExtent()
+
     // --- interaction state ---
-    const target = { x: 0, y: 0 }
-    const current = { x: 0, y: 0 }
+    const targetN = { x: 0, y: 0 } // normalised cursor (-1..1)
+    const curN = { x: 0, y: 0 }
+    let moveImpulse = 0
+    let hasPointer = false
+    let shock = 0
+    let shockPhase = 0
+    const rotM4 = new THREE.Matrix4()
+    const euler = new THREE.Euler()
+
     const onPointer = (e) => {
-      const x = (e.clientX / window.innerWidth) * 2 - 1
-      const y = -((e.clientY / window.innerHeight) * 2 - 1)
-      target.x = x
-      target.y = y
+      targetN.x = (e.clientX / window.innerWidth) * 2 - 1
+      targetN.y = -((e.clientY / window.innerHeight) * 2 - 1)
+      moveImpulse = 1
+      hasPointer = true
+    }
+    const onDown = (e) => {
+      // start a shockwave at the current cursor position in world space
+      shock = 1
+      shockPhase = 0
+      uniforms.uShockPos.value.set(curN.x * halfW, curN.y * halfH, 1.6)
     }
     window.addEventListener('pointermove', onPointer, { passive: true })
+    window.addEventListener('pointerdown', onDown)
 
     const onResize = () => {
-      if (!mount) return
-      const w = mount.clientWidth
-      const h = mount.clientHeight
+      const { w, h } = sizeOf()
+      if (w <= 0 || h <= 0) return
       renderer.setSize(w, h)
       camera.aspect = w / h
       camera.updateProjectionMatrix()
+      computeExtent()
     }
     window.addEventListener('resize', onResize)
+    // ResizeObserver catches the container getting its real size after a
+    // lazy mount (window 'resize' alone would miss that).
+    const ro = new ResizeObserver(onResize)
+    ro.observe(mount)
 
-    // pause rendering when the hero scrolls out of view
     let visible = true
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        visible = entry.isIntersecting
-      },
-      { threshold: 0 },
-    )
+    const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting }, { threshold: 0 })
     io.observe(mount)
 
     const clock = new THREE.Clock()
     let raf
-    let opacity = 0
 
     const render = () => {
       raf = requestAnimationFrame(render)
-      if (!visible || document.hidden) return
+      if (!visible || (document.hidden && !window.__FORCE_RENDER__)) return
 
       const t = clock.getElapsedTime()
+      const dt = Math.min(clock.getDelta(), 0.05)
       uniforms.uTime.value = reduceMotion ? 0 : t
 
-      // smooth mouse + idle drift
-      current.x += (target.x - current.x) * 0.045
-      current.y += (target.y - current.y) * 0.045
-      uniforms.uMouse.value.set(current.x * 0.9, current.y * 0.9, 0)
+      // smooth the cursor + decay the movement impulse
+      curN.x += (targetN.x - curN.x) * 0.07
+      curN.y += (targetN.y - curN.y) * 0.07
+      moveImpulse *= 0.93
 
-      // graceful intro fade
-      opacity += (0.95 - opacity) * 0.02
-      uniforms.uOpacity.value = opacity
+      // scroll progress through the hero (disperse as you leave)
+      const scroll = Math.min(Math.max(window.scrollY / (window.innerHeight || 1), 0), 1)
+      uniforms.uScroll.value += (scroll - uniforms.uScroll.value) * 0.1
 
-      points.rotation.y = (reduceMotion ? 0 : t * 0.06) + current.x * 0.5
-      points.rotation.x = current.y * -0.35
-      uniforms.uDisplace.value = 0.9 + Math.hypot(current.x, current.y) * 0.6
+      // cursor world position + strength
+      if (hasPointer) {
+        uniforms.uMouse.value.set(curN.x * halfW, curN.y * halfH, 1.6)
+      }
+      const strengthTarget = reduceMotion ? 0 : 0.5 + moveImpulse * 0.9
+      uniforms.uMouseStrength.value += (strengthTarget - uniforms.uMouseStrength.value) * 0.15
+
+      // shockwave decay
+      if (shock > 0.001 && !reduceMotion) {
+        shockPhase += dt * 9.0
+        shock *= 0.945
+      } else {
+        shock = 0
+      }
+      uniforms.uShock.value = shock
+      uniforms.uShockPhase.value = shockPhase
+
+      // rotation (time + cursor parallax + scroll), applied in-shader
+      const ry = (reduceMotion ? 0 : t * 0.06) + curN.x * 0.55 + uniforms.uScroll.value * 0.6
+      const rx = curN.y * -0.4 + uniforms.uScroll.value * 0.25
+      euler.set(rx, ry, 0)
+      rotM4.makeRotationFromEuler(euler)
+      uniforms.uRot.value.setFromMatrix4(rotM4)
+      wire.rotation.set(rx * 1.1, -ry * 0.8, 0)
+
+      // intro fade (time-based so it's frame-rate independent) + breathing
+      const intro = Math.min(t / 1.2, 1) * 0.95
+      uniforms.uOpacity.value = intro
+      wire.material.opacity = intro * (0.1 + Math.abs(Math.sin(t * 0.6)) * 0.05) * (1 - uniforms.uScroll.value)
+      const breathe = 1 + Math.sin(t * 0.8) * 0.015
+      points.scale.setScalar(breathe)
 
       renderer.render(scene, camera)
     }
@@ -223,14 +339,16 @@ export default function Scene3D() {
     return () => {
       cancelAnimationFrame(raf)
       window.removeEventListener('pointermove', onPointer)
+      window.removeEventListener('pointerdown', onDown)
       window.removeEventListener('resize', onResize)
+      ro.disconnect()
       io.disconnect()
       geometry.dispose()
       material.dispose()
+      wire.geometry.dispose()
+      wire.material.dispose()
       renderer.dispose()
-      if (renderer.domElement.parentNode === mount) {
-        mount.removeChild(renderer.domElement)
-      }
+      if (renderer.domElement.parentNode === mount) mount.removeChild(renderer.domElement)
     }
   }, [])
 

@@ -5,8 +5,8 @@
   height: 100%;
   z-index: 0;
   pointer-events: none;
-  /* nudge the cloud slightly up-right so it frames the headline */
-  transform: translate(8%, -4%);
+  /* keep centered so cursor-repulsion math lines up with the canvas */
+  transform: translateY(-2%);
 }
 
 .scene3d canvas {
