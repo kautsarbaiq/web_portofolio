@@ -285,7 +285,7 @@ export default function Scene3D() {
 
     const render = () => {
       raf = requestAnimationFrame(render)
-      if (!visible || (document.hidden && !window.__FORCE_RENDER__)) return
+      if (!visible || document.hidden) return
 
       const t = clock.getElapsedTime()
       const dt = Math.min(clock.getDelta(), 0.05)
