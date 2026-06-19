@@ -2,20 +2,20 @@
    ✦  EDIT EVERYTHING HERE  ✦
    Semua teks & data portofolio ada di file ini. Setiap field bilingual:
    { id: 'Bahasa Indonesia', en: 'English' }.
-   Ganti konten placeholder di bawah dengan data asli kamu dari LinkedIn/CV.
+   Konten di bawah diambil dari CV Kautsar Qaulan Sadida Baiquni.
+   Catatan: link demo/repo proyek masih '#' — isi dengan URL asli bila ada.
    ========================================================================= */
 
 export const profile = {
-  name: 'Kautsar Baiq',
-  // Inisial untuk monogram / logo
+  name: 'Kautsar Qaulan Sadida Baiquni',
   initials: 'KB',
   role: {
-    id: 'Software & Web Developer',
-    en: 'Software & Web Developer',
+    id: 'Fullstack Web Developer',
+    en: 'Fullstack Web Developer',
   },
   location: {
-    id: 'Indonesia',
-    en: 'Indonesia',
+    id: 'Bandung, Indonesia',
+    en: 'Bandung, Indonesia',
   },
   // Kalimat besar di hero. Kata di dalam tanda * * akan tampil italic serif beraksen.
   headline: {
@@ -23,17 +23,18 @@ export const profile = {
     en: 'I design & build web that *feels alive*',
   },
   tagline: {
-    id: 'Developer yang ngoding dengan rasa desain — dari ide kasar sampai antarmuka yang halus.',
-    en: 'A developer who codes with a designer’s eye — from rough idea to polished interface.',
+    id: 'Fullstack developer yang terobsesi frontend — membangun aplikasi web yang scalable & pixel-perfect dengan Next.js, React, dan TypeScript.',
+    en: 'A fullstack developer with a frontend obsession — building scalable, pixel-perfect web apps with Next.js, React & TypeScript.',
   },
   available: {
     id: 'Terbuka untuk peluang & kolaborasi',
     en: 'Open to opportunities & collaboration',
   },
   email: 'pragozjawir@gmail.com',
+  phone: '+62 812-2193-2219',
   socials: [
     { label: 'LinkedIn', handle: '/in/kautsar-baiq', url: 'https://www.linkedin.com/in/kautsar-baiq/' },
-    { label: 'GitHub', handle: '@kautsarbaiq', url: 'https://github.com/' },
+    { label: 'WhatsApp', handle: '+62 812-2193-2219', url: 'https://wa.me/6281221932219' },
     { label: 'Email', handle: 'pragozjawir@gmail.com', url: 'mailto:pragozjawir@gmail.com' },
   ],
 }
@@ -41,72 +42,76 @@ export const profile = {
 export const about = {
   paragraphs: {
     id: [
-      'Halo, saya Kautsar — seorang web developer yang percaya bahwa kode yang baik dan desain yang baik adalah satu kesatuan. Saya senang menerjemahkan ide menjadi antarmuka yang cepat, mulus, dan punya karakter.',
-      'Sehari-hari saya bekerja dengan ekosistem JavaScript modern — React di depan, Node di belakang — sambil terus menjaga detail kecil yang membuat sebuah produk terasa berkelas: animasi yang pas, tipografi yang rapi, dan performa yang ringan.',
-      'Di luar layar, saya selalu penasaran dengan hal baru: eksperimen visual, motion design, dan cara membuat teknologi terasa lebih manusiawi.',
+      'Saya Kautsar — fullstack web developer dengan spesialisasi di arsitektur frontend, dan rekam jejak merilis aplikasi web yang scalable serta siap produksi.',
+      'Saat ini saya memimpin sebuah inisiatif digital untuk Pemerintah Kota Serang dan bekerja sebagai fullstack & app developer di Blue Soft IoT, Malaysia — merancang produk yang kokoh dan berpusat pada pengguna dengan Next.js, React, dan TypeScript, termasuk platform komunitas Ourtala.',
+      'Saya senang menjembatani logika backend yang kompleks dengan antarmuka yang cepat, responsif, dan pixel-perfect — serta sangat peduli pada kode yang bersih dan mudah dirawat. Peraih Medali Emas POSN bidang Informatika.',
     ],
     en: [
-      'Hi, I’m Kautsar — a web developer who believes good code and good design are the same craft. I love turning ideas into interfaces that are fast, fluid, and full of character.',
-      'Day to day I work across the modern JavaScript ecosystem — React on the front, Node on the back — while obsessing over the small details that make a product feel premium: the right motion, clean typography, and a light, fast experience.',
-      'Away from the screen I stay curious — visual experiments, motion design, and finding ways to make technology feel a little more human.',
+      'I’m Kautsar — a fullstack web developer specializing in frontend architecture, with a proven track record of shipping scalable, production-ready web applications.',
+      'Right now I’m leading a digital initiative for the Serang City Government and working as a fullstack & app developer at Blue Soft IoT in Malaysia — architecting robust, user-centric products with Next.js, React, and TypeScript, including the Ourtala community platform.',
+      'I love bridging complex backend logic with high-performance, responsive, pixel-perfect interfaces — and I care deeply about clean, maintainable code. POSN Informatika Gold Medalist.',
     ],
   },
   stats: [
-    { value: '3+', label: { id: 'Tahun ngoding', en: 'Years coding' } },
-    { value: '20+', label: { id: 'Proyek dikerjakan', en: 'Projects shipped' } },
-    { value: '10+', label: { id: 'Teknologi dikuasai', en: 'Technologies' } },
-    { value: '∞', label: { id: 'Rasa penasaran', en: 'Curiosity' } },
+    { value: '8+', label: { id: 'Proyek dikerjakan', en: 'Projects shipped' } },
+    { value: 'Gold', label: { id: 'POSN Informatika', en: 'POSN Informatics' } },
+    { value: '3', label: { id: 'Sertifikasi', en: 'Certifications' } },
+    { value: '2', label: { id: 'Negara (ID & MY)', en: 'Countries (ID & MY)' } },
   ],
 }
 
 export const experience = [
   {
-    role: { id: 'Frontend Developer', en: 'Frontend Developer' },
-    company: 'Company / Studio',
-    period: '2024 — Sekarang',
-    location: { id: 'Remote', en: 'Remote' },
+    role: { id: 'Fullstack Web & App Developer', en: 'Fullstack Web & App Developer' },
+    company: 'Blue Soft IoT Sdn Bhd',
+    period: { id: 'Apr 2026 — Sekarang', en: 'Apr 2026 — Present' },
+    location: { id: 'Selangor, Malaysia', en: 'Selangor, Malaysia' },
     points: {
       id: [
-        'Membangun antarmuka web responsif dengan React & TypeScript untuk produk yang dipakai ribuan pengguna.',
-        'Meningkatkan performa halaman hingga lebih cepat dimuat lewat optimasi rendering & aset.',
+        'Membangun website company profile dan tools internal untuk PHH (industri baja, Malaysia & Indonesia) serta Blue Soft (IoT & software development).',
+        'Mengembangkan PHH Inventory — aplikasi web untuk manajemen pemotongan baja yang kompleks — dengan React, Vite, TypeScript & Tailwind CSS.',
+        'Membangun HRMAPP, aplikasi manajemen karyawan lintas platform (absensi, izin, kontrak, check-out) menggunakan Flutter.',
       ],
       en: [
-        'Built responsive web interfaces with React & TypeScript for products used by thousands of users.',
-        'Improved page performance through rendering and asset optimization.',
+        'Building company-profile sites and internal tools for PHH (steel industry, Malaysia & Indonesia) and Blue Soft (IoT & software development).',
+        'Engineered PHH Inventory — a web app for complex steel-cutting management — with React, Vite, TypeScript & Tailwind CSS.',
+        'Developed HRMAPP, a cross-platform employee-management app (attendance, permits, contracts, check-outs) using Flutter.',
       ],
     },
-    stack: ['React', 'TypeScript', 'Vite'],
+    stack: ['React', 'TypeScript', 'Vite', 'Flutter'],
   },
   {
-    role: { id: 'Web Developer (Freelance)', en: 'Web Developer (Freelance)' },
-    company: 'Independent',
-    period: '2023 — 2024',
-    location: { id: 'Indonesia', en: 'Indonesia' },
+    role: { id: 'Fullstack Web Developer', en: 'Fullstack Web Developer' },
+    company: 'Pemerintah Kota Serang',
+    period: { id: 'Agu 2025 — Mei 2026', en: 'Aug 2025 — May 2026' },
+    location: { id: 'Serang, Indonesia', en: 'Serang, Indonesia' },
     points: {
       id: [
-        'Merancang & membangun landing page dan website company profile dari nol untuk klien lokal.',
-        'Mengintegrasikan CMS dan menjaga konsistensi desain di berbagai perangkat.',
+        'Memimpin pengembangan dan peningkatan teknis website Pemerintah Kota Serang dengan Next.js & TypeScript, mendorong transformasi digital layanan publik.',
+        'Membangun website pribadi Wali Kota Serang, mengoptimalkan performa dan merancang fitur baru yang berpusat pada pengguna.',
+        'Mengembangkan sistem monitoring ASN dengan fitur SPPD menggunakan Tailwind CSS & JavaScript.',
       ],
       en: [
-        'Designed & built landing pages and company-profile websites from scratch for local clients.',
-        'Integrated CMS and kept design consistent across devices.',
+        'Spearheaded the development and technical upgrade of the Serang City Government website with Next.js & TypeScript, driving digital transformation for public services.',
+        'Built the Mayor of Serang’s personal website, optimizing performance and architecting new user-centric features.',
+        'Developed a civil-servant monitoring system with SPPD features using Tailwind CSS & JavaScript.',
       ],
     },
-    stack: ['JavaScript', 'Next.js', 'Tailwind'],
+    stack: ['Next.js', 'TypeScript', 'Tailwind'],
   },
   {
-    role: { id: 'Mahasiswa / Belajar Mandiri', en: 'Student / Self-taught' },
-    company: 'Universitas / Bootcamp',
-    period: '2021 — 2023',
-    location: { id: 'Indonesia', en: 'Indonesia' },
+    role: { id: 'IT Trainer (Relawan)', en: 'IT Trainer (Volunteer)' },
+    company: 'SMA Mekar Harum & SMK 1 Cimahi',
+    period: { id: '2025', en: '2025' },
+    location: { id: 'Bandung, Indonesia', en: 'Bandung, Indonesia' },
     points: {
       id: [
-        'Mendalami fondasi pemrograman web, struktur data, dan prinsip desain antarmuka.',
-        'Membangun banyak proyek latihan untuk mengasah kemampuan dari dasar.',
+        'Relawan pengajar IT yang membekali siswa dengan keterampilan teknis dasar dan literasi digital.',
+        'Merancang silabus interaktif pengenalan pemrograman web, mengajarkan HTML, CSS & JavaScript lewat praktik langsung yang ramah pemula.',
       ],
       en: [
-        'Studied the foundations of web programming, data structures, and interface design principles.',
-        'Built many practice projects to sharpen skills from the ground up.',
+        'Volunteer IT trainer empowering students with foundational technical skills and digital literacy.',
+        'Designed an interactive intro-to-web-programming syllabus, teaching HTML, CSS & JavaScript through beginner-friendly, hands-on practice.',
       ],
     },
     stack: ['HTML', 'CSS', 'JavaScript'],
@@ -115,106 +120,143 @@ export const experience = [
 
 export const projects = [
   {
-    title: 'Aurora Dashboard',
+    title: 'Serang City Government',
     year: '2025',
     featured: true,
     tagline: {
-      id: 'Dashboard analitik real-time dengan visualisasi data yang halus.',
-      en: 'A real-time analytics dashboard with silky data visualisations.',
+      id: 'Transformasi digital untuk layanan publik sebuah kota.',
+      en: 'Digital transformation for a city’s public services.',
     },
     description: {
-      id: 'Antarmuka dashboard penuh fitur: grafik interaktif, mode gelap, dan pembaruan data langsung. Fokus pada kecepatan dan kejelasan informasi.',
-      en: 'A feature-rich dashboard interface: interactive charts, dark mode, and live data updates. Built for speed and clarity.',
+      id: 'Memimpin pengembangan penuh dan peningkatan teknis website resmi Pemerintah Kota Serang — platform yang cepat, mudah diakses, dan dibangun untuk memodernkan layanan publik dengan Next.js & TypeScript.',
+      en: 'Led the full development and technical upgrade of the official Serang City Government website — a fast, accessible platform built to modernize public services with Next.js & TypeScript.',
     },
-    tech: ['React', 'D3.js', 'WebSocket', 'Vite'],
+    tech: ['Next.js', 'TypeScript', 'Tailwind'],
     links: { live: '#', repo: '#' },
     accent: '#7c5cff',
   },
   {
-    title: 'Nimbus Commerce',
-    year: '2024',
+    title: 'Walikota Serang',
+    year: '2025',
     featured: false,
     tagline: {
-      id: 'Toko online modern dengan checkout yang mulus.',
-      en: 'A modern storefront with a frictionless checkout.',
+      id: 'Website pribadi untuk Wali Kota Serang.',
+      en: 'A personal website for the Mayor of Serang.',
     },
     description: {
-      id: 'Platform e-commerce dengan keranjang real-time, pencarian instan, dan halaman produk yang cepat dimuat.',
-      en: 'An e-commerce platform with a real-time cart, instant search, and lightning-fast product pages.',
+      id: 'Membangun website pribadi Wali Kota Serang dengan Next.js & TypeScript, fokus pada performa dan pengalaman yang berpusat pada pengguna.',
+      en: 'Engineered the Mayor of Serang’s personal website with Next.js & TypeScript, focusing on performance and a user-centric experience.',
     },
-    tech: ['Next.js', 'Stripe', 'PostgreSQL'],
+    tech: ['Next.js', 'TypeScript'],
     links: { live: '#', repo: '#' },
     accent: '#22d3ee',
   },
   {
-    title: 'Pulse Motion',
-    year: '2024',
+    title: 'PHH Inventory',
+    year: '2026',
     featured: false,
     tagline: {
-      id: 'Library animasi mikro untuk antarmuka web.',
-      en: 'A micro-animation library for web interfaces.',
+      id: 'Manajemen inventaris & pemotongan untuk produsen baja.',
+      en: 'Inventory & cutting management for a steel manufacturer.',
     },
     description: {
-      id: 'Kumpulan komponen animasi ringan yang bisa dipakai ulang, dengan dokumentasi interaktif.',
-      en: 'A collection of lightweight, reusable animation components with interactive docs.',
+      id: 'Aplikasi web yang mengelola alur kerja pemotongan baja yang kompleks beserta inventarisnya — dibangun dengan React, Vite, TypeScript & Tailwind CSS.',
+      en: 'A web app that manages complex steel-cutting workflows and inventory, built with React, Vite, TypeScript & Tailwind CSS.',
     },
-    tech: ['TypeScript', 'Framer Motion', 'Rollup'],
+    tech: ['React', 'Vite', 'TypeScript', 'Tailwind'],
     links: { live: '#', repo: '#' },
     accent: '#ff5c87',
   },
   {
-    title: 'Lumen Portfolio',
-    year: '2023',
+    title: 'HRMAPP',
+    year: '2026',
     featured: false,
     tagline: {
-      id: 'Template portofolio kreatif untuk para desainer.',
-      en: 'A creative portfolio template for designers.',
+      id: 'Aplikasi manajemen karyawan lintas platform.',
+      en: 'A cross-platform employee management app.',
     },
     description: {
-      id: 'Template open-source dengan transisi halaman yang elegan dan kustomisasi tema yang mudah.',
-      en: 'An open-source template with elegant page transitions and easy theme customisation.',
+      id: 'Mengelola absensi, izin, kontrak, dan check-out sekaligus melacak data karyawan — dibangun dengan Flutter.',
+      en: 'Manages attendance, permits, contracts and check-outs while tracking employees — built with Flutter.',
     },
-    tech: ['Astro', 'GSAP', 'CSS'],
+    tech: ['Flutter', 'C++', 'Ruby'],
     links: { live: '#', repo: '#' },
     accent: '#8b6dff',
+  },
+  {
+    title: 'KPU Kota Serang',
+    year: '2026',
+    featured: false,
+    tagline: {
+      id: 'Sistem pelaporan & absensi untuk komisi pemilihan.',
+      en: 'Reporting & attendance system for an election commission.',
+    },
+    description: {
+      id: 'Merekayasa sistem pelaporan digital dan platform absensi otomatis untuk KPU Kota Serang, merampingkan alur administrasi dan akuntabilitas anggota.',
+      en: 'Engineered a digital reporting system and an automated attendance platform for the Serang Election Commission (KPU), streamlining admin workflows and member accountability.',
+    },
+    tech: ['React', 'TypeScript', 'Tailwind'],
+    links: { live: '#', repo: '#' },
+    accent: '#34d399',
   },
 ]
 
 export const skills = [
   {
-    group: { id: 'Bahasa', en: 'Languages' },
-    items: ['JavaScript', 'TypeScript', 'HTML', 'CSS', 'Python'],
-  },
-  {
     group: { id: 'Frontend', en: 'Frontend' },
-    items: ['React', 'Next.js', 'Vite', 'Framer Motion', 'Tailwind', 'Three.js'],
+    items: ['React', 'Next.js', 'TypeScript', 'JavaScript', 'Tailwind CSS', 'Vite'],
   },
   {
-    group: { id: 'Backend & Tools', en: 'Backend & Tools' },
-    items: ['Node.js', 'Express', 'PostgreSQL', 'Git', 'Figma', 'REST API'],
+    group: { id: 'Backend & Mobile', en: 'Backend & Mobile' },
+    items: ['Laravel', 'Flutter', 'REST API', 'HTML', 'CSS'],
   },
+  {
+    group: { id: 'Desain & Tools', en: 'Design & Tools' },
+    items: ['Figma', 'Canva', 'UI/UX Design'],
+  },
+]
+
+export const awards = [
+  {
+    title: { id: 'Peraih Medali Emas — Informatika', en: 'Gold Medalist — Informatics' },
+    issuer: 'POSN (Pekan Olimpiade Sains Nasional)',
+  },
+]
+
+export const certifications = [
+  { title: 'Fundamental Front-End Web Development', issuer: 'Coding Studio' },
+  { title: 'Belajar Dasar Pemrograman JavaScript', issuer: 'Dicoding Indonesia' },
+  { title: 'HTML Basic', issuer: 'Skilvul' },
 ]
 
 export const education = [
   {
-    school: { id: 'Nama Universitas', en: 'University Name' },
-    degree: { id: 'S1 — Teknik Informatika', en: 'B.Sc. — Computer Science' },
-    period: '2021 — 2025',
+    school: { id: 'SMK IDN Boarding School', en: 'SMK IDN Boarding School' },
+    degree: {
+      id: 'SMK — Web & Software Development, Public Speaking',
+      en: 'Vocational High — Web & Software Development, Public Speaking',
+    },
+    period: { id: 'Jul 2024 — Mei 2027 (Perkiraan)', en: 'Jul 2024 — May 2027 (Expected)' },
+  },
+  {
+    school: { id: 'SMP Welas Asih', en: 'SMP Welas Asih' },
+    degree: { id: 'SMP — Bisnis & Alam', en: 'Junior High — Business & Nature' },
+    period: { id: 'Jun 2021 — Mei 2024', en: 'Jun 2021 — May 2024' },
   },
 ]
 
 /* Pita teknologi yang berputar di section Skills */
 export const marquee = [
   'React',
-  'TypeScript',
   'Next.js',
-  'Three.js',
-  'Node.js',
-  'Framer Motion',
+  'TypeScript',
+  'JavaScript',
+  'Tailwind CSS',
+  'Laravel',
+  'Flutter',
   'Vite',
-  'Tailwind',
-  'PostgreSQL',
   'Figma',
-  'GSAP',
-  'WebGL',
+  'HTML',
+  'CSS',
+  'UI/UX',
 ]

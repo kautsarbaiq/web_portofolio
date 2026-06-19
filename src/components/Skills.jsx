@@ -1,4 +1,4 @@
-import { skills, marquee } from '../content/data'
+import { skills, marquee, awards, certifications } from '../content/data'
 import { useLang } from '../context/LanguageContext'
 import Reveal from './Reveal'
 import './Skills.css'
@@ -48,6 +48,39 @@ export default function Skills() {
               </ul>
             </Reveal>
           ))}
+        </div>
+
+        {/* Awards & Certifications */}
+        <div className="creds">
+          <Reveal className="creds__col">
+            <h3 className="creds__title">
+              <span className="creds__icon">★</span>
+              {t({ id: 'Penghargaan', en: 'Awards' })}
+            </h3>
+            <ul className="creds__list">
+              {awards.map((a, i) => (
+                <li key={i} className="creds__item creds__item--award">
+                  <span className="creds__name gradient-text">{t(a.title)}</span>
+                  <span className="creds__issuer">{a.issuer}</span>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+
+          <Reveal className="creds__col" delay={0.08}>
+            <h3 className="creds__title">
+              <span className="creds__icon">✓</span>
+              {t({ id: 'Sertifikasi', en: 'Certifications' })}
+            </h3>
+            <ul className="creds__list">
+              {certifications.map((c, i) => (
+                <li key={i} className="creds__item">
+                  <span className="creds__name">{c.title}</span>
+                  <span className="creds__issuer">{c.issuer}</span>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
         </div>
       </div>
     </section>

@@ -78,7 +78,7 @@ export default function Contact() {
             <span className="footer__role">{t(profile.role)} · {t(profile.location)}</span>
             {education.map((e, i) => (
               <span className="footer__edu" key={i}>
-                {t(e.degree)} — {t(e.school)} · {e.period}
+                {t(e.school)} · {t(e.period)}
               </span>
             ))}
           </div>

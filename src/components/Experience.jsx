@@ -22,7 +22,7 @@ export default function Experience() {
             <Reveal className="exp" key={i} delay={i * 0.05}>
               <div className="exp__period">
                 <span className="exp__dot" />
-                {job.period}
+                {t(job.period)}
               </div>
               <div className="exp__main">
                 <div className="exp__top">
