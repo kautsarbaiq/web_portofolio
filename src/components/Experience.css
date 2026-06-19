@@ -1,0 +1,126 @@
+.experience__heading {
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin-top: 1.2rem;
+  margin-bottom: 3.5rem;
+}
+
+.experience__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.exp {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  padding-block: clamp(1.8rem, 4vh, 3rem);
+  border-top: 1px solid var(--line);
+  transition: background-color 0.4s var(--ease);
+}
+.exp:last-child {
+  border-bottom: 1px solid var(--line);
+}
+.exp:hover {
+  background: linear-gradient(90deg, rgba(124, 92, 255, 0.04), transparent 60%);
+}
+
+.exp__period {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding-top: 0.4rem;
+}
+.exp__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  transition: background-color 0.4s var(--ease), box-shadow 0.4s var(--ease);
+}
+.exp:hover .exp__dot {
+  background: var(--violet);
+  box-shadow: 0 0 14px 1px var(--glow-violet);
+}
+
+.exp__top {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.9rem;
+}
+.exp__role {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+.exp__company {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--violet);
+}
+.exp__loc {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--text-faint);
+  margin-top: 0.3rem;
+}
+.exp__points {
+  list-style: none;
+  margin-top: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 60ch;
+}
+.exp__points li {
+  position: relative;
+  padding-left: 1.4rem;
+  color: var(--text-dim);
+  line-height: 1.55;
+}
+.exp__points li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--text-faint);
+}
+.exp__stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.3rem;
+}
+.exp__chip {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.02em;
+  color: var(--text-dim);
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  transition: border-color 0.3s var(--ease), color 0.3s var(--ease);
+}
+.exp:hover .exp__chip {
+  border-color: var(--line-strong);
+  color: var(--text);
+}
+
+@media (max-width: 760px) {
+  .exp {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .exp__role {
+    font-size: var(--step-1);
+  }
+}

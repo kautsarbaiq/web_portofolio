@@ -1,0 +1,22 @@
+.scene3d {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  /* nudge the cloud slightly up-right so it frames the headline */
+  transform: translate(8%, -4%);
+}
+
+.scene3d canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+@media (max-width: 720px) {
+  .scene3d {
+    transform: translate(0, -8%);
+    opacity: 0.85;
+  }
+}

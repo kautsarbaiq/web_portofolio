@@ -1,0 +1,115 @@
+.skills__heading {
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin-top: 1.2rem;
+  margin-bottom: 3rem;
+}
+
+/* marquee */
+.skills__marquee {
+  position: relative;
+  overflow: hidden;
+  padding-block: 1.4rem;
+  border-block: 1px solid var(--line);
+  margin-bottom: 4rem;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.skills__track {
+  display: flex;
+  gap: 2.4rem;
+  width: max-content;
+  animation: marquee 32s linear infinite;
+}
+.skills__marquee:hover .skills__track {
+  animation-play-state: paused;
+}
+.skills__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 2.4rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--text-dim);
+  white-space: nowrap;
+  transition: color 0.3s var(--ease);
+}
+.skills__tag:hover {
+  color: var(--text);
+}
+.skills__star {
+  color: var(--violet);
+  font-size: 0.6em;
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+/* grid */
+.skills__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+.skillcat {
+  border-top: 1px solid var(--line-strong);
+  padding-top: 1.4rem;
+}
+.skillcat__title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin-bottom: 1.2rem;
+}
+.skillcat__num {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--violet);
+}
+.skillcat__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.skillcat__item {
+  position: relative;
+  font-size: var(--step-0);
+  color: var(--text-dim);
+  padding: 0.5rem 0;
+  border-bottom: 1px solid transparent;
+  transition: color 0.3s var(--ease), padding-left 0.3s var(--ease);
+  cursor: default;
+}
+.skillcat__item:hover {
+  color: var(--text);
+  padding-left: 0.7rem;
+}
+.skillcat__item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--violet);
+  transition: width 0.3s var(--ease);
+}
+.skillcat__item:hover::before {
+  width: 0.4rem;
+}
+
+@media (max-width: 760px) {
+  .skills__grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,104 @@
+.about__grid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: clamp(2rem, 6vw, 6rem);
+  align-items: start;
+}
+
+.about__aside {
+  position: sticky;
+  top: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.about__mark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(6rem, 16vw, 13rem);
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.14);
+  position: relative;
+}
+.about__mark span {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0.14;
+}
+
+.about__body {
+  display: flex;
+  flex-direction: column;
+}
+
+.about__para {
+  font-size: var(--step-1);
+  line-height: 1.6;
+  color: var(--text);
+  margin-bottom: 1.4rem;
+  max-width: 58ch;
+}
+.about__para:first-child {
+  font-size: var(--step-2);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 2rem;
+}
+
+.about__stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--line);
+}
+.about__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.about__stat-value {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.about__stat-label {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--text-dim);
+  line-height: 1.3;
+}
+
+.about__sign {
+  margin-top: 3rem;
+  font-size: clamp(2rem, 5vw, 3rem);
+  color: var(--text-dim);
+  opacity: 0.7;
+}
+
+@media (max-width: 860px) {
+  .about__grid {
+    grid-template-columns: 1fr;
+  }
+  .about__aside {
+    position: static;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .about__mark {
+    font-size: clamp(4rem, 18vw, 7rem);
+  }
+  .about__stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem 1rem;
+  }
+}

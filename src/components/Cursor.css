@@ -1,0 +1,77 @@
+.cursor__dot,
+.cursor__ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  will-change: transform;
+  margin-left: -1px;
+  margin-top: -1px;
+}
+
+.cursor__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  margin-left: -3px;
+  margin-top: -3px;
+  transition: opacity 0.25s ease;
+}
+
+.cursor__ring {
+  width: 38px;
+  height: 38px;
+  margin-left: -19px;
+  margin-top: -19px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  transition:
+    width 0.3s var(--ease),
+    height 0.3s var(--ease),
+    margin 0.3s var(--ease),
+    background-color 0.3s var(--ease),
+    border-color 0.3s var(--ease),
+    opacity 0.25s ease;
+  backdrop-filter: invert(0.06);
+}
+
+.cursor__ring--active {
+  width: 58px;
+  height: 58px;
+  margin-left: -29px;
+  margin-top: -29px;
+  border-color: transparent;
+  background: rgba(124, 92, 255, 0.18);
+}
+
+.cursor__ring--labelled {
+  width: 78px;
+  height: 78px;
+  margin-left: -39px;
+  margin-top: -39px;
+  background: var(--violet);
+  border-color: transparent;
+}
+
+.cursor__ring--down {
+  scale: 0.82;
+}
+
+.cursor__label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #fff;
+  text-align: center;
+  line-height: 1.1;
+}
+
+.cursor__dot.is-hidden,
+.cursor__ring.is-hidden {
+  opacity: 0;
+}

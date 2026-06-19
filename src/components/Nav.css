@@ -1,0 +1,198 @@
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 150;
+  padding-block: 1rem;
+  transition: background-color 0.4s var(--ease), backdrop-filter 0.4s var(--ease),
+    border-color 0.4s var(--ease), padding 0.4s var(--ease);
+  border-bottom: 1px solid transparent;
+}
+
+.nav--scrolled {
+  background: rgba(6, 7, 11, 0.6);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  border-bottom-color: var(--line);
+  padding-block: 0.7rem;
+}
+
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+/* logo */
+.nav__logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+}
+.nav__logo-mark {
+  color: var(--violet);
+  font-size: 1.1rem;
+  animation: spin 14s linear infinite;
+  display: inline-block;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* center links */
+.nav__links {
+  display: flex;
+  gap: 0.4rem;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.nav__link {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  padding: 0.45rem 0.9rem;
+  border-radius: 100px;
+  transition: color 0.3s var(--ease);
+  overflow: hidden;
+}
+.nav__link span {
+  position: relative;
+  z-index: 1;
+}
+.nav__link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: inherit;
+  transform: scale(0.6);
+  opacity: 0;
+  transition: transform 0.35s var(--ease), opacity 0.35s var(--ease);
+}
+.nav__link:hover {
+  color: var(--text);
+}
+.nav__link:hover::before {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* right actions */
+.nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav__lang {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+}
+.nav__lang .is-active {
+  color: var(--text);
+}
+.nav__lang-sep {
+  opacity: 0.4;
+}
+
+.nav__cta {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.02em;
+  color: var(--bg);
+  background: var(--text);
+  padding: 0.6rem 1.15rem;
+  border-radius: 100px;
+  white-space: nowrap;
+  transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
+}
+.nav__cta:hover {
+  background: var(--violet);
+  color: #fff;
+}
+
+/* burger (mobile) */
+.nav__burger {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  position: relative;
+}
+.nav__burger span {
+  position: absolute;
+  left: 50%;
+  width: 16px;
+  height: 1.5px;
+  background: var(--text);
+  transform: translateX(-50%);
+  transition: transform 0.35s var(--ease), opacity 0.35s var(--ease);
+}
+.nav__burger span:nth-child(1) { top: 16px; }
+.nav__burger span:nth-child(2) { bottom: 16px; }
+.nav__burger.is-open span:nth-child(1) { top: 19px; transform: translateX(-50%) rotate(45deg); }
+.nav__burger.is-open span:nth-child(2) { bottom: 19.5px; transform: translateX(-50%) rotate(-45deg); }
+
+/* fullscreen overlay menu */
+.nav__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+  background: linear-gradient(160deg, #0a0c14, #06070b);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--gutter);
+}
+.nav__overlay-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.nav__overlay-links button {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 12vw, 4.5rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  text-align: left;
+  color: var(--text);
+  transition: color 0.3s var(--ease), padding-left 0.3s var(--ease);
+}
+.nav__overlay-links button:hover {
+  color: var(--violet);
+  padding-left: 0.5rem;
+}
+.nav__overlay-index {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--text-faint);
+}
+.nav__overlay-foot {
+  margin-top: 3rem;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+}
+
+@media (max-width: 860px) {
+  .nav__links { display: none; }
+  .nav__cta { display: none; }
+  .nav__burger { display: inline-block; }
+}

@@ -1,0 +1,72 @@
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--gutter);
+}
+
+.preloader__inner {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.preloader__mark {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.preloader__name {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.preloader__role {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.preloader__counter {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 18vw, 11rem);
+  font-weight: 500;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  display: flex;
+  align-items: flex-start;
+  color: var(--text);
+}
+
+.preloader__percent {
+  font-size: 0.3em;
+  margin-top: 0.4em;
+  color: var(--text-dim);
+}
+
+.preloader__bar {
+  height: 2px;
+  width: 100%;
+  background: var(--line);
+  overflow: hidden;
+  margin-top: 1.5rem;
+}
+
+.preloader__bar-fill {
+  height: 100%;
+  width: 100%;
+  background: var(--grad);
+  transform-origin: 0 50%;
+}
