@@ -57,7 +57,8 @@ export default function Nav() {
 
   const go = (id) => {
     setOpen(false)
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    if (window.__lenis) window.__lenis.scrollTo(id === 'top' ? 0 : `#${id}`, { offset: -8 })
+    else document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (

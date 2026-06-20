@@ -58,6 +58,16 @@ export default function Contact() {
           <button className="contact__copy" onClick={copyEmail} data-cursor="Copy">
             {copied ? t({ id: 'Tersalin ✓', en: 'Copied ✓' }) : t({ id: 'Salin email', en: 'Copy email' })}
           </button>
+          <a
+            className="contact__copy contact__cv"
+            href="/Kautsar-Baiquni-CV.pdf"
+            target="_blank"
+            rel="noopener"
+            download
+            data-cursor="PDF"
+          >
+            {t({ id: 'Unduh CV', en: 'Download CV' })} ↓
+          </a>
         </Reveal>
 
         <Reveal className="contact__socials" delay={0.18}>
@@ -87,7 +97,9 @@ export default function Contact() {
             <Clock />
             <button
               className="footer__top"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              onClick={() =>
+                window.__lenis ? window.__lenis.scrollTo(0) : window.scrollTo({ top: 0, behavior: 'smooth' })
+              }
               data-cursor="Top"
             >
               {t({ id: 'Kembali ke atas', en: 'Back to top' })} ↑

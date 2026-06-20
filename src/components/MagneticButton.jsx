@@ -29,7 +29,9 @@ export default function MagneticButton({
   }
 
   const Tag = href ? motion.a : motion.button
-  const tagProps = href ? { href, target: rest.target, rel: rest.rel } : { onClick }
+  const tagProps = href
+    ? { href, target: rest.target, rel: rest.rel, download: rest.download }
+    : { onClick }
 
   return (
     <Tag

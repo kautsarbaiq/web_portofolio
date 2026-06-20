@@ -96,7 +96,11 @@ export default function Hero({ start }) {
         >
           <MagneticButton
             className="hero__cta hero__cta--primary"
-            onClick={() => document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() =>
+              window.__lenis
+                ? window.__lenis.scrollTo('#work')
+                : document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })
+            }
             cursor="Scroll"
           >
             <span>{t({ id: 'Lihat karya', en: 'View work' })}</span>
@@ -108,6 +112,17 @@ export default function Hero({ start }) {
             cursor="Email"
           >
             {t({ id: 'Hubungi saya', en: 'Get in touch' })}
+          </MagneticButton>
+          <MagneticButton
+            className="hero__cta hero__cta--ghost"
+            href="/Kautsar-Baiquni-CV.pdf"
+            target="_blank"
+            rel="noopener"
+            download
+            cursor="PDF"
+          >
+            {t({ id: 'Unduh CV', en: 'Download CV' })}
+            <span className="hero__cta-arrow">↓</span>
           </MagneticButton>
         </motion.div>
       </motion.div>
