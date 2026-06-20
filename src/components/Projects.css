@@ -91,7 +91,7 @@
 .frame__shot {
   aspect-ratio: 16 / 10;
   overflow: hidden;
-  background: var(--cover-2);
+  background: linear-gradient(160deg, var(--cover-1), var(--cover-2));
 }
 .frame__shot img {
   width: 100%;
@@ -99,6 +99,11 @@
   object-fit: cover;
   object-position: top center;
   transition: transform 0.6s var(--ease);
+}
+/* wide (landscape) screenshots: show the FULL page width, letterboxed,
+   instead of cropping the sides */
+.frame__shot img.is-wide {
+  object-fit: contain;
 }
 .pcard:hover .frame__shot img {
   transform: scale(1.04);
