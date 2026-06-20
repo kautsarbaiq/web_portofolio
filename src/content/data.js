@@ -43,12 +43,12 @@ export const about = {
   paragraphs: {
     id: [
       'Saya Kautsar — fullstack web developer dengan spesialisasi di arsitektur frontend, dan rekam jejak merilis aplikasi web yang scalable serta siap produksi.',
-      'Saat ini saya memimpin sebuah inisiatif digital untuk Pemerintah Kota Serang dan bekerja sebagai fullstack & app developer di Blue Soft IoT, Malaysia — merancang produk yang kokoh dan berpusat pada pengguna dengan Next.js, React, dan TypeScript, termasuk platform komunitas Ourtala.',
+      'Saat ini saya memimpin sebuah inisiatif digital untuk Pemerintah Kota Serang dan bekerja sebagai fullstack & app developer di Blue Soft IoT, Malaysia — merancang produk yang kokoh dan berpusat pada pengguna dengan Next.js, React, dan TypeScript.',
       'Saya senang menjembatani logika backend yang kompleks dengan antarmuka yang cepat, responsif, dan pixel-perfect — serta sangat peduli pada kode yang bersih dan mudah dirawat. Peraih Medali Emas POSN bidang Informatika.',
     ],
     en: [
       'I’m Kautsar — a fullstack web developer specializing in frontend architecture, with a proven track record of shipping scalable, production-ready web applications.',
-      'Right now I’m leading a digital initiative for the Serang City Government and working as a fullstack & app developer at Blue Soft IoT in Malaysia — architecting robust, user-centric products with Next.js, React, and TypeScript, including the Ourtala community platform.',
+      'Right now I’m leading a digital initiative for the Serang City Government and working as a fullstack & app developer at Blue Soft IoT in Malaysia — architecting robust, user-centric products with Next.js, React, and TypeScript.',
       'I love bridging complex backend logic with high-performance, responsive, pixel-perfect interfaces — and I care deeply about clean, maintainable code. POSN Informatika Gold Medalist.',
     ],
   },
@@ -118,22 +118,22 @@ export const experience = [
   },
 ]
 
-/* Proyek diambil dari GitHub (kautsarbaiq), urut terbaru → PHH-Ecommerce.
-   `image` mengarah ke screenshot di /public/projects (kalau ada);
-   kalau null, kartu memakai cover gradien. `type`: 'web' | 'app'. */
+/* Urutan: proyek web dengan screenshot asli dulu, lalu KPU (masih mockup,
+   belum ada foto asli), terakhir proyek aplikasi (app) di paling bawah.
+   `image` -> screenshot di /public/projects; `type`: 'web' | 'app'. */
 export const projects = [
   {
-    title: 'HCM PHH',
+    title: 'Akapack POS',
     year: '2026',
-    type: 'app',
+    type: 'web',
     tagline: {
-      id: 'Aplikasi manajemen komunitas perumahan dengan panel admin web.',
-      en: 'Housing-community management app with a web admin panel.',
+      id: 'Aplikasi kasir & manajemen retail untuk UMKM.',
+      en: 'POS & retail management app for small businesses.',
     },
-    tech: ['Flutter', 'Dart', 'PostgreSQL'],
-    links: { live: 'https://adminhousing.vercel.app', repo: 'https://github.com/kautsarbaiq/HCM-PHH-App' },
-    image: '/projects/hcm-phh.png',
-    accent: '#6d5efc',
+    tech: ['Next.js', 'Supabase', 'TanStack', 'Tailwind'],
+    links: { live: 'https://akapack-program-kasir.vercel.app', repo: 'https://github.com/kautsarbaiq/akapack_program_kasir' },
+    image: '/projects/akapack-kasir.png',
+    accent: '#f472b6',
   },
   {
     title: 'Akapack Website',
@@ -149,19 +149,6 @@ export const projects = [
     accent: '#2dd4ff',
   },
   {
-    title: 'Akapack POS',
-    year: '2026',
-    type: 'web',
-    tagline: {
-      id: 'Aplikasi kasir & manajemen retail untuk UMKM.',
-      en: 'POS & retail management app for small businesses.',
-    },
-    tech: ['Next.js', 'Supabase', 'TanStack', 'Tailwind'],
-    links: { live: 'https://akapack-program-kasir.vercel.app', repo: 'https://github.com/kautsarbaiq/akapack_program_kasir' },
-    image: '/projects/akapack-kasir.png',
-    accent: '#f472b6',
-  },
-  {
     title: 'PHH Inventory',
     year: '2026',
     type: 'web',
@@ -173,32 +160,6 @@ export const projects = [
     links: { live: 'https://phh-inventory-web-client.vercel.app', repo: 'https://github.com/kautsarbaiq/PHH-inventory-web' },
     image: '/projects/phh-inventory.png',
     accent: '#6d5efc',
-  },
-  {
-    title: 'HRM App',
-    year: '2026',
-    type: 'app',
-    tagline: {
-      id: 'Aplikasi manajemen karyawan: absensi, izin, kontrak.',
-      en: 'Employee management app: attendance, permits, contracts.',
-    },
-    tech: ['Flutter', 'Dart'],
-    links: { live: '', repo: 'https://github.com/kautsarbaiq/HRM-APP' },
-    image: '/projects/hrm-app.png',
-    accent: '#2dd4ff',
-  },
-  {
-    title: 'KPU Kota Serang',
-    year: '2026',
-    type: 'web',
-    tagline: {
-      id: 'Sistem pelaporan & absensi untuk KPU Kota Serang.',
-      en: 'Reporting & attendance system for the Serang Election Commission.',
-    },
-    tech: ['JavaScript', 'WebGL', 'CSS'],
-    links: { live: '', repo: 'https://github.com/kautsarbaiq/web_KPU_kota_serang' },
-    image: '/projects/kpu-serang.svg',
-    accent: '#f472b6',
   },
   {
     title: 'Blue Soft',
@@ -224,6 +185,45 @@ export const projects = [
     tech: ['HTML', 'CSS', 'JavaScript'],
     links: { live: 'https://phh-ecommerce.vercel.app', repo: 'https://github.com/kautsarbaiq/PHH-Ecommerce' },
     image: '/projects/phh-ecommerce.png',
+    accent: '#2dd4ff',
+  },
+  {
+    title: 'KPU Kota Serang',
+    year: '2026',
+    type: 'web',
+    tagline: {
+      id: 'Sistem pelaporan & absensi untuk KPU Kota Serang.',
+      en: 'Reporting & attendance system for the Serang Election Commission.',
+    },
+    tech: ['JavaScript', 'WebGL', 'CSS'],
+    links: { live: '', repo: 'https://github.com/kautsarbaiq/web_KPU_kota_serang' },
+    image: '/projects/kpu-serang.svg',
+    accent: '#f472b6',
+  },
+  {
+    title: 'HCM PHH',
+    year: '2026',
+    type: 'app',
+    tagline: {
+      id: 'Aplikasi manajemen komunitas perumahan dengan panel admin web.',
+      en: 'Housing-community management app with a web admin panel.',
+    },
+    tech: ['Flutter', 'Dart', 'PostgreSQL'],
+    links: { live: 'https://adminhousing.vercel.app', repo: 'https://github.com/kautsarbaiq/HCM-PHH-App' },
+    image: '/projects/hcm-phh.png',
+    accent: '#6d5efc',
+  },
+  {
+    title: 'HRM App',
+    year: '2026',
+    type: 'app',
+    tagline: {
+      id: 'Aplikasi manajemen karyawan: absensi, izin, kontrak.',
+      en: 'Employee management app: attendance, permits, contracts.',
+    },
+    tech: ['Flutter', 'Dart'],
+    links: { live: '', repo: 'https://github.com/kautsarbaiq/HRM-APP' },
+    image: '/projects/hrm-app.png',
     accent: '#2dd4ff',
   },
 ]
