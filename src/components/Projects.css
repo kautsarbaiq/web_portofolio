@@ -10,10 +10,15 @@
   margin-top: 1.2rem;
 }
 
+/* masonry-style columns so each card is exactly as tall as its content
+   (no forced row height, no empty space under short/wide screenshots) */
 .projects__grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.6rem;
+  column-count: 2;
+  column-gap: 1.6rem;
+}
+.projects__grid > * {
+  break-inside: avoid;
+  margin-bottom: 1.6rem;
 }
 
 /* ---- card ---- */
@@ -23,7 +28,6 @@
   --ry: 0deg;
   --mx: 50%;
   --my: 50%;
-  height: 100%;
   border-radius: var(--radius-lg);
   border: 1px solid var(--glass-border);
   background: var(--glass);
@@ -89,21 +93,16 @@
   max-width: 70%;
 }
 .frame__shot {
-  aspect-ratio: 16 / 10;
   overflow: hidden;
   background: linear-gradient(160deg, var(--cover-1), var(--cover-2));
+  line-height: 0;
 }
+/* web screenshots: full width, natural height — no crop, no empty space */
 .frame__shot img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
+  height: auto;
+  display: block;
   transition: transform 0.6s var(--ease);
-}
-/* wide (landscape) screenshots: show the FULL page width, letterboxed,
-   instead of cropping the sides */
-.frame__shot img.is-wide {
-  object-fit: contain;
 }
 .pcard:hover .frame__shot img {
   transform: scale(1.04);
@@ -114,6 +113,7 @@
    resolves against the aspect-ratio height — otherwise the tall phone
    overflows and gets cropped. */
 .frame--app .frame__shot {
+  aspect-ratio: 4 / 3;
   background:
     radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%),
     linear-gradient(160deg, var(--cover-1), var(--cover-2));
@@ -266,6 +266,6 @@
 
 @media (max-width: 860px) {
   .projects__grid {
-    grid-template-columns: 1fr;
+    column-count: 1;
   }
 }

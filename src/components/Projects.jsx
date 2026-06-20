@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { projects } from '../content/data'
 import { useLang } from '../context/LanguageContext'
 import Reveal from './Reveal'
@@ -15,7 +15,6 @@ function hostOf(url) {
 function ProjectCard({ project, index }) {
   const { t } = useLang()
   const ref = useRef(null)
-  const [wide, setWide] = useState(false)
 
   const handleMove = (e) => {
     const el = ref.current
@@ -58,13 +57,7 @@ function ProjectCard({ project, index }) {
               <span className="frame__url">{isApp ? 'app' : hostOf(live)}</span>
             </div>
             <div className="frame__shot">
-              <img
-                src={project.image}
-                alt={`${project.title} preview`}
-                loading="lazy"
-                className={wide ? 'is-wide' : ''}
-                onLoad={(e) => setWide(e.currentTarget.naturalWidth / e.currentTarget.naturalHeight > 1.6)}
-              />
+              <img src={project.image} alt={`${project.title} preview`} loading="lazy" />
             </div>
           </div>
         ) : (
