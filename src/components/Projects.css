@@ -68,7 +68,7 @@
   background:
     radial-gradient(120% 120% at 18% 8%, color-mix(in srgb, var(--accent) 85%, transparent), transparent 58%),
     radial-gradient(110% 110% at 92% 92%, color-mix(in srgb, var(--sky) 70%, transparent), transparent 62%),
-    linear-gradient(160deg, #f3f5fd, #e3e8f5);
+    linear-gradient(160deg, var(--cover-1), var(--cover-2));
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -170,7 +170,7 @@
   color: var(--text-dim);
   padding: 0.3rem 0.7rem;
   border: 1px solid var(--glass-border);
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--glass-faint);
   border-radius: 100px;
 }
 .pcard__cta {
