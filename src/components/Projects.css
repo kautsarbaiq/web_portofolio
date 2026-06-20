@@ -104,19 +104,24 @@
   transform: scale(1.04);
 }
 
-/* app (portrait phone) screenshots: contain + centered on a tinted backdrop */
+/* app (portrait phone) screenshots: show the full screen, contained and
+   centered on a tinted backdrop. Flexbox (not grid) so max-height:100%
+   resolves against the aspect-ratio height — otherwise the tall phone
+   overflows and gets cropped. */
 .frame--app .frame__shot {
   background:
     radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%),
     linear-gradient(160deg, var(--cover-1), var(--cover-2));
-  display: grid;
-  place-items: center;
-  padding: 14px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 0;
 }
 .frame--app .frame__shot img {
   width: auto;
-  max-width: 60%;
-  height: 100%;
+  height: auto;
+  max-width: 58%;
+  max-height: 100%;
   object-fit: contain;
   border-radius: 14px;
   box-shadow: 0 16px 34px -12px rgba(31, 38, 80, 0.4);
