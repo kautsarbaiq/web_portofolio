@@ -132,7 +132,7 @@ export const projects = [
     },
     tech: ['Flutter', 'Dart', 'PostgreSQL'],
     links: { live: 'https://adminhousing.vercel.app', repo: 'https://github.com/kautsarbaiq/HCM-PHH-App' },
-    image: '/projects/hcm-phh.svg',
+    image: '/projects/hcm-phh.png',
     accent: '#6d5efc',
   },
   {
@@ -171,7 +171,7 @@ export const projects = [
     },
     tech: ['React', 'Vite', 'TypeScript', 'Tailwind'],
     links: { live: 'https://phh-inventory-web-client.vercel.app', repo: 'https://github.com/kautsarbaiq/PHH-inventory-web' },
-    image: '/projects/phh-inventory.svg',
+    image: '/projects/phh-inventory.png',
     accent: '#6d5efc',
   },
   {
