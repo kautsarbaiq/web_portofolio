@@ -1,0 +1,193 @@
+<svg viewBox="0 0 1280 800" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" font-family="Inter, system-ui, -apple-system, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eef1f8"/>
+      <stop offset="1" stop-color="#e4e8f3"/>
+    </linearGradient>
+    <filter id="sh" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="8" stdDeviation="14" flood-color="#1f2650" flood-opacity="0.10"/>
+    </filter>
+    <filter id="phoneShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="24" stdDeviation="40" flood-color="#1f2650" flood-opacity="0.22"/>
+    </filter>
+    <filter id="blurAccent" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="70"/>
+    </filter>
+    <clipPath id="screenClip">
+      <rect x="466" y="44" width="348" height="712" rx="30"/>
+    </clipPath>
+    <linearGradient id="attCard" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2dd4ff" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#2dd4ff" stop-opacity="0.10"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="1280" height="800" fill="url(#bg)"/>
+
+  <!-- Soft blurred accent circles -->
+  <circle cx="360" cy="200" r="150" fill="#2dd4ff" opacity="0.30" filter="url(#blurAccent)"/>
+  <circle cx="930" cy="620" r="180" fill="#2dd4ff" opacity="0.26" filter="url(#blurAccent)"/>
+
+  <!-- Phone body -->
+  <g filter="url(#phoneShadow)">
+    <rect x="450" y="20" width="380" height="760" rx="44" fill="#0d1320"/>
+    <rect x="458" y="28" width="364" height="744" rx="38" fill="#ffffff"/>
+  </g>
+
+  <!-- Notch -->
+  <rect x="588" y="36" width="104" height="20" rx="10" fill="#0d1320"/>
+
+  <!-- Screen content -->
+  <g clip-path="url(#screenClip)">
+    <rect x="466" y="44" width="348" height="712" fill="#f4f6fb"/>
+
+    <!-- Status bar -->
+    <text x="486" y="78" font-size="13" font-weight="600" fill="#0d1320">9:41</text>
+    <!-- signal -->
+    <g fill="#0d1320">
+      <rect x="742" y="70" width="3" height="6" rx="1"/>
+      <rect x="747" y="67" width="3" height="9" rx="1"/>
+      <rect x="752" y="64" width="3" height="12" rx="1"/>
+      <rect x="757" y="61" width="3" height="15" rx="1"/>
+    </g>
+    <!-- wifi -->
+    <g fill="none" stroke="#0d1320" stroke-width="2" stroke-linecap="round">
+      <path d="M766 68 a8 8 0 0 1 12 0"/>
+      <path d="M769 71 a4 4 0 0 1 6 0"/>
+    </g>
+    <circle cx="772" cy="74" r="1.4" fill="#0d1320"/>
+    <!-- battery -->
+    <rect x="786" y="64" width="20" height="11" rx="3" fill="none" stroke="#0d1320" stroke-width="1.6"/>
+    <rect x="788" y="66" width="14" height="7" rx="1.5" fill="#0d1320"/>
+    <rect x="807" y="67" width="2" height="5" rx="1" fill="#0d1320"/>
+
+    <!-- Header -->
+    <text x="486" y="116" font-size="14" fill="#8b92a4">Good morning,</text>
+    <text x="486" y="142" font-size="24" font-weight="700" fill="#0d1320">Kautsar</text>
+    <!-- Avatar -->
+    <circle cx="780" cy="124" r="22" fill="#2dd4ff" opacity="0.14"/>
+    <circle cx="780" cy="124" r="22" fill="none" stroke="#2dd4ff" stroke-width="1.6"/>
+    <circle cx="780" cy="117" r="7" fill="none" stroke="#2dd4ff" stroke-width="2"/>
+    <path d="M769 137 a11 9 0 0 1 22 0" fill="none" stroke="#2dd4ff" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Attendance card -->
+    <g filter="url(#sh)">
+      <rect x="486" y="166" width="308" height="170" rx="16" fill="#ffffff"/>
+      <rect x="486" y="166" width="308" height="170" rx="16" fill="url(#attCard)"/>
+      <rect x="486" y="166" width="308" height="170" rx="16" fill="none" stroke="#e7eaf2"/>
+    </g>
+    <!-- clock icon -->
+    <circle cx="514" cy="200" r="11" fill="none" stroke="#2dd4ff" stroke-width="2"/>
+    <path d="M514 194 v6 l4 3" fill="none" stroke="#2dd4ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="534" y="205" font-size="13" font-weight="600" fill="#0d1320">Today</text>
+    <text x="486" y="262" font-size="52" font-weight="800" fill="#0d1320" font-family="Inter, system-ui, sans-serif" transform="translate(20,0)">08:24</text>
+    <text x="506" y="288" font-size="13" fill="#8b92a4">Thursday, 20 June 2026</text>
+    <!-- Check In pill -->
+    <rect x="506" y="302" width="268" height="20" rx="0" fill="none"/>
+    <g transform="translate(0,0)">
+      <rect x="566" y="298" width="208" height="22" rx="0" fill="none"/>
+    </g>
+
+    <!-- Check In button -->
+    <g filter="url(#sh)">
+      <rect x="586" y="296" width="188" height="0" rx="0" fill="none"/>
+    </g>
+    <rect x="586" y="296" width="188" height="24" rx="0" fill="none"/>
+    <g>
+      <rect x="586" y="296" width="0" height="0"/>
+    </g>
+    <!-- proper check in pill -->
+    <rect x="606" y="298" width="168" height="22" rx="11" fill="none"/>
+
+    <!-- Stat tiles -->
+    <g filter="url(#sh)">
+      <rect x="486" y="356" width="96" height="86" rx="14" fill="#ffffff"/>
+      <rect x="592" y="356" width="96" height="86" rx="14" fill="#ffffff"/>
+      <rect x="698" y="356" width="96" height="86" rx="14" fill="#ffffff"/>
+    </g>
+    <rect x="486" y="356" width="96" height="86" rx="14" fill="none" stroke="#e7eaf2"/>
+    <rect x="592" y="356" width="96" height="86" rx="14" fill="none" stroke="#e7eaf2"/>
+    <rect x="698" y="356" width="96" height="86" rx="14" fill="none" stroke="#e7eaf2"/>
+
+    <!-- tile 1 present -->
+    <circle cx="514" cy="384" r="9" fill="#16a34a" opacity="0.14"/>
+    <path d="M510 384 l3 3 l5 -6" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="500" y="418" font-size="22" font-weight="800" fill="#0d1320">21</text>
+    <text x="500" y="434" font-size="11" fill="#8b92a4">Present</text>
+
+    <!-- tile 2 late -->
+    <circle cx="620" cy="384" r="9" fill="#f59e0b" opacity="0.14"/>
+    <path d="M620 379 v5 l3 3" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="606" y="418" font-size="22" font-weight="800" fill="#0d1320">2</text>
+    <text x="606" y="434" font-size="11" fill="#8b92a4">Late</text>
+
+    <!-- tile 3 leave -->
+    <circle cx="726" cy="384" r="9" fill="#2dd4ff" opacity="0.18"/>
+    <rect x="721" y="379" width="10" height="9" rx="2" fill="none" stroke="#2dd4ff" stroke-width="1.8"/>
+    <path d="M723 379 v-2 M729 379 v-2" stroke="#2dd4ff" stroke-width="1.8" stroke-linecap="round"/>
+    <text x="712" y="418" font-size="22" font-weight="800" fill="#0d1320">1</text>
+    <text x="712" y="434" font-size="11" fill="#8b92a4">Leave</text>
+
+    <!-- Recent section -->
+    <text x="486" y="478" font-size="15" font-weight="700" fill="#0d1320">Recent</text>
+    <text x="772" y="478" font-size="12" fill="#2dd4ff" text-anchor="end" font-weight="600">All</text>
+
+    <!-- Recent rows -->
+    <!-- row 1 -->
+    <g filter="url(#sh)"><rect x="486" y="492" width="308" height="62" rx="14" fill="#ffffff"/></g>
+    <rect x="486" y="492" width="308" height="62" rx="14" fill="none" stroke="#e7eaf2"/>
+    <circle cx="516" cy="523" r="16" fill="#16a34a" opacity="0.14"/>
+    <path d="M508 523 l5 5 l9 -10" fill="none" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="544" y="518" font-size="14" font-weight="600" fill="#0d1320">Check-in</text>
+    <text x="544" y="536" font-size="12" fill="#8b92a4">08:24 AM</text>
+    <rect x="690" y="512" width="86" height="22" rx="11" fill="#16a34a" opacity="0.14"/>
+    <text x="733" y="527" font-size="11" font-weight="600" fill="#16a34a" text-anchor="middle">On time</text>
+
+    <!-- row 2 -->
+    <g filter="url(#sh)"><rect x="486" y="564" width="308" height="62" rx="14" fill="#ffffff"/></g>
+    <rect x="486" y="564" width="308" height="62" rx="14" fill="none" stroke="#e7eaf2"/>
+    <circle cx="516" cy="595" r="16" fill="#2dd4ff" opacity="0.16"/>
+    <rect x="509" y="589" width="14" height="12" rx="2" fill="none" stroke="#2dd4ff" stroke-width="2"/>
+    <path d="M512 589 v-2 M520 589 v-2 M509 593 h14" stroke="#2dd4ff" stroke-width="2" stroke-linecap="round"/>
+    <text x="544" y="590" font-size="14" font-weight="600" fill="#0d1320">Leave request</text>
+    <text x="544" y="608" font-size="12" fill="#8b92a4">19 June</text>
+    <rect x="686" y="584" width="90" height="22" rx="11" fill="#16a34a" opacity="0.14"/>
+    <text x="731" y="599" font-size="11" font-weight="600" fill="#16a34a" text-anchor="middle">Approved</text>
+
+    <!-- row 3 -->
+    <g filter="url(#sh)"><rect x="486" y="636" width="308" height="62" rx="14" fill="#ffffff"/></g>
+    <rect x="486" y="636" width="308" height="62" rx="14" fill="none" stroke="#e7eaf2"/>
+    <circle cx="516" cy="667" r="16" fill="#8b92a4" opacity="0.14"/>
+    <path d="M516 660 v7 l5 3" fill="none" stroke="#8b92a4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="516" cy="667" r="9" fill="none" stroke="#8b92a4" stroke-width="2"/>
+    <text x="544" y="662" font-size="14" font-weight="600" fill="#0d1320">Check-out</text>
+    <text x="544" y="680" font-size="12" fill="#8b92a4">17:30 PM</text>
+    <rect x="694" y="656" width="82" height="22" rx="11" fill="#f59e0b" opacity="0.14"/>
+    <text x="735" y="671" font-size="11" font-weight="600" fill="#f59e0b" text-anchor="middle">Pending</text>
+
+    <!-- Bottom tab bar -->
+    <rect x="466" y="710" width="348" height="46" fill="#ffffff"/>
+    <line x1="466" y1="710" x2="814" y2="710" stroke="#e7eaf2" stroke-width="1"/>
+
+    <!-- home active -->
+    <rect x="496" y="722" width="44" height="26" rx="13" fill="#2dd4ff" opacity="0.14"/>
+    <path d="M510 736 l8 -7 l8 7 v8 h-16 z" fill="none" stroke="#2dd4ff" stroke-width="2" stroke-linejoin="round"/>
+    <!-- attendance -->
+    <circle cx="588" cy="731" r="8" fill="none" stroke="#8b92a4" stroke-width="2"/>
+    <path d="M588 727 v4 l3 2" fill="none" stroke="#8b92a4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- leave -->
+    <rect x="676" y="725" width="16" height="13" rx="2" fill="none" stroke="#8b92a4" stroke-width="2"/>
+    <path d="M680 725 v-2 M688 725 v-2 M676 730 h16" stroke="#8b92a4" stroke-width="2" stroke-linecap="round"/>
+    <!-- profile -->
+    <circle cx="766" cy="728" r="5" fill="none" stroke="#8b92a4" stroke-width="2"/>
+    <path d="M758 740 a8 7 0 0 1 16 0" fill="none" stroke="#8b92a4" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Check In pill button (drawn over screen content, inside clip not needed but keep within screen) -->
+  <g clip-path="url(#screenClip)">
+    <rect x="606" y="298" width="168" height="24" rx="12" fill="#2dd4ff" filter="url(#sh)"/>
+    <path d="M624 310 l4 4 l8 -8" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="650" y="314" font-size="13" font-weight="700" fill="#ffffff">Check In</text>
+  </g>
+</svg>

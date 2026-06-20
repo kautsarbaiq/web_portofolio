@@ -132,7 +132,7 @@ export const projects = [
     },
     tech: ['Flutter', 'Dart', 'PostgreSQL'],
     links: { live: 'https://adminhousing.vercel.app', repo: 'https://github.com/kautsarbaiq/HCM-PHH-App' },
-    image: null,
+    image: '/projects/hcm-phh.svg',
     accent: '#6d5efc',
   },
   {
@@ -171,7 +171,7 @@ export const projects = [
     },
     tech: ['React', 'Vite', 'TypeScript', 'Tailwind'],
     links: { live: 'https://phh-inventory-web-client.vercel.app', repo: 'https://github.com/kautsarbaiq/PHH-inventory-web' },
-    image: null,
+    image: '/projects/phh-inventory.svg',
     accent: '#6d5efc',
   },
   {
@@ -184,7 +184,7 @@ export const projects = [
     },
     tech: ['Flutter', 'Dart'],
     links: { live: '', repo: 'https://github.com/kautsarbaiq/HRM-APP' },
-    image: null,
+    image: '/projects/hrm-app.svg',
     accent: '#2dd4ff',
   },
   {
@@ -197,7 +197,7 @@ export const projects = [
     },
     tech: ['JavaScript', 'WebGL', 'CSS'],
     links: { live: '', repo: 'https://github.com/kautsarbaiq/web_KPU_kota_serang' },
-    image: null,
+    image: '/projects/kpu-serang.svg',
     accent: '#f472b6',
   },
   {
@@ -210,7 +210,7 @@ export const projects = [
     },
     tech: ['React', 'Vite', 'Spline', 'Tailwind'],
     links: { live: 'https://web-blue-soft.vercel.app', repo: 'https://github.com/kautsarbaiq/web-blue-soft' },
-    image: null,
+    image: '/projects/blue-soft.svg',
     accent: '#6d5efc',
   },
   {
