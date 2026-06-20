@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { about, profile } from '../content/data'
 import { useLang } from '../context/LanguageContext'
 import Reveal from './Reveal'
+import CountUp from './CountUp'
 import './About.css'
 
 export default function About() {
@@ -35,7 +36,7 @@ export default function About() {
           <div className="about__stats">
             {about.stats.map((s, i) => (
               <Reveal className="about__stat" key={i} delay={0.1 + i * 0.07}>
-                <span className="about__stat-value gradient-text">{s.value}</span>
+                <CountUp className="about__stat-value gradient-text" value={s.value} />
                 <span className="about__stat-label">{t(s.label)}</span>
               </Reveal>
             ))}
