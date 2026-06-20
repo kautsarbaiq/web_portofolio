@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
+import Lenis from 'lenis'
+import 'lenis/dist/lenis.css'
 import Preloader from './components/Preloader'
 import Background from './components/Background'
 import Cursor from './components/Cursor'
@@ -20,6 +22,28 @@ export default function App() {
     document.body.style.overflow = loading ? 'hidden' : ''
     return () => {
       document.body.style.overflow = ''
+    }
+  }, [loading])
+
+  // Smooth scrolling (Lenis) — start once the intro is done.
+  useEffect(() => {
+    if (loading) return
+    const lenis = new Lenis({
+      duration: 1.1,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    })
+    window.__lenis = lenis
+    let raf
+    const loop = (time) => {
+      lenis.raf(time)
+      raf = requestAnimationFrame(loop)
+    }
+    raf = requestAnimationFrame(loop)
+    return () => {
+      cancelAnimationFrame(raf)
+      lenis.destroy()
+      delete window.__lenis
     }
   }, [loading])
 
