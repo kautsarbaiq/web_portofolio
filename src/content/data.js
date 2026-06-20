@@ -210,7 +210,7 @@ export const projects = [
     },
     tech: ['React', 'Vite', 'Spline', 'Tailwind'],
     links: { live: 'https://web-blue-soft.vercel.app', repo: 'https://github.com/kautsarbaiq/web-blue-soft' },
-    image: '/projects/blue-soft.svg',
+    image: '/projects/blue-soft.png',
     accent: '#6d5efc',
   },
   {
