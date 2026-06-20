@@ -5,8 +5,8 @@
   height: 100%;
   z-index: 0;
   pointer-events: none;
-  /* keep centered so cursor-repulsion math lines up with the canvas */
-  transform: translateY(-2%);
+  /* shift the crystal right so it frames the headline rather than sitting behind it */
+  transform: translate(22%, -2%);
 }
 
 .scene3d canvas {
