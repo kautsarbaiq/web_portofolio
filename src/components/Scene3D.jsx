@@ -1,17 +1,16 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
 import './Scene3D.css'
 
 /* -------------------------------------------------------------------------
-   Scene3D — an interactive particle nebula (imperative three.js).
-   ~7k points on a Fibonacci sphere, driven by multi-octave simplex
-   turbulence. The cloud:
-     • repels in 3D away from the cursor (a bulge that tracks the pointer)
-     • emits an expanding shockwave on click
-     • disperses + spins faster as you scroll the hero
-     • glows hotter where the cursor is near
-   A faint wireframe icosahedron sits inside as structure. All rotation
-   happens in the shader (uRot) so the cursor math stays in world space.
+   Scene3D — a refractive glass crystal (imperative three.js).
+   A faceted icosahedron rendered with MeshPhysicalMaterial transmission +
+   iridescence, so it behaves like real frosted glass: it refracts the
+   environment, throws coloured highlights, and shifts hue with view angle.
+   The surface gently morphs (vertex noise via onBeforeCompile), the whole
+   gem bobs + spins, follows the cursor, and pulses on click.
+   Theme-aware: lighting/exposure adapt to light vs dark.
    ------------------------------------------------------------------------- */
 
 const SIMPLEX = /* glsl */ `
@@ -37,109 +36,7 @@ float snoise(vec3 v){
   vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0); m=m*m;
   return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
 }
-float fbm(vec3 p){
-  float v=0.0; float a=0.5;
-  for(int i=0;i<4;i++){ v+=a*snoise(p); p*=2.02; a*=0.5; }
-  return v;
-}
 `
-
-const VERT = /* glsl */ `
-uniform float uTime;
-uniform float uSize;
-uniform float uPixelRatio;
-uniform float uScroll;
-uniform float uMouseStrength;
-uniform float uShock;
-uniform float uShockPhase;
-uniform vec3 uMouse;
-uniform vec3 uShockPos;
-uniform mat3 uRot;
-attribute float aSeed;
-attribute float aScale;
-varying float vMix;
-varying float vGlow;
-${SIMPLEX}
-void main(){
-  vec3 base = position;
-  vec3 nrm = normalize(base);
-  float t = uTime * 0.16;
-
-  // multi-octave turbulence sampled in stable (un-rotated) space
-  float f = fbm(base * 0.55 + vec3(t));
-  float f2 = fbm(base * 1.6 - vec3(t * 1.25));
-  float disp = f * 0.6 + f2 * 0.4;
-
-  // rotate the whole cloud in the shader (keeps cursor math in world space)
-  vec3 p = uRot * base;
-  vec3 wn = uRot * nrm;
-
-  // radial turbulence + scroll-driven dispersion
-  p += wn * disp * (0.95 + uScroll * 2.2);
-
-  // tangential swirl => flowing motion
-  vec3 tang = normalize(cross(wn, vec3(0.0, 1.0, 0.0)) + 1e-4);
-  p += tang * f2 * (0.45 + uScroll * 0.6);
-
-  // 3D cursor repulsion — a bulge that follows the pointer
-  vec3 toM = p - uMouse;
-  float dM = length(toM);
-  float push = uMouseStrength * exp(-dM * dM * 0.6);
-  p += normalize(toM) * push;
-  float near = exp(-dM * dM * 0.5);
-
-  // click shockwave — an expanding ring from the click point
-  float dS = length(p - uShockPos);
-  float ring = sin(dS * 5.0 - uShockPhase);
-  p += wn * ring * uShock * exp(-dS * 0.55) * 0.8;
-
-  vMix = clamp(0.5 + f * 0.7 + sin(t * 0.5 + aSeed * 6.28) * 0.12, 0.0, 1.0);
-  vGlow = 0.38 + 0.55 * smoothstep(-0.2, 0.6, f) + near * 0.9 + uShock * abs(ring) * 0.4;
-
-  vec4 mv = modelViewMatrix * vec4(p, 1.0);
-  gl_Position = projectionMatrix * mv;
-  gl_PointSize = uSize * aScale * uPixelRatio * (12.0 / -mv.z) * (1.0 + near * 1.8 + uScroll * 0.6);
-}
-`
-
-const FRAG = /* glsl */ `
-precision highp float;
-uniform vec3 uColorA;
-uniform vec3 uColorB;
-uniform vec3 uColorC;
-uniform float uOpacity;
-varying float vMix;
-varying float vGlow;
-void main(){
-  float d = length(gl_PointCoord - 0.5);
-  if (d > 0.5) discard;
-  float soft = smoothstep(0.5, 0.0, d);
-  vec3 col = mix(uColorA, uColorB, vMix);
-  col = mix(col, uColorC, smoothstep(0.62, 1.0, vMix) * 0.7);
-  // slight core deepening for dimension on a light backdrop
-  col *= 0.8 + (1.0 - d) * 0.28;
-  float alpha = soft * uOpacity * clamp(vGlow, 0.0, 1.25) * 0.6;
-  gl_FragColor = vec4(col, alpha);
-}
-`
-
-function fibonacciSphere(count, radius) {
-  const positions = new Float32Array(count * 3)
-  const seeds = new Float32Array(count)
-  const scales = new Float32Array(count)
-  const golden = Math.PI * (3 - Math.sqrt(5))
-  for (let i = 0; i < count; i++) {
-    const y = 1 - (i / (count - 1)) * 2
-    const r = Math.sqrt(1 - y * y)
-    const theta = golden * i
-    positions[i * 3] = Math.cos(theta) * r * radius
-    positions[i * 3 + 1] = y * radius
-    positions[i * 3 + 2] = Math.sin(theta) * r * radius
-    seeds[i] = Math.random()
-    scales[i] = 0.5 + Math.random() * 1.7
-  }
-  return { positions, seeds, scales }
-}
 
 export default function Scene3D() {
   const mountRef = useRef(null)
@@ -154,11 +51,9 @@ export default function Scene3D() {
     try {
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' })
     } catch (e) {
-      return // no WebGL — CSS aurora still carries the look
+      return
     }
 
-    // Fall back to viewport size if the container hasn't been laid out yet
-    // (can happen on lazy mount before the hero has width).
     const sizeOf = () => ({
       w: mount.clientWidth || window.innerWidth,
       h: mount.clientHeight || window.innerHeight,
@@ -168,96 +63,104 @@ export default function Scene3D() {
     const init = sizeOf()
     renderer.setPixelRatio(dpr)
     renderer.setSize(init.w, init.h)
-    renderer.setClearColor(0x000000, 0)
+    renderer.toneMapping = THREE.ACESFilmicToneMapping
+    renderer.toneMappingExposure = 1.0
     mount.appendChild(renderer.domElement)
 
     const scene = new THREE.Scene()
-    const FOV = 42
-    const camera = new THREE.PerspectiveCamera(FOV, init.w / init.h, 0.1, 100)
-    const CAM_Z = 10
-    camera.position.set(0, 0, CAM_Z)
+    const camera = new THREE.PerspectiveCamera(40, init.w / init.h, 0.1, 100)
+    camera.position.set(0, 0, 6)
 
-    const RADIUS = 3.2
-    const COUNT = window.innerWidth < 720 ? 4500 : 7400
-    const { positions, seeds, scales } = fibonacciSphere(COUNT, RADIUS)
+    // environment for reflections / refraction
+    const pmrem = new THREE.PMREMGenerator(renderer)
+    const envRT = pmrem.fromScene(new RoomEnvironment(), 0.04)
+    scene.environment = envRT.texture
 
-    const geometry = new THREE.BufferGeometry()
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-    geometry.setAttribute('aSeed', new THREE.BufferAttribute(seeds, 1))
-    geometry.setAttribute('aScale', new THREE.BufferAttribute(scales, 1))
+    // coloured lights for chromatic highlights
+    const amb = new THREE.AmbientLight(0xffffff, 0.35)
+    const l1 = new THREE.PointLight(0x7c5cff, 40, 25)
+    l1.position.set(-4, 2.5, 4)
+    const l2 = new THREE.PointLight(0x2dd4ff, 36, 25)
+    l2.position.set(4, -1.5, 3)
+    const l3 = new THREE.PointLight(0xf472b6, 30, 25)
+    l3.position.set(0, 3.5, -3)
+    scene.add(amb, l1, l2, l3)
 
-    const uniforms = {
-      uTime: { value: 0 },
-      uSize: { value: 10.0 },
-      uPixelRatio: { value: dpr },
-      uScroll: { value: 0 },
-      uMouseStrength: { value: 0.5 },
-      uShock: { value: 0 },
-      uShockPhase: { value: 0 },
-      uMouse: { value: new THREE.Vector3(99, 99, 99) },
-      uShockPos: { value: new THREE.Vector3(0, 0, 0) },
-      uRot: { value: new THREE.Matrix3() },
-      uColorA: { value: new THREE.Color('#7c5cff') },
-      uColorB: { value: new THREE.Color('#1ba3ef') },
-      uColorC: { value: new THREE.Color('#ec4899') },
-      uOpacity: { value: 0.0 },
-    }
-
-    const material = new THREE.ShaderMaterial({
-      uniforms,
-      vertexShader: VERT,
-      fragmentShader: FRAG,
-      transparent: true,
-      depthWrite: false,
-      blending: THREE.NormalBlending,
+    // the crystal
+    const SCALE = window.innerWidth < 720 ? 1.15 : 1.4
+    const geometry = new THREE.IcosahedronGeometry(1.5, 2)
+    const material = new THREE.MeshPhysicalMaterial({
+      transmission: 1,
+      thickness: 1.6,
+      roughness: 0.16,
+      ior: 1.45,
+      iridescence: 1,
+      iridescenceIOR: 1.34,
+      metalness: 0,
+      clearcoat: 1,
+      clearcoatRoughness: 0.22,
+      color: 0xffffff,
+      attenuationColor: new THREE.Color('#bcd0ff'),
+      attenuationDistance: 2.2,
+      envMapIntensity: 1.2,
+      flatShading: true,
     })
 
-    const points = new THREE.Points(geometry, material)
-    scene.add(points)
-
-    // faint wireframe core for structure
-    const wire = new THREE.LineSegments(
-      new THREE.WireframeGeometry(new THREE.IcosahedronGeometry(RADIUS * 0.62, 1)),
-      new THREE.LineBasicMaterial({
-        color: new THREE.Color('#7c5cff'),
-        transparent: true,
-        opacity: 0.0,
-        blending: THREE.NormalBlending,
-        depthWrite: false,
-      }),
-    )
-    scene.add(wire)
-
-    // --- view-space mapping for the cursor ---
-    let halfH = Math.tan((FOV / 2) * (Math.PI / 180)) * CAM_Z
-    let halfW = halfH * camera.aspect
-    const computeExtent = () => {
-      halfH = Math.tan((FOV / 2) * (Math.PI / 180)) * CAM_Z
-      halfW = halfH * camera.aspect
+    // inject a gentle vertex morph (flatShading recomputes normals for us)
+    let shaderRef = null
+    material.onBeforeCompile = (shader) => {
+      shader.uniforms.uTime = { value: 0 }
+      shader.uniforms.uAmp = { value: 0.14 }
+      shader.vertexShader =
+        SIMPLEX +
+        '\nuniform float uTime;\nuniform float uAmp;\n' +
+        shader.vertexShader.replace(
+          '#include <begin_vertex>',
+          `#include <begin_vertex>
+           vec3 dir = normalize(position);
+           float nA = snoise(dir * 1.7 + vec3(uTime * 0.4));
+           float nB = snoise(dir * 3.2 - vec3(uTime * 0.3));
+           transformed += normalize(objectNormal) * (nA * 0.7 + nB * 0.3) * uAmp;`,
+        )
+      shaderRef = shader
     }
-    computeExtent()
 
-    // --- interaction state ---
-    const targetN = { x: 0, y: 0 } // normalised cursor (-1..1)
+    const mesh = new THREE.Mesh(geometry, material)
+    mesh.scale.setScalar(SCALE)
+    scene.add(mesh)
+
+    // --- theme handling ---
+    const applyTheme = () => {
+      const dark = document.documentElement.dataset.theme === 'dark'
+      renderer.toneMappingExposure = dark ? 1.15 : 0.95
+      // light mode: tint the glass body + drop white reflections so it reads on white
+      material.transmission = dark ? 1.0 : 0.88
+      material.roughness = dark ? 0.16 : 0.22
+      material.envMapIntensity = dark ? 0.6 : 0.7
+      material.iridescence = dark ? 1.0 : 1.0
+      material.attenuationColor.set(dark ? '#7c5cff' : '#6d5efc')
+      material.attenuationDistance = dark ? 1.8 : 0.85
+      amb.intensity = dark ? 0.18 : 0.28
+      l1.intensity = dark ? 70 : 62
+      l2.intensity = dark ? 62 : 54
+      l3.intensity = dark ? 52 : 46
+    }
+    applyTheme()
+    const themeObserver = new MutationObserver(applyTheme)
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+
+    // --- interaction ---
+    const targetN = { x: 0, y: 0 }
     const curN = { x: 0, y: 0 }
     let moveImpulse = 0
-    let hasPointer = false
-    let shock = 0
-    let shockPhase = 0
-    const rotM4 = new THREE.Matrix4()
-    const euler = new THREE.Euler()
-
+    let clickPulse = 0
     const onPointer = (e) => {
       targetN.x = (e.clientX / window.innerWidth) * 2 - 1
       targetN.y = -((e.clientY / window.innerHeight) * 2 - 1)
       moveImpulse = 1
-      hasPointer = true
     }
-    const onDown = (e) => {
-      // start a shockwave at the current cursor position in world space
-      shock = 1
-      shockPhase = 0
-      uniforms.uShockPos.value.set(curN.x * halfW, curN.y * halfH, 1.6)
+    const onDown = () => {
+      clickPulse = 1
     }
     window.addEventListener('pointermove', onPointer, { passive: true })
     window.addEventListener('pointerdown', onDown)
@@ -268,11 +171,8 @@ export default function Scene3D() {
       renderer.setSize(w, h)
       camera.aspect = w / h
       camera.updateProjectionMatrix()
-      computeExtent()
     }
     window.addEventListener('resize', onResize)
-    // ResizeObserver catches the container getting its real size after a
-    // lazy mount (window 'resize' alone would miss that).
     const ro = new ResizeObserver(onResize)
     ro.observe(mount)
 
@@ -288,49 +188,31 @@ export default function Scene3D() {
       if (!visible || document.hidden) return
 
       const t = clock.getElapsedTime()
-      const dt = Math.min(clock.getDelta(), 0.05)
-      uniforms.uTime.value = reduceMotion ? 0 : t
 
-      // smooth the cursor + decay the movement impulse
-      curN.x += (targetN.x - curN.x) * 0.07
-      curN.y += (targetN.y - curN.y) * 0.07
-      moveImpulse *= 0.93
+      curN.x += (targetN.x - curN.x) * 0.06
+      curN.y += (targetN.y - curN.y) * 0.06
+      moveImpulse *= 0.94
+      clickPulse *= 0.92
 
-      // scroll progress through the hero (disperse as you leave)
-      const scroll = Math.min(Math.max(window.scrollY / (window.innerHeight || 1), 0), 1)
-      uniforms.uScroll.value += (scroll - uniforms.uScroll.value) * 0.1
-
-      // cursor world position + strength
-      if (hasPointer) {
-        uniforms.uMouse.value.set(curN.x * halfW, curN.y * halfH, 1.6)
+      if (shaderRef && !reduceMotion) {
+        shaderRef.uniforms.uTime.value = t
+        shaderRef.uniforms.uAmp.value = 0.13 + moveImpulse * 0.12 + clickPulse * 0.3
       }
-      const strengthTarget = reduceMotion ? 0 : 0.5 + moveImpulse * 0.9
-      uniforms.uMouseStrength.value += (strengthTarget - uniforms.uMouseStrength.value) * 0.15
 
-      // shockwave decay
-      if (shock > 0.001 && !reduceMotion) {
-        shockPhase += dt * 9.0
-        shock *= 0.945
-      } else {
-        shock = 0
+      // rotation: slow spin + cursor parallax
+      mesh.rotation.y = (reduceMotion ? 0 : t * 0.18) + curN.x * 0.8
+      mesh.rotation.x = (reduceMotion ? 0 : Math.sin(t * 0.3) * 0.15) + curN.y * -0.6
+      mesh.rotation.z = reduceMotion ? 0 : Math.sin(t * 0.2) * 0.08
+      // bob + click scale pulse
+      mesh.position.y = reduceMotion ? 0 : Math.sin(t * 0.9) * 0.12
+      mesh.scale.setScalar(SCALE * (1 + clickPulse * 0.08))
+
+      // drift the coloured lights for moving highlights
+      if (!reduceMotion) {
+        l1.position.x = Math.cos(t * 0.4) * 4
+        l1.position.z = Math.sin(t * 0.4) * 4
+        l2.position.y = Math.sin(t * 0.5) * 3
       }
-      uniforms.uShock.value = shock
-      uniforms.uShockPhase.value = shockPhase
-
-      // rotation (time + cursor parallax + scroll), applied in-shader
-      const ry = (reduceMotion ? 0 : t * 0.06) + curN.x * 0.55 + uniforms.uScroll.value * 0.6
-      const rx = curN.y * -0.4 + uniforms.uScroll.value * 0.25
-      euler.set(rx, ry, 0)
-      rotM4.makeRotationFromEuler(euler)
-      uniforms.uRot.value.setFromMatrix4(rotM4)
-      wire.rotation.set(rx * 1.1, -ry * 0.8, 0)
-
-      // intro fade (time-based so it's frame-rate independent) + breathing
-      const intro = Math.min(t / 1.2, 1) * 0.95
-      uniforms.uOpacity.value = intro
-      wire.material.opacity = intro * (0.1 + Math.abs(Math.sin(t * 0.6)) * 0.05) * (1 - uniforms.uScroll.value)
-      const breathe = 1 + Math.sin(t * 0.8) * 0.015
-      points.scale.setScalar(breathe)
 
       renderer.render(scene, camera)
     }
@@ -343,10 +225,11 @@ export default function Scene3D() {
       window.removeEventListener('resize', onResize)
       ro.disconnect()
       io.disconnect()
+      themeObserver.disconnect()
       geometry.dispose()
       material.dispose()
-      wire.geometry.dispose()
-      wire.material.dispose()
+      envRT.dispose()
+      pmrem.dispose()
       renderer.dispose()
       if (renderer.domElement.parentNode === mount) mount.removeChild(renderer.domElement)
     }
