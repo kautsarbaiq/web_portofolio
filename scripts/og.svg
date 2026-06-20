@@ -1,0 +1,66 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" font-family="Space Grotesk, Inter, system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b0e18"/>
+      <stop offset="1" stop-color="#06070b"/>
+    </linearGradient>
+    <linearGradient id="grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8b6dff"/>
+      <stop offset="1" stop-color="#2dd4ff"/>
+    </linearGradient>
+    <radialGradient id="glowV" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#7c5cff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#7c5cff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowC" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#2dd4ff" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#2dd4ff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="50"/></filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- grid -->
+  <g stroke="#ffffff" stroke-opacity="0.04">
+    <line x1="0" y1="157" x2="1200" y2="157"/><line x1="0" y1="315" x2="1200" y2="315"/><line x1="0" y1="472" x2="1200" y2="472"/>
+    <line x1="300" y1="0" x2="300" y2="630"/><line x1="600" y1="0" x2="600" y2="630"/><line x1="900" y1="0" x2="900" y2="630"/>
+  </g>
+
+  <!-- glows -->
+  <circle cx="150" cy="120" r="220" fill="url(#glowV)" filter="url(#soft)"/>
+  <circle cx="1000" cy="560" r="240" fill="url(#glowC)" filter="url(#soft)"/>
+
+  <!-- crystal motif (right) -->
+  <g transform="translate(960,315)" opacity="0.92">
+    <circle cx="0" cy="0" r="180" fill="url(#glowV)" opacity="0.5" filter="url(#soft)"/>
+    <g fill="none" stroke="url(#grad)" stroke-width="2" stroke-linejoin="round" opacity="0.9">
+      <polygon points="0,-150 130,-75 130,75 0,150 -130,75 -130,-75"/>
+      <polygon points="0,-90 78,-45 78,45 0,90 -78,45 -78,-45"/>
+      <path d="M0,-150 L0,-90 M130,-75 L78,-45 M130,75 L78,45 M0,150 L0,90 M-130,75 L-78,45 M-130,-75 L-78,-45"/>
+      <path d="M0,-90 L78,45 M78,-45 L-78,45 M-78,-45 L0,90"/>
+    </g>
+  </g>
+
+  <!-- eyebrow -->
+  <g transform="translate(90,150)">
+    <circle cx="6" cy="-5" r="6" fill="#4ade80"/>
+    <text x="26" y="0" font-size="22" letter-spacing="6" fill="#9aa0b0" font-family="JetBrains Mono, monospace">FULLSTACK WEB DEVELOPER</text>
+  </g>
+
+  <!-- name -->
+  <text x="88" y="300" font-size="92" font-weight="700" fill="#edeff4" letter-spacing="-3">Kautsar Baiquni</text>
+
+  <!-- tagline -->
+  <text x="90" y="372" font-size="34" fill="#9aa0b0">Building fast, scalable, pixel-perfect web</text>
+  <text x="90" y="416" font-size="34" fill="#9aa0b0">with <tspan fill="#edeff4">Next.js · React · TypeScript · Flutter</tspan></text>
+
+  <!-- divider -->
+  <rect x="90" y="470" width="120" height="4" rx="2" fill="url(#grad)"/>
+
+  <!-- footer -->
+  <g transform="translate(90,545)">
+    <text x="0" y="0" font-size="26" font-weight="600" fill="#edeff4"><tspan fill="#7c5cff">✦</tspan> kautsarbaiq</text>
+    <text x="0" y="34" font-size="20" fill="#5b6273" font-family="JetBrains Mono, monospace">Bandung, Indonesia</text>
+  </g>
+</svg>
