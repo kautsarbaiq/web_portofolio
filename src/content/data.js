@@ -184,7 +184,7 @@ export const projects = [
     },
     tech: ['Flutter', 'Dart'],
     links: { live: '', repo: 'https://github.com/kautsarbaiq/HRM-APP' },
-    image: '/projects/hrm-app.svg',
+    image: '/projects/hrm-app.png',
     accent: '#2dd4ff',
   },
   {
