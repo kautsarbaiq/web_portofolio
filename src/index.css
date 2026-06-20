@@ -1,38 +1,51 @@
 /* =========================================================================
    KAUTSAR — Portfolio
-   Global design system — LIGHT / GLASSMORPHISM.
-   White-dominant, frosted glass panels, soft pastel refraction.
+   Global design system — GLASSMORPHISM, dual theme (light + dark).
+   Theme is switched via [data-theme="dark"] on <html>.
    ========================================================================= */
 
 :root {
-  /* --- Base surfaces (light) --- */
+  /* ---- Theme tokens: LIGHT (default) ---- */
   --bg: #eef0f7;
   --bg-2: #e7eaf3;
+  --bg-glow: #ffffff;
+  --vignette: rgba(160, 170, 200, 0.22);
+
+  --text: #0d1320;
+  --text-dim: #545d73;
+  --text-faint: #97a0b4;
   --ink: #0d1320;
 
-  /* --- Glass --- */
-  --glass: rgba(255, 255, 255, 0.55);
-  --glass-strong: rgba(255, 255, 255, 0.72);
-  --glass-faint: rgba(255, 255, 255, 0.38);
-  --glass-border: rgba(255, 255, 255, 0.7);
-  --glass-edge: rgba(13, 19, 32, 0.06);
-  --glass-blur: 18px;
-  --glass-shadow: 0 10px 40px -12px rgba(31, 38, 80, 0.28);
-  --glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.85);
-
-  /* --- Lines / legacy surface aliases (light) --- */
   --line: rgba(13, 19, 32, 0.08);
   --line-strong: rgba(13, 19, 32, 0.14);
+  --hover: rgba(13, 19, 32, 0.06);
+  --grid-line: rgba(13, 19, 32, 0.035);
+  --scrollthumb: rgba(13, 19, 32, 0.18);
+  --scrollthumb-hover: rgba(13, 19, 32, 0.3);
+
+  --glass: rgba(255, 255, 255, 0.55);
+  --glass-strong: rgba(255, 255, 255, 0.72);
+  --glass-faint: rgba(255, 255, 255, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.7);
+  --glass-shadow: 0 10px 40px -12px rgba(31, 38, 80, 0.28);
+  --glass-shadow-hover: 0 22px 60px -22px rgba(31, 38, 80, 0.4);
+  --glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+
   --surface: rgba(255, 255, 255, 0.5);
   --surface-2: rgba(255, 255, 255, 0.72);
   --glow-violet: rgba(124, 92, 255, 0.35);
 
-  /* --- Text --- */
-  --text: #0d1320;
-  --text-dim: #545d73;
-  --text-faint: #97a0b4;
+  --cover-1: #f3f5fd;
+  --cover-2: #e3e8f5;
 
-  /* --- Accents / glow --- */
+  --cursor: #0d1320;
+  --cursor-ring: rgba(13, 19, 32, 0.35);
+
+  --grain-opacity: 0.025;
+  --grain-blend: multiply;
+  --aurora-opacity: 0.7;
+
+  /* ---- Accents (shared across themes) ---- */
   --violet: #6d5efc;
   --sky: #2dd4ff;
   --pink: #f472b6;
@@ -40,13 +53,12 @@
   --grad: linear-gradient(115deg, #7c5cff 0%, #2dd4ff 100%);
   --grad-soft: linear-gradient(115deg, rgba(124, 92, 255, 0.9), rgba(45, 212, 255, 0.9));
 
-  /* --- Type --- */
+  /* ---- Type ---- */
   --font-display: 'Space Grotesk', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
   --font-serif: 'Instrument Serif', Georgia, serif;
 
-  /* --- Fluid type scale --- */
   --step--1: clamp(0.78rem, 0.74rem + 0.2vw, 0.88rem);
   --step-0: clamp(0.95rem, 0.9rem + 0.25vw, 1.05rem);
   --step-1: clamp(1.15rem, 1.05rem + 0.5vw, 1.45rem);
@@ -55,17 +67,62 @@
   --step-4: clamp(3rem, 1.8rem + 5.6vw, 6rem);
   --step-5: clamp(3.6rem, 1.6rem + 9vw, 9rem);
 
-  /* --- Layout --- */
+  /* ---- Layout ---- */
   --container: 1240px;
   --gutter: clamp(1.25rem, 4vw, 4rem);
   --radius: 18px;
   --radius-lg: 26px;
+  --glass-blur: 18px;
 
-  /* --- Motion --- */
+  /* ---- Motion ---- */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
   color-scheme: light;
+}
+
+/* ---- Theme tokens: DARK ---- */
+:root[data-theme='dark'] {
+  --bg: #07080d;
+  --bg-2: #0c0e16;
+  --bg-glow: #161a2e;
+  --vignette: rgba(0, 0, 0, 0.55);
+
+  --text: #edeff4;
+  --text-dim: #9aa0b0;
+  --text-faint: #5b6273;
+  --ink: #edeff4;
+
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+  --hover: rgba(255, 255, 255, 0.08);
+  --grid-line: rgba(255, 255, 255, 0.035);
+  --scrollthumb: rgba(255, 255, 255, 0.16);
+  --scrollthumb-hover: rgba(255, 255, 255, 0.28);
+
+  --glass: rgba(255, 255, 255, 0.055);
+  --glass-strong: rgba(255, 255, 255, 0.1);
+  --glass-faint: rgba(255, 255, 255, 0.035);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-shadow: 0 16px 48px -20px rgba(0, 0, 0, 0.7);
+  --glass-shadow-hover: 0 26px 64px -24px rgba(0, 0, 0, 0.8);
+  --glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+
+  --surface: rgba(255, 255, 255, 0.06);
+  --surface-2: rgba(255, 255, 255, 0.1);
+  --glow-violet: rgba(124, 92, 255, 0.55);
+
+  --cover-1: #1a1f30;
+  --cover-2: #0c0e17;
+
+  --cursor: #ffffff;
+  --cursor-ring: rgba(255, 255, 255, 0.45);
+
+  --grain-opacity: 0.05;
+  --grain-blend: screen;
+  --aurora-opacity: 0.55;
+
+  color-scheme: dark;
 }
 
 /* ----------------------------- Reset ----------------------------- */
@@ -106,6 +163,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+  transition: background-color 0.5s var(--ease), color 0.5s var(--ease);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -140,7 +198,6 @@ button {
   color: #fff;
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -148,13 +205,13 @@ button {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(13, 19, 32, 0.18);
+  background: var(--scrollthumb);
   border-radius: 10px;
   border: 2px solid transparent;
   background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(13, 19, 32, 0.3);
+  background: var(--scrollthumb-hover);
   background-clip: padding-box;
 }
 
