@@ -178,6 +178,41 @@
   font-size: var(--step--1);
   color: var(--text-faint);
 }
+.creds__count {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  padding: 0.12rem 0.5rem;
+  border-radius: 100px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.creds__more {
+  margin-top: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--text);
+  padding: 0.55rem 1.1rem;
+  border-radius: 100px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-faint);
+  transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
+}
+.creds__more:hover {
+  background: var(--hover);
+  color: var(--accent);
+}
+.creds__more-arrow {
+  transition: transform 0.3s var(--ease);
+}
+.creds__more-arrow.is-open {
+  transform: rotate(180deg);
+}
 
 @media (max-width: 760px) {
   .skills__grid {

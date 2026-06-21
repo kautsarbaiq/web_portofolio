@@ -1,11 +1,17 @@
+import { useState } from 'react'
 import { skills, marquee, awards, certifications } from '../content/data'
 import { useLang } from '../context/LanguageContext'
 import Reveal from './Reveal'
 import './Skills.css'
 
+const CERT_PREVIEW = 5
+
 export default function Skills() {
   const { t } = useLang()
+  const [showAll, setShowAll] = useState(false)
   const row = [...marquee, ...marquee]
+  const visibleCerts = showAll ? certifications : certifications.slice(0, CERT_PREVIEW)
+  const hiddenCount = certifications.length - CERT_PREVIEW
 
   return (
     <section className="section skills" id="skills">
@@ -71,15 +77,27 @@ export default function Skills() {
             <h3 className="creds__title">
               <span className="creds__icon">✓</span>
               {t({ id: 'Sertifikasi', en: 'Certifications' })}
+              <span className="creds__count">{certifications.length}</span>
             </h3>
             <ul className="creds__list">
-              {certifications.map((c, i) => (
+              {visibleCerts.map((c, i) => (
                 <li key={i} className="creds__item">
                   <span className="creds__name">{c.title}</span>
-                  <span className="creds__issuer">{c.issuer}</span>
+                  <span className="creds__issuer">
+                    {c.issuer}
+                    {c.year ? ` · ${c.year}` : ''}
+                  </span>
                 </li>
               ))}
             </ul>
+            {hiddenCount > 0 && (
+              <button className="creds__more" onClick={() => setShowAll((v) => !v)} data-cursor={showAll ? 'Less' : 'More'}>
+                {showAll
+                  ? t({ id: 'Tampilkan lebih sedikit', en: 'Show less' })
+                  : t({ id: `Lihat semua (${certifications.length})`, en: `Show all (${certifications.length})` })}
+                <span className={`creds__more-arrow ${showAll ? 'is-open' : ''}`}>↓</span>
+              </button>
+            )}
           </Reveal>
         </div>
       </div>

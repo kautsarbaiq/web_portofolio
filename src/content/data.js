@@ -295,7 +295,19 @@ export const awards = [
   },
 ]
 
+/* Sertifikat — yang kuat/IBM di atas. Section Skills menampilkan beberapa
+   dulu, sisanya di balik tombol "Lihat semua". */
 export const certifications = [
+  { title: 'Introduction to Artificial Intelligence', issuer: 'IBM', year: '2025' },
+  { title: 'Introduction to Generative AI', issuer: 'IBM', year: '2025' },
+  { title: 'AI Ethics', issuer: 'IBM', year: '2025' },
+  { title: 'Belajar Dasar Cloud dan Gen AI di AWS', issuer: 'Dicoding Indonesia', year: '2026' },
+  { title: 'Front-End Developer', issuer: 'Dicoding Indonesia', year: '2025' },
+  { title: 'Career Management Essentials', issuer: 'IBM', year: '2025' },
+  { title: 'Ace Your Professional Interview', issuer: 'IBM', year: '2025' },
+  { title: 'Create a Great Professional Resume', issuer: 'IBM', year: '2025' },
+  { title: 'Develop Your Professional Network and Brand', issuer: 'IBM', year: '2025' },
+  { title: 'Focus Your Direction with Workplace Research', issuer: 'IBM', year: '2025' },
   { title: 'Fundamental Front-End Web Development', issuer: 'Coding Studio' },
   { title: 'Belajar Dasar Pemrograman JavaScript', issuer: 'Dicoding Indonesia' },
   { title: 'HTML Basic', issuer: 'Skilvul' },
