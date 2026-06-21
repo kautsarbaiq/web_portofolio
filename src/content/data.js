@@ -83,7 +83,7 @@ export const experience = [
   {
     role: { id: 'Web Developer', en: 'Web Developer' },
     company: 'KPU Kota Serang',
-    period: { id: '2026', en: '2026' },
+    period: { id: 'Agu 2025 — Mei 2026', en: 'Aug 2025 — May 2026' },
     location: { id: 'Serang, Indonesia', en: 'Serang, Indonesia' },
     points: {
       id: [
@@ -117,7 +117,7 @@ export const experience = [
   {
     role: { id: 'Web Developer', en: 'Web Developer' },
     company: 'Kementerian Agama Kota Lebak',
-    period: { id: '2025', en: '2025' },
+    period: { id: 'Agu 2025 — Mei 2026', en: 'Aug 2025 — May 2026' },
     location: { id: 'Lebak, Indonesia', en: 'Lebak, Indonesia' },
     points: {
       id: [
@@ -129,7 +129,7 @@ export const experience = [
         'Designed the registration, matching, and pre-marriage class flows with ustadz guidance.',
       ],
     },
-    stack: ['React', 'Tailwind'],
+    stack: ['Laravel', 'Tailwind'],
   },
   {
     role: { id: 'IT Trainer (Relawan)', en: 'IT Trainer (Volunteer)' },
@@ -227,7 +227,7 @@ export const projects = [
       id: 'Platform ta’aruf digital — “Match Online, Meet Offline, With Ustadz”.',
       en: 'A digital ta’aruf platform — “Match Online, Meet Offline, With Ustadz”.',
     },
-    tech: ['React', 'Tailwind'],
+    tech: ['Laravel', 'Tailwind CSS'],
     links: { live: '', repo: '' },
     image: '/projects/selaras.png',
     accent: '#16a34a',
