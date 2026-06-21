@@ -38,6 +38,10 @@ function ProjectCard({ project, index }) {
   const { live, repo } = project.links
   const primary = live || repo
   const isApp = project.type === 'app'
+  const Media = primary ? 'a' : 'div'
+  const mediaProps = primary
+    ? { href: primary, target: '_blank', rel: 'noreferrer', 'data-cursor': 'View' }
+    : {}
 
   return (
     <article
@@ -47,7 +51,7 @@ function ProjectCard({ project, index }) {
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}
     >
-      <a className="pcard__media" href={primary} target="_blank" rel="noreferrer" data-cursor="View" aria-label={project.title}>
+      <Media className="pcard__media" {...mediaProps} aria-label={project.title}>
         {project.image ? (
           <div className={`frame ${isApp ? 'frame--app' : ''}`}>
             <div className="frame__bar">
@@ -68,7 +72,7 @@ function ProjectCard({ project, index }) {
           </div>
         )}
         <span className="pcard__glow" />
-      </a>
+      </Media>
 
       <div className="pcard__body">
         <div className="pcard__row">

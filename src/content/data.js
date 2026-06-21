@@ -81,6 +81,23 @@ export const experience = [
     stack: ['React', 'TypeScript', 'Vite', 'Flutter'],
   },
   {
+    role: { id: 'Web Developer', en: 'Web Developer' },
+    company: 'KPU Kota Serang',
+    period: { id: '2026', en: '2026' },
+    location: { id: 'Serang, Indonesia', en: 'Serang, Indonesia' },
+    points: {
+      id: [
+        'Membangun portal pegawai e-Office KPU Kota Serang — sistem SPPD (Surat Perjalanan Dinas) digital.',
+        'Mengembangkan fitur Buat SPD, Surat Perintah Tugas (SPT), Bukti Konfirmasi, Kuitansi, dan Laporan Perjalanan untuk merampingkan administrasi perjalanan dinas pegawai.',
+      ],
+      en: [
+        'Built the e-Office staff portal for the Serang Election Commission (KPU) — a digital official-travel (SPPD) system.',
+        'Developed Create Travel Order (SPD), Assignment Letter (SPT), Confirmation, Receipt, and Travel Report features to streamline employee travel administration.',
+      ],
+    },
+    stack: ['JavaScript', 'WebGL', 'CSS'],
+  },
+  {
     role: { id: 'Fullstack Web Developer', en: 'Fullstack Web Developer' },
     company: 'Pemerintah Kota Serang',
     period: { id: 'Agu 2025 — Mei 2026', en: 'Aug 2025 — May 2026' },
@@ -89,15 +106,30 @@ export const experience = [
       id: [
         'Memimpin pengembangan dan peningkatan teknis website Pemerintah Kota Serang dengan Next.js & TypeScript, mendorong transformasi digital layanan publik.',
         'Membangun website pribadi Wali Kota Serang, mengoptimalkan performa dan merancang fitur baru yang berpusat pada pengguna.',
-        'Mengembangkan sistem monitoring ASN dengan fitur SPPD menggunakan Tailwind CSS & JavaScript.',
       ],
       en: [
         'Spearheaded the development and technical upgrade of the Serang City Government website with Next.js & TypeScript, driving digital transformation for public services.',
         'Built the Mayor of Serang’s personal website, optimizing performance and architecting new user-centric features.',
-        'Developed a civil-servant monitoring system with SPPD features using Tailwind CSS & JavaScript.',
       ],
     },
     stack: ['Next.js', 'TypeScript', 'Tailwind'],
+  },
+  {
+    role: { id: 'Web Developer', en: 'Web Developer' },
+    company: 'Kementerian Agama Kota Lebak',
+    period: { id: '2025', en: '2025' },
+    location: { id: 'Lebak, Indonesia', en: 'Lebak, Indonesia' },
+    points: {
+      id: [
+        'Membangun “Selaras”, platform ta’aruf digital — atas usulan Kepala Kemenag Lebak — untuk mempertemukan calon pasangan secara syar’i: “Match Online, Meet Offline, With Ustadz”.',
+        'Merancang alur pendaftaran, pencocokan, dan kelas pra-nikah dengan pendampingan ustadz.',
+      ],
+      en: [
+        'Built “Selaras”, a digital ta’aruf platform — at the suggestion of the head of Kemenag Lebak — to connect prospective partners the syariah way: “Match Online, Meet Offline, With Ustadz”.',
+        'Designed the registration, matching, and pre-marriage class flows with ustadz guidance.',
+      ],
+    },
+    stack: ['React', 'Tailwind'],
   },
   {
     role: { id: 'IT Trainer (Relawan)', en: 'IT Trainer (Volunteer)' },
@@ -188,6 +220,19 @@ export const projects = [
     accent: '#2dd4ff',
   },
   {
+    title: 'Selaras',
+    year: '2025',
+    type: 'web',
+    tagline: {
+      id: 'Platform ta’aruf digital — “Match Online, Meet Offline, With Ustadz”.',
+      en: 'A digital ta’aruf platform — “Match Online, Meet Offline, With Ustadz”.',
+    },
+    tech: ['React', 'Tailwind'],
+    links: { live: '', repo: '' },
+    image: '/projects/selaras.png',
+    accent: '#16a34a',
+  },
+  {
     title: 'KPU Kota Serang',
     year: '2026',
     type: 'web',
@@ -197,7 +242,7 @@ export const projects = [
     },
     tech: ['JavaScript', 'WebGL', 'CSS'],
     links: { live: '', repo: 'https://github.com/kautsarbaiq/web_KPU_kota_serang' },
-    image: '/projects/kpu-serang.svg',
+    image: '/projects/kpu-serang.png',
     accent: '#f472b6',
   },
   {
