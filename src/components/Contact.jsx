@@ -68,6 +68,16 @@ export default function Contact() {
           >
             {t({ id: 'Unduh CV', en: 'Download CV' })} ↓
           </a>
+          <a
+            className="contact__copy contact__cv"
+            href="/Kautsar-Baiquni-Cover-Letter.pdf"
+            target="_blank"
+            rel="noopener"
+            download
+            data-cursor="PDF"
+          >
+            {t({ id: 'Unduh Cover Letter', en: 'Download Cover Letter' })} ↓
+          </a>
         </Reveal>
 
         <Reveal className="contact__socials" delay={0.18}>
