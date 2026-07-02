@@ -67,6 +67,17 @@
   50% { transform: translate(4vw, -6vw) scale(1.2); }
 }
 
+/* soft light that follows the cursor */
+.bg__light {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    560px circle at var(--bx, 50%) var(--by, 35%),
+    color-mix(in srgb, var(--violet) 9%, transparent),
+    transparent 70%
+  );
+}
+
 /* a touch of vignette to keep edges soft */
 .bg__vignette {
   position: absolute;
