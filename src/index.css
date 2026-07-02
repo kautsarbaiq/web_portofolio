@@ -289,3 +289,44 @@ button {
   position: relative;
   isolation: isolate;
 }
+
+/* --------------------- Theme-switch circular reveal --------------------- */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 2;
+}
+/* freeze transitions during the reveal so the circle edge stays crisp */
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
+}
+
+/* -------------------- Cursor spotlight on glass cards -------------------- */
+.spot {
+  position: relative;
+}
+.spot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    240px circle at var(--sx, 50%) var(--sy, 50%),
+    color-mix(in srgb, var(--accent) 15%, transparent),
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 0.35s var(--ease);
+  pointer-events: none;
+}
+.spot:hover::after {
+  opacity: 1;
+}

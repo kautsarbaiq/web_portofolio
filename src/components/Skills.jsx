@@ -40,7 +40,7 @@ export default function Skills() {
       <div className="container">
         <div className="skills__grid">
           {skills.map((cat, i) => (
-            <Reveal className="skillcat" key={i} delay={i * 0.08}>
+            <Reveal className="skillcat spot" key={i} delay={i * 0.08}>
               <h3 className="skillcat__title">
                 <span className="skillcat__num">0{i + 1}</span>
                 {t(cat.group)}
@@ -58,7 +58,7 @@ export default function Skills() {
 
         {/* Awards & Certifications */}
         <div className="creds">
-          <Reveal className="creds__col">
+          <Reveal className="creds__col spot">
             <h3 className="creds__title">
               <span className="creds__icon">★</span>
               {t({ id: 'Penghargaan', en: 'Awards' })}
@@ -73,7 +73,7 @@ export default function Skills() {
             </ul>
           </Reveal>
 
-          <Reveal className="creds__col" delay={0.08}>
+          <Reveal className="creds__col spot" delay={0.08}>
             <h3 className="creds__title">
               <span className="creds__icon">✓</span>
               {t({ id: 'Sertifikasi', en: 'Certifications' })}

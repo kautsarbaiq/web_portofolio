@@ -25,6 +25,19 @@ export default function App() {
     }
   }, [loading])
 
+  // Track the cursor inside .spot glass cards for the spotlight highlight.
+  useEffect(() => {
+    const onMove = (e) => {
+      const el = e.target.closest?.('.spot')
+      if (!el) return
+      const r = el.getBoundingClientRect()
+      el.style.setProperty('--sx', `${((e.clientX - r.left) / r.width) * 100}%`)
+      el.style.setProperty('--sy', `${((e.clientY - r.top) / r.height) * 100}%`)
+    }
+    window.addEventListener('pointermove', onMove, { passive: true })
+    return () => window.removeEventListener('pointermove', onMove)
+  }, [])
+
   // Smooth scrolling (Lenis) — start once the intro is done.
   useEffect(() => {
     if (loading) return

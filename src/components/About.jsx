@@ -35,7 +35,7 @@ export default function About() {
 
           <div className="about__stats">
             {about.stats.map((s, i) => (
-              <Reveal className="about__stat" key={i} delay={0.1 + i * 0.07}>
+              <Reveal className="about__stat spot" key={i} delay={0.1 + i * 0.07}>
                 <CountUp className="about__stat-value gradient-text" value={s.value} />
                 <span className="about__stat-label">{t(s.label)}</span>
               </Reveal>
