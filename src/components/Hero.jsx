@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { profile } from '../content/data'
 import { useLang } from '../context/LanguageContext'
 import MagneticButton from './MagneticButton'
+import Scramble from './Scramble'
 import './Hero.css'
 
 // three.js is heavy — load it in its own chunk so the hero text paints first.
@@ -58,7 +59,7 @@ export default function Hero({ start }) {
             <span className="hero__avail-dot" />
             {t(profile.available)}
           </span>
-          <span className="hero__coords">{t(profile.location)} — 2026</span>
+          <Scramble className="hero__coords" text={`${t(profile.location)} — 2026`} delay={2400} />
         </motion.div>
 
         {/* headline */}
