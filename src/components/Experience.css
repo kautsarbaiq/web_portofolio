@@ -32,6 +32,25 @@
   box-shadow: 0 20px 55px -20px rgba(31, 38, 80, 0.38), var(--glass-inset);
 }
 
+/* outlined index watermark in the corner */
+.exp__num {
+  position: absolute;
+  top: 0.9rem;
+  right: 1.3rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--line-strong);
+  pointer-events: none;
+  transition: -webkit-text-stroke-color 0.4s var(--ease);
+}
+.exp:hover .exp__num {
+  -webkit-text-stroke-color: color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
 .exp__period {
   font-family: var(--font-mono);
   font-size: var(--step--1);

@@ -19,7 +19,8 @@ export default function Experience() {
 
         <div className="experience__list">
           {experience.map((job, i) => (
-            <Reveal className="exp" key={i} delay={i * 0.05}>
+            <Reveal className="exp spot" key={i} delay={i * 0.05}>
+              <span className="exp__num" aria-hidden="true">0{i + 1}</span>
               <div className="exp__period">
                 <span className="exp__dot" />
                 {t(job.period)}
