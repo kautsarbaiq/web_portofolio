@@ -109,6 +109,53 @@
   color: var(--violet);
 }
 
+/* giant outlined signature marquee */
+.sig {
+  overflow: hidden;
+  padding-block: clamp(1.2rem, 3.5vh, 2.4rem);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+.sig__track {
+  display: flex;
+  gap: 3rem;
+  width: max-content;
+  animation: sigScroll 42s linear infinite;
+}
+.sig:hover .sig__track {
+  animation-play-state: paused;
+}
+.sig__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 3rem;
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 9vw, 7.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1.5px color-mix(in srgb, var(--text) 32%, transparent);
+  transition: color 0.5s var(--ease);
+}
+.sig:hover .sig__item {
+  color: color-mix(in srgb, var(--text) 88%, transparent);
+}
+.sig__star {
+  -webkit-text-stroke: 0;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 0.45em;
+}
+@keyframes sigScroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 /* footer */
 .footer {
   border-top: 1px solid var(--line);

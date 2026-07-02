@@ -91,6 +91,18 @@ export default function Contact() {
         </Reveal>
       </div>
 
+      {/* giant outlined signature marquee */}
+      <div className="sig" aria-hidden="true">
+        <div className="sig__track">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <span className="sig__item" key={i}>
+              Kautsar Baiquni <span className="sig__star">✦</span> Fullstack Developer{' '}
+              <span className="sig__star">✦</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
       <footer className="footer">
         <div className="container footer__inner">
           <div className="footer__col">
