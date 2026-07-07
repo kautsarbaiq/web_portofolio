@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { projects } from '../content/data'
 import { useLang } from '../context/LanguageContext'
 import Reveal from './Reveal'
@@ -17,6 +17,9 @@ function hostOf(url) {
 function ProjectCard({ project, index }) {
   const { t } = useLang()
   const ref = useRef(null)
+  // gentle parallax of the screenshot inside its frame while scrolling
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const imgY = useTransform(scrollYProgress, [0, 1], ['-6%', '6%'])
 
   const handleMove = (e) => {
     const el = ref.current
@@ -69,7 +72,12 @@ function ProjectCard({ project, index }) {
               viewport={{ once: true, margin: '0px 0px -8% 0px' }}
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             >
-              <img src={project.image} alt={`${project.title} preview`} loading="lazy" />
+              <motion.img
+                src={project.image}
+                alt={`${project.title} preview`}
+                loading="lazy"
+                style={{ y: imgY, scale: 1.12 }}
+              />
             </motion.div>
           </div>
         ) : (
