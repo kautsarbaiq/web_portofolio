@@ -1,6 +1,7 @@
 import { experience } from '../content/data'
 import { useLang } from '../context/LanguageContext'
 import Reveal from './Reveal'
+import SplitReveal from './SplitReveal'
 import './Experience.css'
 
 export default function Experience() {
@@ -12,10 +13,14 @@ export default function Experience() {
         <Reveal as="span" className="eyebrow">
           {t({ id: '02 — Pengalaman', en: '02 — Experience' })}
         </Reveal>
-        <Reveal as="h2" className="experience__heading" delay={0.05}>
-          {t({ id: 'Jejak ', en: 'Where I’ve ' })}
-          <span className="serif gradient-text">{t({ id: 'karier', en: 'worked' })}</span>
-        </Reveal>
+        <SplitReveal
+          as="h2"
+          className="experience__heading"
+          segments={[
+            { text: t({ id: 'Jejak ', en: 'Where I’ve ' }) },
+            { text: t({ id: 'karier', en: 'worked' }), className: 'serif gradient-text' },
+          ]}
+        />
 
         <div className="experience__list">
           {experience.map((job, i) => (

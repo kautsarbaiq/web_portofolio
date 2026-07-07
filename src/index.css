@@ -330,3 +330,17 @@ button {
 .spot:hover::after {
   opacity: 1;
 }
+
+/* ------------------- Character-stagger heading reveal ------------------- */
+.split__mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  /* keep descenders (g, y, j) from being clipped by the mask */
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+.split__char {
+  display: inline-block;
+  will-change: transform;
+}

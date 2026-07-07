@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { profile, education } from '../content/data'
 import { useLang } from '../context/LanguageContext'
 import Reveal from './Reveal'
+import SplitReveal from './SplitReveal'
 import MagneticButton from './MagneticButton'
 import './Contact.css'
 
@@ -44,12 +45,16 @@ export default function Contact() {
           {t({ id: '05 — Kontak', en: '05 — Contact' })}
         </Reveal>
 
-        <Reveal as="h2" className="contact__title" delay={0.05}>
-          {t({ id: 'Mari bangun ', en: "Let’s build " })}
-          <span className="serif gradient-text">{t({ id: 'sesuatu', en: 'something' })}</span>
-          <br />
-          {t({ id: 'yang berkesan.', en: 'worth remembering.' })}
-        </Reveal>
+        <SplitReveal
+          as="h2"
+          className="contact__title"
+          segments={[
+            { text: t({ id: 'Mari bangun ', en: "Let’s build " }) },
+            { text: t({ id: 'sesuatu', en: 'something' }), className: 'serif gradient-text' },
+            { br: true },
+            { text: t({ id: 'yang berkesan.', en: 'worth remembering.' }) },
+          ]}
+        />
 
         <Reveal className="contact__actions" delay={0.12}>
           <MagneticButton className="contact__email" href={`mailto:${profile.email}`} cursor="Email">

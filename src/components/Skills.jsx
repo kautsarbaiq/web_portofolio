@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { skills, marquee, awards, certifications } from '../content/data'
 import { useLang } from '../context/LanguageContext'
 import Reveal from './Reveal'
+import SplitReveal from './SplitReveal'
 import './Skills.css'
 
 const CERT_PREVIEW = 5
@@ -19,10 +20,14 @@ export default function Skills() {
         <Reveal as="span" className="eyebrow">
           {t({ id: '04 — Keahlian', en: '04 — Capabilities' })}
         </Reveal>
-        <Reveal as="h2" className="skills__heading" delay={0.05}>
-          {t({ id: 'Alat & ', en: 'Tools & ' })}
-          <span className="serif gradient-text">{t({ id: 'teknologi', en: 'technologies' })}</span>
-        </Reveal>
+        <SplitReveal
+          as="h2"
+          className="skills__heading"
+          segments={[
+            { text: t({ id: 'Alat & ', en: 'Tools & ' }) },
+            { text: t({ id: 'teknologi', en: 'technologies' }), className: 'serif gradient-text' },
+          ]}
+        />
       </div>
 
       {/* infinite marquee */}
