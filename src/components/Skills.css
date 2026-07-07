@@ -8,6 +8,38 @@
   margin-bottom: 3rem;
 }
 
+/* giant outlined echo of the hovered skill */
+.skills {
+  position: relative;
+}
+.skills__ghost {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(4rem, 14vw, 13rem);
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--line-strong);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.skills__ghost.is-on {
+  opacity: 0.6;
+}
+.skills > .container,
+.skills__marquee {
+  position: relative;
+  z-index: 1;
+}
+
 /* marquee */
 .skills__marquee {
   position: relative;

@@ -10,12 +10,17 @@ const CERT_PREVIEW = 5
 export default function Skills() {
   const { t } = useLang()
   const [showAll, setShowAll] = useState(false)
+  const [ghost, setGhost] = useState('')
   const row = [...marquee, ...marquee]
   const visibleCerts = showAll ? certifications : certifications.slice(0, CERT_PREVIEW)
   const hiddenCount = certifications.length - CERT_PREVIEW
 
   return (
     <section className="section skills" id="skills">
+      {/* giant outlined echo of the hovered skill */}
+      <div className={`skills__ghost ${ghost ? 'is-on' : ''}`} aria-hidden="true">
+        {ghost}
+      </div>
       <div className="container">
         <Reveal as="span" className="eyebrow">
           {t({ id: '04 — Keahlian', en: '04 — Capabilities' })}
@@ -52,7 +57,12 @@ export default function Skills() {
               </h3>
               <ul className="skillcat__list">
                 {cat.items.map((item) => (
-                  <li key={item} className="skillcat__item">
+                  <li
+                    key={item}
+                    className="skillcat__item"
+                    onMouseEnter={() => setGhost(item)}
+                    onMouseLeave={() => setGhost('')}
+                  >
                     {item}
                   </li>
                 ))}
