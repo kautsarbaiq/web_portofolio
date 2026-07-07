@@ -9,10 +9,12 @@
   transition: background-color 0.5s var(--ease);
 }
 
-/* faint grid */
+/* faint grid — drifts slowly against the scroll for depth */
 .bg__grid {
   position: absolute;
   inset: -2px;
+  transform: translateY(calc(var(--scroll-y, 0) * -0.045px));
+  will-change: transform;
   background-image:
     linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
     linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
