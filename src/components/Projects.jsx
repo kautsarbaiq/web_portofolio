@@ -21,24 +21,6 @@ function ProjectCard({ project, index }) {
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const imgY = useTransform(scrollYProgress, [0, 1], ['-6%', '6%'])
 
-  const handleMove = (e) => {
-    const el = ref.current
-    if (!el) return
-    const r = el.getBoundingClientRect()
-    const px = (e.clientX - r.left) / r.width
-    const py = (e.clientY - r.top) / r.height
-    el.style.setProperty('--mx', `${px * 100}%`)
-    el.style.setProperty('--my', `${py * 100}%`)
-    el.style.setProperty('--rx', `${(0.5 - py) * 5}deg`)
-    el.style.setProperty('--ry', `${(px - 0.5) * 7}deg`)
-  }
-  const handleLeave = () => {
-    const el = ref.current
-    if (!el) return
-    el.style.setProperty('--rx', '0deg')
-    el.style.setProperty('--ry', '0deg')
-  }
-
   const num = String(index + 1).padStart(2, '0')
   const { live, repo } = project.links
   const primary = live || repo
@@ -49,13 +31,7 @@ function ProjectCard({ project, index }) {
     : {}
 
   return (
-    <article
-      ref={ref}
-      className="pcard"
-      style={{ '--accent': project.accent }}
-      onMouseMove={handleMove}
-      onMouseLeave={handleLeave}
-    >
+    <article ref={ref} className="pcard">
       <Media className="pcard__media" {...mediaProps} aria-label={project.title}>
         {project.image ? (
           <div className={`frame ${isApp ? 'frame--app' : ''}`}>
@@ -87,7 +63,6 @@ function ProjectCard({ project, index }) {
             <span className="pcard__badge">{isApp ? 'App' : 'Web'}</span>
           </div>
         )}
-        <span className="pcard__glow" />
       </Media>
 
       <div className="pcard__body">

@@ -10,117 +10,81 @@
   margin-top: 1.2rem;
 }
 
-/* masonry-style columns so each card is exactly as tall as its content
-   (no forced row height, no empty space under short/wide screenshots) */
+/* masonry-style columns so each card is exactly as tall as its content */
 .projects__grid {
   column-count: 2;
-  column-gap: 1.6rem;
+  column-gap: 2.4rem;
 }
 .projects__grid > * {
   break-inside: avoid;
-  margin-bottom: 1.6rem;
+  margin-bottom: 3rem;
 }
 
-/* ---- card ---- */
+/* ---- card: flat editorial index entry ---- */
 .pcard {
-  --accent: #6d5efc;
-  --rx: 0deg;
-  --ry: 0deg;
-  --mx: 50%;
-  --my: 50%;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--glass-border);
-  background: var(--glass);
-  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  box-shadow: var(--glass-shadow), var(--glass-inset);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transform: perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry));
-  transform-style: preserve-3d;
-  transition: transform 0.4s var(--ease), border-color 0.4s var(--ease), box-shadow 0.4s var(--ease);
-  will-change: transform;
-}
-.pcard:hover {
-  border-color: color-mix(in srgb, var(--accent) 45%, var(--glass-border));
-  box-shadow: 0 34px 70px -34px color-mix(in srgb, var(--accent) 55%, transparent), var(--glass-inset);
+  background: transparent;
 }
 
 /* media / preview */
 .pcard__media {
   position: relative;
   display: block;
-  padding: 1rem 1rem 0;
 }
 
-/* browser frame */
+/* minimal plate frame */
 .frame {
-  border-radius: 14px;
   overflow: hidden;
-  border: 1px solid var(--glass-border);
-  background: var(--glass-strong);
-  box-shadow: 0 12px 30px -16px rgba(31, 38, 80, 0.4);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: var(--radius);
 }
 .frame__bar {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 12px;
-  background: var(--glass-faint);
-  border-bottom: 1px solid var(--glass-border);
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--line);
 }
 .frame__dot {
-  width: 9px;
-  height: 9px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--text-faint) 55%, transparent);
+  background: var(--line-strong);
 }
-.frame__dot:nth-child(1) { background: #ff5f57; }
-.frame__dot:nth-child(2) { background: #febc2e; }
-.frame__dot:nth-child(3) { background: #28c840; }
 .frame__url {
   margin-left: 0.6rem;
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: var(--text-dim);
-  background: var(--glass);
-  padding: 0.15rem 0.7rem;
-  border-radius: 100px;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 70%;
+  max-width: 75%;
 }
 .frame__shot {
   overflow: hidden;
   background: linear-gradient(160deg, var(--cover-1), var(--cover-2));
   line-height: 0;
 }
-/* web screenshots: full width, natural height — no crop, no empty space */
 .frame__shot img {
   width: 100%;
   height: auto;
   display: block;
-  transition: transform 0.6s var(--ease);
+  transition: transform 0.6s var(--ease), filter 0.6s var(--ease);
 }
 .pcard:hover .frame__shot img {
-  transform: scale(1.04);
+  filter: saturate(1.05);
 }
 
-/* app (portrait phone) screenshots: show the full screen, contained and
-   centered on a tinted backdrop. Flexbox (not grid) so max-height:100%
-   resolves against the aspect-ratio height — otherwise the tall phone
-   overflows and gets cropped. */
+/* app (portrait phone) screenshots: full screen, contained + centred */
 .frame--app .frame__shot {
   aspect-ratio: 4 / 3;
-  background:
-    radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%),
-    linear-gradient(160deg, var(--cover-1), var(--cover-2));
+  background: linear-gradient(160deg, var(--cover-1), var(--cover-2));
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 0;
+  padding: 14px 0;
 }
 .frame--app .frame__shot img {
   width: auto;
@@ -128,22 +92,20 @@
   max-width: 58%;
   max-height: 100%;
   object-fit: contain;
-  border-radius: 14px;
-  box-shadow: 0 16px 34px -12px rgba(31, 38, 80, 0.4);
+  border-radius: 10px;
+  box-shadow: 0 14px 30px -14px rgba(0, 0, 0, 0.35);
 }
 
-/* fallback gradient cover (no screenshot) */
+/* fallback cover (no screenshot) */
 .pcard__cover {
   position: relative;
   aspect-ratio: 16 / 10;
-  border-radius: 14px;
-  background:
-    radial-gradient(120% 120% at 18% 8%, color-mix(in srgb, var(--accent) 80%, transparent), transparent 58%),
-    radial-gradient(110% 110% at 92% 92%, color-mix(in srgb, var(--sky) 60%, transparent), transparent 62%),
-    linear-gradient(160deg, var(--cover-1), var(--cover-2));
+  background: linear-gradient(160deg, var(--cover-1), var(--cover-2));
   display: grid;
   place-items: center;
   overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
 }
 .pcard__cover-num {
   font-family: var(--font-display);
@@ -151,14 +113,10 @@
   font-weight: 700;
   letter-spacing: -0.05em;
   color: transparent;
-  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.7);
+  -webkit-text-stroke: 1px var(--line-strong);
 }
 .pcard__rings {
-  position: absolute;
-  inset: -20%;
-  background: repeating-radial-gradient(circle at var(--mx) var(--my),
-    rgba(255, 255, 255, 0.18) 0, rgba(255, 255, 255, 0.18) 1px, transparent 1px, transparent 24px);
-  opacity: 0.6;
+  display: none;
 }
 .pcard__badge {
   position: absolute;
@@ -168,36 +126,18 @@
   font-size: 0.66rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #fff;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--text-dim);
+  border: 1px solid var(--line-strong);
   padding: 0.2rem 0.6rem;
   border-radius: 100px;
-  backdrop-filter: blur(6px);
 }
 
-/* cursor-follow glow */
-.pcard__glow {
-  position: absolute;
-  inset: 0;
-  border-radius: 14px;
-  background: radial-gradient(240px circle at var(--mx) var(--my),
-    color-mix(in srgb, var(--accent) 28%, transparent), transparent 60%);
-  opacity: 0;
-  transition: opacity 0.4s var(--ease);
-  pointer-events: none;
-}
-.pcard:hover .pcard__glow {
-  opacity: 1;
-}
-
-/* body */
+/* body — hairline index row under the image */
 .pcard__body {
-  padding: 1.3rem clamp(1.2rem, 2.5vw, 1.8rem) 1.6rem;
+  padding: 1.1rem 0.1rem 0;
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
-  flex: 1;
+  gap: 0.45rem;
 }
 .pcard__row {
   display: flex;
@@ -216,27 +156,27 @@
 .pcard__tagline {
   color: var(--text-dim);
   line-height: 1.5;
+  max-width: 52ch;
 }
 .pcard__tech {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.3rem;
+  gap: 0.4rem 1.1rem;
+  margin-top: 0.2rem;
 }
 .pcard__tech-chip {
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  color: var(--text-dim);
-  padding: 0.3rem 0.7rem;
-  border: 1px solid var(--glass-border);
-  background: var(--glass-faint);
-  border-radius: 100px;
+  letter-spacing: 0.03em;
+  color: var(--text-faint);
+  text-transform: uppercase;
 }
 .pcard__links {
   display: flex;
-  gap: 0.7rem;
-  margin-top: auto;
-  padding-top: 1.1rem;
+  gap: 1.6rem;
+  margin-top: 0.7rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--line);
 }
 .pcard__link {
   display: inline-flex;
@@ -244,24 +184,17 @@
   gap: 0.4em;
   font-family: var(--font-mono);
   font-size: var(--step--1);
+  letter-spacing: 0.04em;
   color: var(--text);
-  padding: 0.5rem 1rem;
-  border-radius: 100px;
-  border: 1px solid var(--glass-border);
-  background: var(--glass-faint);
-  transition: background-color 0.3s var(--ease), color 0.3s var(--ease), border-color 0.3s var(--ease);
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s var(--ease), color 0.3s var(--ease);
 }
 .pcard__link:hover {
-  background: var(--hover);
+  border-color: var(--text);
 }
 .pcard__link--primary {
-  color: #fff;
-  background: var(--accent);
-  border-color: transparent;
-}
-.pcard__link--primary:hover {
-  filter: brightness(1.08);
-  background: var(--accent);
+  color: var(--text);
 }
 
 @media (max-width: 860px) {
