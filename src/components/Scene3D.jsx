@@ -55,9 +55,9 @@ export default function Scene3D() {
       new THREE.ShaderMaterial({
         side: THREE.BackSide,
         uniforms: {
-          cTop: { value: new THREE.Color('#39c8f5') },
-          cMid: { value: new THREE.Color('#121024') },
-          cBot: { value: new THREE.Color('#6a48f0') },
+          cTop: { value: new THREE.Color('#f4f4f2') },
+          cMid: { value: new THREE.Color('#77777a') },
+          cBot: { value: new THREE.Color('#242426') },
         },
         vertexShader: `varying vec3 vP; void main(){ vP = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
         fragmentShader: `
@@ -67,7 +67,7 @@ export default function Scene3D() {
             float h = vP.y * 0.5 + 0.5;
             vec3 col = mix(cBot, cMid, smoothstep(0.0, 0.55, h));
             col = mix(col, cTop, smoothstep(0.6, 1.0, h));
-            col += vec3(1.0, 0.85, 1.0) * 0.25 * smoothstep(0.03, 0.0, abs(vP.y - 0.02));
+            col += vec3(1.0) * 0.3 * smoothstep(0.03, 0.0, abs(vP.y - 0.02));
             gl_FragColor = vec4(col, 1.0);
           }`,
       }),
@@ -79,10 +79,11 @@ export default function Scene3D() {
       p.lookAt(0, 0, 0)
       envScene.add(p)
     }
-    addPanel(new THREE.Color(6, 6, 6), new THREE.Vector3(0, 9, 2), 8, 3)
-    addPanel(new THREE.Color(0.4, 3.2, 5.0), new THREE.Vector3(8, 1, 3), 5, 2.4)
-    addPanel(new THREE.Color(3.6, 1.6, 6.0), new THREE.Vector3(-8, 0, -2), 5, 2.4)
-    addPanel(new THREE.Color(4.0, 1.2, 2.6), new THREE.Vector3(0, -3, -8), 4, 1.6)
+    // all-neutral softboxes → clean silver reflections
+    addPanel(new THREE.Color(7, 7, 7), new THREE.Vector3(0, 9, 2), 8, 3)
+    addPanel(new THREE.Color(3.2, 3.2, 3.3), new THREE.Vector3(8, 1, 3), 5, 2.4)
+    addPanel(new THREE.Color(2.4, 2.4, 2.5), new THREE.Vector3(-8, 0, -2), 5, 2.4)
+    addPanel(new THREE.Color(1.6, 1.6, 1.7), new THREE.Vector3(0, -3, -8), 4, 1.6)
     const pmrem = new THREE.PMREMGenerator(renderer)
     const envRT = pmrem.fromScene(envScene, 0.06)
     scene.environment = envRT.texture
@@ -91,13 +92,13 @@ export default function Scene3D() {
       if (o.material) o.material.dispose()
     })
 
-    // accent lights for tinted speculars + white rim
+    // neutral studio lights + white rim — monochrome steel speculars
     const amb = new THREE.AmbientLight(0xffffff, 0.2)
-    const l1 = new THREE.PointLight(0x7c5cff, 26, 25)
+    const l1 = new THREE.PointLight(0xffffff, 22, 25)
     l1.position.set(-4, 2.5, 4)
-    const l2 = new THREE.PointLight(0x2dd4ff, 22, 25)
+    const l2 = new THREE.PointLight(0xf4f2ea, 18, 25)
     l2.position.set(4, -1.5, 3)
-    const l3 = new THREE.PointLight(0xf472b6, 16, 25)
+    const l3 = new THREE.PointLight(0xd8d8d8, 12, 25)
     l3.position.set(0, 3.5, -3)
     const rim = new THREE.PointLight(0xffffff, 24, 20)
     rim.position.set(0, 1.5, -4)
@@ -114,12 +115,10 @@ export default function Scene3D() {
     const material = new THREE.MeshPhysicalMaterial({
       color: 0xffffff,
       metalness: 1,
-      roughness: 0.08,
-      iridescence: 1,
-      iridescenceIOR: 1.32,
-      clearcoat: 0.6,
+      roughness: 0.09,
+      clearcoat: 0.5,
       clearcoatRoughness: 0.2,
-      envMapIntensity: 1.15,
+      envMapIntensity: 1.1,
     })
     const knot = new THREE.Mesh(geometry, material)
     group.add(knot)
@@ -127,14 +126,14 @@ export default function Scene3D() {
     // ---- theme handling ----
     const applyTheme = () => {
       const dark = document.documentElement.dataset.theme === 'dark'
-      renderer.toneMappingExposure = dark ? 1.05 : 0.92
-      material.color.set(dark ? '#ffffff' : '#e6e9f2')
-      material.roughness = dark ? 0.07 : 0.11
-      material.envMapIntensity = dark ? 1.2 : 0.95
+      renderer.toneMappingExposure = dark ? 1.02 : 0.95
+      material.color.set(dark ? '#ffffff' : '#f0f0ee')
+      material.roughness = dark ? 0.08 : 0.1
+      material.envMapIntensity = dark ? 1.15 : 1.0
       amb.intensity = dark ? 0.15 : 0.25
-      l1.intensity = dark ? 26 : 20
-      l2.intensity = dark ? 22 : 17
-      l3.intensity = dark ? 16 : 12
+      l1.intensity = dark ? 24 : 18
+      l2.intensity = dark ? 18 : 14
+      l3.intensity = dark ? 12 : 9
       rim.intensity = dark ? 26 : 13
     }
     applyTheme()
