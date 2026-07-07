@@ -33,7 +33,7 @@ export default function Hero({ start }) {
   const animState = start ? 'show' : 'hidden'
 
   return (
-    <section className="hero" id="top" ref={ref}>
+    <section className="hero" id="top" ref={ref} data-cursor="Drag">
       <Suspense fallback={null}>
         <Scene3D />
       </Suspense>
