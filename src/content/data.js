@@ -79,6 +79,7 @@ export const experience = [
       ],
     },
     stack: ['React', 'TypeScript', 'Vite', 'Flutter'],
+    preview: '/projects/phh-inventory.png',
   },
   {
     role: { id: 'Web Developer', en: 'Web Developer' },
@@ -96,6 +97,7 @@ export const experience = [
       ],
     },
     stack: ['JavaScript', 'WebGL', 'CSS'],
+    preview: '/projects/kpu-serang.png',
   },
   {
     role: { id: 'Fullstack Web Developer', en: 'Fullstack Web Developer' },
@@ -130,6 +132,7 @@ export const experience = [
       ],
     },
     stack: ['Laravel', 'Tailwind'],
+    preview: '/projects/selaras.png',
   },
   {
     role: { id: 'IT Trainer (Relawan)', en: 'IT Trainer (Volunteer)' },
