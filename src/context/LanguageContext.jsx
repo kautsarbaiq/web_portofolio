@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react'
+import { flushSync } from 'react-dom'
 
 const LanguageContext = createContext(null)
 
@@ -26,8 +27,26 @@ export function LanguageProvider({ children }) {
     document.documentElement.lang = lang
   }, [lang])
 
+  // Language switch with a soft page crossfade (View Transitions API);
+  // falls back to an instant swap.
   const toggle = useCallback(() => {
-    setLang((prev) => (prev === 'id' ? 'en' : 'id'))
+    const next = document.documentElement.lang === 'id' ? 'en' : 'id'
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (!document.startViewTransition || reduce) {
+      setLang(next)
+      return
+    }
+    const transition = document.startViewTransition(() => {
+      flushSync(() => setLang(next))
+    })
+    transition.ready
+      .then(() => {
+        document.documentElement.animate(
+          { opacity: [0, 1] },
+          { duration: 320, easing: 'ease', pseudoElement: '::view-transition-new(root)' },
+        )
+      })
+      .catch(() => {})
   }, [])
 
   // Resolve a bilingual value. Accepts { id, en } objects, arrays of them,
