@@ -40,8 +40,6 @@
   padding: 0.6rem 1.1rem;
   border: 1px solid var(--glass-border);
   background: var(--glass);
-  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
   box-shadow: var(--glass-inset);
   border-radius: 100px;
   transition: color 0.3s var(--ease), background-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
