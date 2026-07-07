@@ -4,6 +4,7 @@ import { about, profile } from '../content/data'
 import { useLang } from '../context/LanguageContext'
 import Reveal from './Reveal'
 import CountUp from './CountUp'
+import WordFade from './WordFade'
 import './About.css'
 
 export default function About() {
@@ -27,11 +28,15 @@ export default function About() {
         </div>
 
         <div className="about__body">
-          {paragraphs.map((p, i) => (
-            <Reveal as="p" key={i} delay={i * 0.08} className="about__para">
-              {p}
-            </Reveal>
-          ))}
+          {paragraphs.map((p, i) =>
+            i === 0 ? (
+              <WordFade key={i} text={p} className="about__para" />
+            ) : (
+              <Reveal as="p" key={i} delay={i * 0.08} className="about__para">
+                {p}
+              </Reveal>
+            ),
+          )}
 
           <div className="about__stats">
             {about.stats.map((s, i) => (
