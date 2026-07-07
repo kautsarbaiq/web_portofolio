@@ -1,7 +1,9 @@
 import { useRef } from 'react'
+import { motion } from 'framer-motion'
 import { projects } from '../content/data'
 import { useLang } from '../context/LanguageContext'
 import Reveal from './Reveal'
+import SplitReveal from './SplitReveal'
 import './Projects.css'
 
 function hostOf(url) {
@@ -60,9 +62,15 @@ function ProjectCard({ project, index }) {
               <span className="frame__dot" />
               <span className="frame__url">{isApp ? 'app' : hostOf(live)}</span>
             </div>
-            <div className="frame__shot">
+            <motion.div
+              className="frame__shot"
+              initial={{ clipPath: 'inset(0 0 100% 0)' }}
+              whileInView={{ clipPath: 'inset(0 0 0% 0)' }}
+              viewport={{ once: true, margin: '0px 0px -8% 0px' }}
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            >
               <img src={project.image} alt={`${project.title} preview`} loading="lazy" />
-            </div>
+            </motion.div>
           </div>
         ) : (
           <div className="pcard__cover">
@@ -118,10 +126,14 @@ export default function Projects() {
           <Reveal as="span" className="eyebrow">
             {t({ id: '03 — Karya Pilihan', en: '03 — Selected Work' })}
           </Reveal>
-          <Reveal as="h2" className="projects__heading" delay={0.05}>
-            {t({ id: 'Hal yang saya ', en: 'Things I’ve ' })}
-            <span className="serif gradient-text">{t({ id: 'bangun', en: 'built' })}</span>
-          </Reveal>
+          <SplitReveal
+            as="h2"
+            className="projects__heading"
+            segments={[
+              { text: t({ id: 'Hal yang saya ', en: 'Things I’ve ' }) },
+              { text: t({ id: 'bangun', en: 'built' }), className: 'serif gradient-text' },
+            ]}
+          />
         </div>
 
         <div className="projects__grid">
