@@ -77,9 +77,9 @@ export default function Nav() {
 
           <nav className="nav__links" aria-label="Primary">
             {LINKS.map((l) => (
-              <button key={l.id} className="nav__link" onClick={() => go(l.id)}>
+              <MagneticButton key={l.id} className="nav__link" strength={0.3} onClick={() => go(l.id)}>
                 <span>{t(l.label)}</span>
-              </button>
+              </MagneticButton>
             ))}
           </nav>
 
