@@ -34,8 +34,12 @@ export default function Hero({ start }) {
   const { t } = useLang()
   const ref = useRef(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
-  const y = useTransform(scrollYProgress, [0, 1], [0, 120])
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0])
+  // layered parallax exit — each row leaves at its own depth
+  const yMeta = useTransform(scrollYProgress, [0, 1], [0, 60])
+  const yTitle = useTransform(scrollYProgress, [0, 1], [0, 190])
+  const yTagline = useTransform(scrollYProgress, [0, 1], [0, 120])
+  const yActions = useTransform(scrollYProgress, [0, 1], [0, 70])
 
   const tokens = tokenize(t(profile.headline))
   const animState = start ? 'show' : 'hidden'
@@ -46,48 +50,55 @@ export default function Hero({ start }) {
         <Scene3D />
       </Suspense>
 
-      <motion.div className="hero__content container" style={{ y, opacity }}>
+      <motion.div className="hero__content container" style={{ opacity }}>
         {/* top micro row */}
-        <motion.div
-          className="hero__meta"
-          variants={fadeUp}
-          initial="hidden"
-          animate={animState}
-          custom={0.1}
-        >
-          <span className="hero__avail">
-            <span className="hero__avail-dot" />
-            {t(profile.available)}
-          </span>
-          <Scramble className="hero__coords" text={`${t(profile.location)} — 2026`} delay={2400} />
+        <motion.div style={{ y: yMeta }}>
+          <motion.div
+            className="hero__meta"
+            variants={fadeUp}
+            initial="hidden"
+            animate={animState}
+            custom={0.1}
+          >
+            <span className="hero__avail">
+              <span className="hero__avail-dot" />
+              {t(profile.available)}
+            </span>
+            <Scramble className="hero__coords" text={`${t(profile.location)} — 2026`} delay={2400} />
+          </motion.div>
         </motion.div>
 
         {/* headline */}
-        <h1 className="hero__title">
-          <motion.span variants={lineVariants} initial="hidden" animate={animState} className="hero__title-inner">
-            {tokens.map((tok, i) => (
-              <span className="hero__word-mask" key={i}>
-                <motion.span
-                  variants={wordVariants}
-                  className={tok.em ? 'hero__word hero__word--em serif gradient-text' : 'hero__word'}
-                >
-                  {tok.text}
-                </motion.span>
-              </span>
-            ))}
-          </motion.span>
-        </h1>
+        <motion.div style={{ y: yTitle }}>
+          <h1 className="hero__title">
+            <motion.span variants={lineVariants} initial="hidden" animate={animState} className="hero__title-inner">
+              {tokens.map((tok, i) => (
+                <span className="hero__word-mask" key={i}>
+                  <motion.span
+                    variants={wordVariants}
+                    className={tok.em ? 'hero__word hero__word--em serif gradient-text' : 'hero__word'}
+                  >
+                    {tok.text}
+                  </motion.span>
+                </span>
+              ))}
+            </motion.span>
+          </h1>
+        </motion.div>
 
-        <motion.p
-          className="hero__tagline"
-          variants={fadeUp}
-          initial="hidden"
-          animate={animState}
-          custom={0.5}
-        >
-          {t(profile.tagline)}
-        </motion.p>
+        <motion.div style={{ y: yTagline }}>
+          <motion.p
+            className="hero__tagline"
+            variants={fadeUp}
+            initial="hidden"
+            animate={animState}
+            custom={0.5}
+          >
+            {t(profile.tagline)}
+          </motion.p>
+        </motion.div>
 
+        <motion.div style={{ y: yActions }}>
         <motion.div
           className="hero__actions"
           variants={fadeUp}
@@ -125,6 +136,7 @@ export default function Hero({ start }) {
             {t({ id: 'Unduh CV', en: 'Download CV' })}
             <span className="hero__cta-arrow">↓</span>
           </MagneticButton>
+        </motion.div>
         </motion.div>
       </motion.div>
 
