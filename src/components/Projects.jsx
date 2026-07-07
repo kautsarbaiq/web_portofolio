@@ -1,5 +1,5 @@
-import { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef, useState } from 'react'
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { projects } from '../content/data'
 import { useLang } from '../context/LanguageContext'
 import Reveal from './Reveal'
@@ -99,8 +99,17 @@ function ProjectCard({ project, index }) {
   )
 }
 
+const FILTERS = [
+  { id: 'all', label: { id: 'Semua', en: 'All' } },
+  { id: 'web', label: { id: 'Web', en: 'Web' } },
+  { id: 'app', label: { id: 'Aplikasi', en: 'Apps' } },
+]
+
 export default function Projects() {
   const { t } = useLang()
+  const [filter, setFilter] = useState('all')
+  const list = filter === 'all' ? projects : projects.filter((p) => p.type === filter)
+  const countOf = (f) => (f === 'all' ? projects.length : projects.filter((p) => p.type === f).length)
 
   return (
     <section className="section projects" id="work">
@@ -117,15 +126,37 @@ export default function Projects() {
               { text: t({ id: 'bangun', en: 'built' }), className: 'serif gradient-text' },
             ]}
           />
+
+          <Reveal className="projects__filters" delay={0.1}>
+            {FILTERS.map((f) => (
+              <button
+                key={f.id}
+                className={`projects__filter ${filter === f.id ? 'is-active' : ''}`}
+                onClick={() => setFilter(f.id)}
+                data-cursor="Filter"
+              >
+                {t(f.label)} <sup>{countOf(f.id)}</sup>
+              </button>
+            ))}
+          </Reveal>
         </div>
 
-        <div className="projects__grid">
-          {projects.map((p, i) => (
-            <Reveal key={p.title} delay={(i % 2) * 0.06}>
-              <ProjectCard project={p} index={i} />
-            </Reveal>
-          ))}
-        </div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={filter}
+            className="projects__grid"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {list.map((p) => (
+              <Reveal key={p.title} delay={0.04}>
+                <ProjectCard project={p} index={projects.indexOf(p)} />
+              </Reveal>
+            ))}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </section>
   )
