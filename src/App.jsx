@@ -48,8 +48,13 @@ export default function App() {
     })
     window.__lenis = lenis
     let raf
+    let skew = 0
     const loop = (time) => {
       lenis.raf(time)
+      // scroll-velocity skew for the marquees (classic awwwards touch)
+      const target = Math.max(-7, Math.min(7, (lenis.velocity || 0) * 0.45))
+      skew += (target - skew) * 0.12
+      document.documentElement.style.setProperty('--scroll-skew', `${skew.toFixed(2)}deg`)
       raf = requestAnimationFrame(loop)
     }
     raf = requestAnimationFrame(loop)

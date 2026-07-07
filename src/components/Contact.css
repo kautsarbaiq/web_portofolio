@@ -113,6 +113,8 @@
 .sig {
   overflow: hidden;
   padding-block: clamp(1.2rem, 3.5vh, 2.4rem);
+  transform: skewX(var(--scroll-skew, 0deg));
+  will-change: transform;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
 }
