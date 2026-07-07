@@ -6,7 +6,7 @@
   z-index: 0;
   pointer-events: none;
   /* shift the crystal right so it frames the headline rather than sitting behind it */
-  transform: translate(27%, -2%);
+  transform: translate(29%, -2%);
 }
 
 .scene3d canvas {
