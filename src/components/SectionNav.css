@@ -1,0 +1,69 @@
+.snav {
+  position: fixed;
+  right: 1.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  align-items: flex-end;
+}
+
+.snav__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.15rem 0;
+}
+
+.snav__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 100px;
+  background: var(--text-faint);
+  opacity: 0.55;
+  transition: all 0.35s var(--ease);
+}
+
+.snav__label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 100px;
+  padding: 0.28rem 0.7rem;
+  opacity: 0;
+  transform: translateX(6px);
+  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.snav__item:hover .snav__label,
+.snav__item.is-active .snav__label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.snav__item:hover .snav__dot {
+  opacity: 1;
+}
+
+.snav__item.is-active .snav__dot {
+  height: 22px;
+  background: var(--grad);
+  opacity: 1;
+  box-shadow: 0 0 10px color-mix(in srgb, var(--violet) 55%, transparent);
+}
+
+@media (max-width: 1200px) {
+  .snav {
+    display: none;
+  }
+}

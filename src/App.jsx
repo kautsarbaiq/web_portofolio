@@ -7,6 +7,7 @@ import Background from './components/Background'
 import Cursor from './components/Cursor'
 import ScrollProgress from './components/ScrollProgress'
 import Nav from './components/Nav'
+import SectionNav from './components/SectionNav'
 import Hero from './components/Hero'
 import About from './components/About'
 import Experience from './components/Experience'
@@ -55,6 +56,8 @@ export default function App() {
       const target = Math.max(-7, Math.min(7, (lenis.velocity || 0) * 0.45))
       skew += (target - skew) * 0.12
       document.documentElement.style.setProperty('--scroll-skew', `${skew.toFixed(2)}deg`)
+      // raw scroll offset for background parallax layers
+      document.documentElement.style.setProperty('--scroll-y', `${Math.round(lenis.scroll || 0)}`)
       raf = requestAnimationFrame(loop)
     }
     raf = requestAnimationFrame(loop)
@@ -76,6 +79,7 @@ export default function App() {
       </AnimatePresence>
 
       <Nav />
+      <SectionNav />
       <main>
         <Hero start={!loading} />
         <About />
