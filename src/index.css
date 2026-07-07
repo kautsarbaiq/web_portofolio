@@ -5,53 +5,54 @@
    ========================================================================= */
 
 :root {
-  /* ---- Theme tokens: LIGHT (default) ---- */
-  --bg: #eef0f7;
-  --bg-2: #e7eaf3;
-  --bg-glow: #ffffff;
-  --vignette: rgba(160, 170, 200, 0.22);
+  /* ---- Theme tokens: LIGHT (default) — editorial concrete & ink ---- */
+  --bg: #f1f0eb;
+  --bg-2: #e9e8e2;
+  --bg-glow: #f7f6f1;
+  --vignette: rgba(20, 20, 18, 0.06);
 
-  --text: #0d1320;
-  --text-dim: #545d73;
-  --text-faint: #97a0b4;
-  --ink: #0d1320;
+  --text: #171716;
+  --text-dim: #605f59;
+  --text-faint: #a3a29a;
+  --ink: #171716;
 
-  --line: rgba(13, 19, 32, 0.08);
-  --line-strong: rgba(13, 19, 32, 0.14);
-  --hover: rgba(13, 19, 32, 0.06);
-  --grid-line: rgba(13, 19, 32, 0.035);
-  --scrollthumb: rgba(13, 19, 32, 0.18);
-  --scrollthumb-hover: rgba(13, 19, 32, 0.3);
+  --line: rgba(23, 23, 22, 0.14);
+  --line-strong: rgba(23, 23, 22, 0.26);
+  --hover: rgba(23, 23, 22, 0.06);
+  --grid-line: rgba(23, 23, 22, 0.05);
+  --scrollthumb: rgba(23, 23, 22, 0.22);
+  --scrollthumb-hover: rgba(23, 23, 22, 0.36);
 
-  --glass: rgba(255, 255, 255, 0.55);
-  --glass-strong: rgba(255, 255, 255, 0.72);
-  --glass-faint: rgba(255, 255, 255, 0.45);
-  --glass-border: rgba(255, 255, 255, 0.7);
-  --glass-shadow: 0 10px 40px -12px rgba(31, 38, 80, 0.28);
-  --glass-shadow-hover: 0 22px 60px -22px rgba(31, 38, 80, 0.4);
-  --glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  /* flat paper surfaces (glass names kept for compatibility) */
+  --glass: #f7f6f1;
+  --glass-strong: #fbfaf5;
+  --glass-faint: #f3f2ec;
+  --glass-border: rgba(23, 23, 22, 0.16);
+  --glass-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  --glass-shadow-hover: 0 0 0 rgba(0, 0, 0, 0);
+  --glass-inset: inset 0 0 0 rgba(0, 0, 0, 0);
 
-  --surface: rgba(255, 255, 255, 0.5);
-  --surface-2: rgba(255, 255, 255, 0.72);
-  --glow-violet: rgba(124, 92, 255, 0.35);
+  --surface: #f7f6f1;
+  --surface-2: #fbfaf5;
+  --glow-violet: rgba(23, 23, 22, 0.12);
 
-  --cover-1: #f3f5fd;
-  --cover-2: #e3e8f5;
+  --cover-1: #eeede8;
+  --cover-2: #e2e1da;
 
-  --cursor: #0d1320;
-  --cursor-ring: rgba(13, 19, 32, 0.35);
+  --cursor: #171716;
+  --cursor-ring: rgba(23, 23, 22, 0.4);
 
-  --grain-opacity: 0.025;
+  --grain-opacity: 0.035;
   --grain-blend: multiply;
-  --aurora-opacity: 0.7;
+  --aurora-opacity: 0;
 
-  /* ---- Accents (shared across themes) ---- */
-  --violet: #6d5efc;
-  --sky: #2dd4ff;
-  --pink: #f472b6;
+  /* ---- Accents: graphite monochrome (shared across themes) ---- */
+  --violet: #2c2c30;
+  --sky: #6f6e75;
+  --pink: #4a4a50;
   --accent: var(--violet);
-  --grad: linear-gradient(115deg, #7c5cff 0%, #2dd4ff 100%);
-  --grad-soft: linear-gradient(115deg, rgba(124, 92, 255, 0.9), rgba(45, 212, 255, 0.9));
+  --grad: linear-gradient(115deg, #1b1b1e 0%, #6a6a72 100%);
+  --grad-soft: linear-gradient(115deg, rgba(27, 27, 30, 0.9), rgba(106, 106, 114, 0.9));
 
   /* ---- Type ---- */
   --font-display: 'Space Grotesk', system-ui, sans-serif;
@@ -70,9 +71,9 @@
   /* ---- Layout ---- */
   --container: 1240px;
   --gutter: clamp(1.25rem, 4vw, 4rem);
-  --radius: 18px;
-  --radius-lg: 26px;
-  --glass-blur: 18px;
+  --radius: 4px;
+  --radius-lg: 8px;
+  --glass-blur: 0px;
 
   /* ---- Motion ---- */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -81,46 +82,54 @@
   color-scheme: light;
 }
 
-/* ---- Theme tokens: DARK ---- */
+/* ---- Theme tokens: DARK — charcoal editorial ---- */
 :root[data-theme='dark'] {
-  --bg: #07080d;
-  --bg-2: #0c0e16;
-  --bg-glow: #161a2e;
-  --vignette: rgba(0, 0, 0, 0.55);
+  --bg: #131312;
+  --bg-2: #181817;
+  --bg-glow: #1d1d1b;
+  --vignette: rgba(0, 0, 0, 0.4);
 
-  --text: #edeff4;
-  --text-dim: #9aa0b0;
-  --text-faint: #5b6273;
-  --ink: #edeff4;
+  --text: #eceae3;
+  --text-dim: #97968d;
+  --text-faint: #61605a;
+  --ink: #eceae3;
 
-  --line: rgba(255, 255, 255, 0.08);
-  --line-strong: rgba(255, 255, 255, 0.16);
-  --hover: rgba(255, 255, 255, 0.08);
-  --grid-line: rgba(255, 255, 255, 0.035);
-  --scrollthumb: rgba(255, 255, 255, 0.16);
-  --scrollthumb-hover: rgba(255, 255, 255, 0.28);
+  --line: rgba(236, 234, 227, 0.14);
+  --line-strong: rgba(236, 234, 227, 0.28);
+  --hover: rgba(236, 234, 227, 0.07);
+  --grid-line: rgba(236, 234, 227, 0.05);
+  --scrollthumb: rgba(236, 234, 227, 0.18);
+  --scrollthumb-hover: rgba(236, 234, 227, 0.32);
 
-  --glass: rgba(255, 255, 255, 0.055);
-  --glass-strong: rgba(255, 255, 255, 0.1);
-  --glass-faint: rgba(255, 255, 255, 0.035);
-  --glass-border: rgba(255, 255, 255, 0.12);
-  --glass-shadow: 0 16px 48px -20px rgba(0, 0, 0, 0.7);
-  --glass-shadow-hover: 0 26px 64px -24px rgba(0, 0, 0, 0.8);
-  --glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --glass: #1a1a19;
+  --glass-strong: #201f1e;
+  --glass-faint: #171716;
+  --glass-border: rgba(236, 234, 227, 0.16);
+  --glass-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  --glass-shadow-hover: 0 0 0 rgba(0, 0, 0, 0);
+  --glass-inset: inset 0 0 0 rgba(0, 0, 0, 0);
 
-  --surface: rgba(255, 255, 255, 0.06);
-  --surface-2: rgba(255, 255, 255, 0.1);
-  --glow-violet: rgba(124, 92, 255, 0.55);
+  --surface: #1a1a19;
+  --surface-2: #201f1e;
+  --glow-violet: rgba(236, 234, 227, 0.12);
 
-  --cover-1: #1a1f30;
-  --cover-2: #0c0e17;
+  --cover-1: #1e1e1c;
+  --cover-2: #262624;
 
-  --cursor: #ffffff;
-  --cursor-ring: rgba(255, 255, 255, 0.45);
+  --cursor: #f1f0eb;
+  --cursor-ring: rgba(241, 240, 235, 0.45);
 
   --grain-opacity: 0.05;
   --grain-blend: screen;
-  --aurora-opacity: 0.55;
+  --aurora-opacity: 0;
+
+  /* graphite accents invert to bone */
+  --violet: #d9d8d0;
+  --sky: #8f8e85;
+  --pink: #b7b6ae;
+  --accent: var(--violet);
+  --grad: linear-gradient(115deg, #eceae3 0%, #8f8e85 100%);
+  --grad-soft: linear-gradient(115deg, rgba(236, 234, 227, 0.9), rgba(143, 142, 133, 0.9));
 
   color-scheme: dark;
 }
@@ -215,20 +224,14 @@ button {
   background-clip: padding-box;
 }
 
-/* ----------------------------- Glass ----------------------------- */
+/* ------------------------ Flat paper surfaces ------------------------ */
 .glass {
   background: var(--glass);
-  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
   border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow), var(--glass-inset);
 }
 .glass-strong {
   background: var(--glass-strong);
-  backdrop-filter: blur(26px) saturate(190%);
-  -webkit-backdrop-filter: blur(26px) saturate(190%);
   border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow), var(--glass-inset);
 }
 
 /* ----------------------------- Helpers ----------------------------- */
