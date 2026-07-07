@@ -9,21 +9,13 @@ import './Hero.css'
 // three.js is heavy — load it in its own chunk so the hero text paints first.
 const Scene3D = lazy(() => import('./Scene3D'))
 
-/* Turn a headline string into tokens, marking *emphasised* spans. */
-function tokenize(text) {
-  return text.split(/(\*[^*]+\*)/g).filter(Boolean).map((chunk) => {
-    const em = chunk.startsWith('*') && chunk.endsWith('*')
-    return { text: em ? chunk.slice(1, -1) : chunk, em }
-  })
-}
-
 const lineVariants = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.045, delayChildren: 0.1 } },
+  show: { transition: { staggerChildren: 0.14, delayChildren: 0.15 } },
 }
 const wordVariants = {
   hidden: { y: '110%' },
-  show: { y: '0%', transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1] } },
+  show: { y: '0%', transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] } },
 }
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -35,13 +27,9 @@ export default function Hero({ start }) {
   const ref = useRef(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0])
-  // layered parallax exit — each row leaves at its own depth
   const yMeta = useTransform(scrollYProgress, [0, 1], [0, 60])
-  const yTitle = useTransform(scrollYProgress, [0, 1], [0, 190])
-  const yTagline = useTransform(scrollYProgress, [0, 1], [0, 120])
-  const yActions = useTransform(scrollYProgress, [0, 1], [0, 70])
+  const yLockup = useTransform(scrollYProgress, [0, 1], [0, 170])
 
-  const tokens = tokenize(t(profile.headline))
   const animState = start ? 'show' : 'hidden'
 
   return (
@@ -51,7 +39,7 @@ export default function Hero({ start }) {
       </Suspense>
 
       <motion.div className="hero__content container" style={{ opacity }}>
-        {/* top micro row */}
+        {/* top micro row — tiny corner meta, like an architectural index */}
         <motion.div style={{ y: yMeta }}>
           <motion.div
             className="hero__meta"
@@ -68,75 +56,67 @@ export default function Hero({ start }) {
           </motion.div>
         </motion.div>
 
-        {/* headline */}
-        <motion.div style={{ y: yTitle }}>
-          <h1 className="hero__title">
-            <motion.span variants={lineVariants} initial="hidden" animate={animState} className="hero__title-inner">
-              {tokens.map((tok, i) => (
-                <span className="hero__word-mask" key={i}>
-                  <motion.span
-                    variants={wordVariants}
-                    className={tok.em ? 'hero__word hero__word--em serif gradient-text' : 'hero__word'}
-                  >
-                    {tok.text}
-                  </motion.span>
-                </span>
-              ))}
+        {/* bottom-left name lockup */}
+        <motion.div className="hero__lockup" style={{ y: yLockup }}>
+          <h1 className="hero__name" aria-label="Kautsar Baiquni">
+            <motion.span variants={lineVariants} initial="hidden" animate={animState} aria-hidden="true">
+              <span className="hero__name-mask">
+                <motion.span className="hero__name-line" variants={wordVariants}>
+                  Kautsar
+                </motion.span>
+              </span>
+              <span className="hero__name-mask">
+                <motion.span className="hero__name-line serif hero__name-line--accent" variants={wordVariants}>
+                  Baiquni
+                </motion.span>
+              </span>
             </motion.span>
           </h1>
-        </motion.div>
 
-        <motion.div style={{ y: yTagline }}>
           <motion.p
-            className="hero__tagline"
+            className="hero__role"
             variants={fadeUp}
             initial="hidden"
             animate={animState}
-            custom={0.5}
+            custom={0.55}
           >
-            {t(profile.tagline)}
+            {t(profile.role)} — Next.js · React · TypeScript · Flutter
           </motion.p>
-        </motion.div>
 
-        <motion.div style={{ y: yActions }}>
-        <motion.div
-          className="hero__actions"
-          variants={fadeUp}
-          initial="hidden"
-          animate={animState}
-          custom={0.65}
-        >
-          <MagneticButton
-            className="hero__cta hero__cta--primary"
-            onClick={() =>
-              window.__lenis
-                ? window.__lenis.scrollTo('#work')
-                : document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })
-            }
-            cursor="Scroll"
+          <motion.div
+            className="hero__links"
+            variants={fadeUp}
+            initial="hidden"
+            animate={animState}
+            custom={0.7}
           >
-            <span>{t({ id: 'Lihat karya', en: 'View work' })}</span>
-            <span className="hero__cta-arrow">↓</span>
-          </MagneticButton>
-          <MagneticButton
-            className="hero__cta hero__cta--ghost"
-            href={`mailto:${profile.email}`}
-            cursor="Email"
-          >
-            {t({ id: 'Hubungi saya', en: 'Get in touch' })}
-          </MagneticButton>
-          <MagneticButton
-            className="hero__cta hero__cta--ghost"
-            href="/Kautsar-Baiquni-CV.pdf"
-            target="_blank"
-            rel="noopener"
-            download
-            cursor="PDF"
-          >
-            {t({ id: 'Unduh CV', en: 'Download CV' })}
-            <span className="hero__cta-arrow">↓</span>
-          </MagneticButton>
-        </motion.div>
+            <MagneticButton
+              className="hero__link"
+              strength={0.2}
+              onClick={() =>
+                window.__lenis
+                  ? window.__lenis.scrollTo('#work')
+                  : document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })
+              }
+              cursor="Scroll"
+            >
+              {t({ id: 'Lihat karya', en: 'View work' })} ↓
+            </MagneticButton>
+            <MagneticButton className="hero__link" strength={0.2} href={`mailto:${profile.email}`} cursor="Email">
+              {t({ id: 'Hubungi saya', en: 'Get in touch' })} ↗
+            </MagneticButton>
+            <MagneticButton
+              className="hero__link"
+              strength={0.2}
+              href="/Kautsar-Baiquni-CV.pdf"
+              target="_blank"
+              rel="noopener"
+              download
+              cursor="PDF"
+            >
+              {t({ id: 'Unduh CV', en: 'Download CV' })} ↓
+            </MagneticButton>
+          </motion.div>
         </motion.div>
       </motion.div>
 
