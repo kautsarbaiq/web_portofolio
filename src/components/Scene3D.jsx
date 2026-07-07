@@ -3,17 +3,94 @@ import * as THREE from 'three'
 import './Scene3D.css'
 
 /* -------------------------------------------------------------------------
-   Scene3D — a polished holo-chrome knot sculpture (imperative three.js).
+   Scene3D — a dotted contour-line sphere (imperative three.js).
 
-   A torus-knot "infinity sculpture" in mirror metal with a thin-film
-   iridescent sheen, lit by a custom gradient studio environment (white
-   softbox + cyan/violet/pink panels through PMREM). Crisp, structured,
-   jewellery-like — reads as intentional design from every angle.
+   ~50k tiny points arranged in ORDERED latitude rings (that ordering is
+   what creates the striped, moiré contour look), folded by layered simplex
+   noise in the vertex shader into deep organic waves — a monochrome
+   particle sculpture: ink dots on concrete in light mode, bone dots on
+   charcoal in dark mode.
 
-   Interaction: slow tumble, cursor parallax, drag-to-spin with inertia,
-   click pop, and SCROLL-DRIVEN rotation — the sculpture turns over as the
-   page scrolls, then sinks away. Theme-aware and reduced-motion safe.
+   Interaction: slow rotation, cursor parallax, drag-to-spin with inertia,
+   cursor proximity deepens the folds, click sends a ripple through the
+   surface, and scroll rotates/sinks the sphere as the hero exits.
    ------------------------------------------------------------------------- */
+
+const SIMPLEX = /* glsl */ `
+vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x,289.0);}
+vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-0.85373472095314*r;}
+float snoise(vec3 v){
+  const vec2 C=vec2(1.0/6.0,1.0/3.0); const vec4 D=vec4(0.0,0.5,1.0,2.0);
+  vec3 i=floor(v+dot(v,C.yyy)); vec3 x0=v-i+dot(i,C.xxx);
+  vec3 g=step(x0.yzx,x0.xyz); vec3 l=1.0-g; vec3 i1=min(g.xyz,l.zxy); vec3 i2=max(g.xyz,l.zxy);
+  vec3 x1=x0-i1+C.xxx; vec3 x2=x0-i2+C.yyy; vec3 x3=x0-D.yyy;
+  i=mod(i,289.0);
+  vec4 p=permute(permute(permute(i.z+vec4(0.0,i1.z,i2.z,1.0))+i.y+vec4(0.0,i1.y,i2.y,1.0))+i.x+vec4(0.0,i1.x,i2.x,1.0));
+  float n_=1.0/7.0; vec3 ns=n_*D.wyz-D.xzx;
+  vec4 j=p-49.0*floor(p*ns.z*ns.z);
+  vec4 x_=floor(j*ns.z); vec4 y_=floor(j-7.0*x_);
+  vec4 x=x_*ns.x+ns.yyyy; vec4 y=y_*ns.x+ns.yyyy; vec4 h=1.0-abs(x)-abs(y);
+  vec4 b0=vec4(x.xy,y.xy); vec4 b1=vec4(x.zw,y.zw);
+  vec4 s0=floor(b0)*2.0+1.0; vec4 s1=floor(b1)*2.0+1.0; vec4 sh=-step(h,vec4(0.0));
+  vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy; vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
+  vec3 p0=vec3(a0.xy,h.x); vec3 p1=vec3(a0.zw,h.y); vec3 p2=vec3(a1.xy,h.z); vec3 p3=vec3(a1.zw,h.w);
+  vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
+  p0*=norm.x; p1*=norm.y; p2*=norm.z; p3*=norm.w;
+  vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0); m=m*m;
+  return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
+}
+`
+
+const VERT = /* glsl */ `
+uniform float uTime;
+uniform float uAmp;
+uniform float uPulse;
+uniform float uSize;
+uniform float uPixelRatio;
+uniform vec3 uPoke;
+varying float vShade;
+${SIMPLEX}
+void main(){
+  vec3 dir = normalize(position);
+  float t = uTime;
+
+  // layered folds — a deep slow field plus fine detail
+  float n1 = snoise(dir * 1.35 + vec3(t * 0.12, t * 0.09, -t * 0.1));
+  float n2 = snoise(dir * 3.1 - vec3(t * 0.07));
+  float n3 = snoise(dir * 6.5 + vec3(t * 0.05));
+  float fold = n1 * 0.75 + n2 * 0.2 + n3 * 0.05;
+
+  // cursor-facing bulge
+  float facing = max(0.0, dot(dir, uPoke));
+  fold += facing * facing * 0.25 * uPoke.z;
+
+  // click ripple sweeping across the sphere
+  fold += uPulse * 0.35 * sin(dot(dir, vec3(0.7, 0.5, 0.5)) * 10.0 - t * 12.0);
+
+  float r = length(position) * (1.0 + fold * uAmp);
+  vec3 p = dir * r;
+
+  // shade: compressed (inner) folds darker, crests brighter
+  vShade = clamp(0.78 + fold * 0.5, 0.3, 1.3);
+
+  vec4 mv = modelViewMatrix * vec4(p, 1.0);
+  gl_Position = projectionMatrix * mv;
+  gl_PointSize = uSize * uPixelRatio * (5.2 / -mv.z);
+}
+`
+
+const FRAG = /* glsl */ `
+precision highp float;
+uniform vec3 uColor;
+uniform float uAlpha;
+varying float vShade;
+void main(){
+  float d = length(gl_PointCoord - 0.5);
+  if (d > 0.5) discard;
+  float soft = smoothstep(0.5, 0.12, d);
+  gl_FragColor = vec4(uColor, soft * uAlpha * vShade);
+}
+`
 
 export default function Scene3D() {
   const mountRef = useRef(null)
@@ -40,101 +117,63 @@ export default function Scene3D() {
     const init = sizeOf()
     renderer.setPixelRatio(dpr)
     renderer.setSize(init.w, init.h)
-    renderer.toneMapping = THREE.ACESFilmicToneMapping
-    renderer.toneMappingExposure = 1.0
     mount.appendChild(renderer.domElement)
 
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(40, init.w / init.h, 0.1, 100)
     camera.position.set(0, 0, 6)
 
-    // Custom gradient studio environment — the chrome reflects this.
-    const envScene = new THREE.Scene()
-    const dome = new THREE.Mesh(
-      new THREE.SphereGeometry(20, 64, 32),
-      new THREE.ShaderMaterial({
-        side: THREE.BackSide,
-        uniforms: {
-          cTop: { value: new THREE.Color('#f4f4f2') },
-          cMid: { value: new THREE.Color('#77777a') },
-          cBot: { value: new THREE.Color('#242426') },
-        },
-        vertexShader: `varying vec3 vP; void main(){ vP = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
-        fragmentShader: `
-          varying vec3 vP;
-          uniform vec3 cTop; uniform vec3 cMid; uniform vec3 cBot;
-          void main(){
-            float h = vP.y * 0.5 + 0.5;
-            vec3 col = mix(cBot, cMid, smoothstep(0.0, 0.55, h));
-            col = mix(col, cTop, smoothstep(0.6, 1.0, h));
-            col += vec3(1.0) * 0.3 * smoothstep(0.03, 0.0, abs(vP.y - 0.02));
-            gl_FragColor = vec4(col, 1.0);
-          }`,
-      }),
-    )
-    envScene.add(dome)
-    const addPanel = (color, pos, w, h) => {
-      const p = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color }))
-      p.position.copy(pos)
-      p.lookAt(0, 0, 0)
-      envScene.add(p)
-    }
-    // all-neutral softboxes → clean silver reflections
-    addPanel(new THREE.Color(7, 7, 7), new THREE.Vector3(0, 9, 2), 8, 3)
-    addPanel(new THREE.Color(3.2, 3.2, 3.3), new THREE.Vector3(8, 1, 3), 5, 2.4)
-    addPanel(new THREE.Color(2.4, 2.4, 2.5), new THREE.Vector3(-8, 0, -2), 5, 2.4)
-    addPanel(new THREE.Color(1.6, 1.6, 1.7), new THREE.Vector3(0, -3, -8), 4, 1.6)
-    const pmrem = new THREE.PMREMGenerator(renderer)
-    const envRT = pmrem.fromScene(envScene, 0.06)
-    scene.environment = envRT.texture
-    envScene.traverse((o) => {
-      if (o.geometry) o.geometry.dispose()
-      if (o.material) o.material.dispose()
-    })
-
-    // neutral studio lights + white rim — monochrome steel speculars
-    const amb = new THREE.AmbientLight(0xffffff, 0.2)
-    const l1 = new THREE.PointLight(0xffffff, 22, 25)
-    l1.position.set(-4, 2.5, 4)
-    const l2 = new THREE.PointLight(0xf4f2ea, 18, 25)
-    l2.position.set(4, -1.5, 3)
-    const l3 = new THREE.PointLight(0xd8d8d8, 12, 25)
-    l3.position.set(0, 3.5, -3)
-    const rim = new THREE.PointLight(0xffffff, 24, 20)
-    rim.position.set(0, 1.5, -4)
-    scene.add(amb, l1, l2, l3, rim)
-
     const isMobile = window.innerWidth < 720
-    const SCALE = isMobile ? 0.78 : 1.0
+
+    // ---- ordered latitude rings of dots (the ordering makes the contours) ----
+    const RINGS = isMobile ? 150 | 0 : 210
+    const R = 1.5
+    const positions = []
+    for (let i = 0; i < RINGS; i++) {
+      const phi = (Math.PI * (i + 0.5)) / RINGS
+      const ringR = Math.sin(phi)
+      const y = Math.cos(phi)
+      // constant angular density → more dots on bigger rings
+      const count = Math.max(24, Math.round(ringR * (isMobile ? 240 : 300)))
+      for (let j = 0; j < count; j++) {
+        const theta = (Math.PI * 2 * j) / count
+        positions.push(Math.cos(theta) * ringR * R, y * R, Math.sin(theta) * ringR * R)
+      }
+    }
+    const geometry = new THREE.BufferGeometry()
+    geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(positions), 3))
+
+    const uniforms = {
+      uTime: { value: 0 },
+      uAmp: { value: 0.34 },
+      uPulse: { value: 0 },
+      uSize: { value: isMobile ? 2.0 : 2.3 },
+      uPixelRatio: { value: dpr },
+      uPoke: { value: new THREE.Vector3(0, 0, 0) },
+      uColor: { value: new THREE.Color('#171716') },
+      uAlpha: { value: 0.85 },
+    }
+    const material = new THREE.ShaderMaterial({
+      uniforms,
+      vertexShader: VERT,
+      fragmentShader: FRAG,
+      transparent: true,
+      depthWrite: false,
+    })
+    const sphere = new THREE.Points(geometry, material)
     const group = new THREE.Group()
+    const SCALE = isMobile ? 0.85 : 1.0
     group.scale.setScalar(SCALE)
+    group.add(sphere)
     scene.add(group)
 
-    // ---- the sculpture: a smooth interlocking torus knot ----
-    const geometry = new THREE.TorusKnotGeometry(0.92, 0.3, 512, 96)
-    const material = new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
-      metalness: 1,
-      roughness: 0.09,
-      clearcoat: 0.5,
-      clearcoatRoughness: 0.2,
-      envMapIntensity: 1.1,
-    })
-    const knot = new THREE.Mesh(geometry, material)
-    group.add(knot)
-
-    // ---- theme handling ----
+    // ---- theme handling: ink on concrete / bone on charcoal ----
     const applyTheme = () => {
       const dark = document.documentElement.dataset.theme === 'dark'
-      renderer.toneMappingExposure = dark ? 1.02 : 0.95
-      material.color.set(dark ? '#ffffff' : '#f0f0ee')
-      material.roughness = dark ? 0.08 : 0.1
-      material.envMapIntensity = dark ? 1.15 : 1.0
-      amb.intensity = dark ? 0.15 : 0.25
-      l1.intensity = dark ? 24 : 18
-      l2.intensity = dark ? 18 : 14
-      l3.intensity = dark ? 12 : 9
-      rim.intensity = dark ? 26 : 13
+      uniforms.uColor.value.set(dark ? '#f2f0e9' : '#1b1b1a')
+      uniforms.uAlpha.value = dark ? 1.0 : 0.85
+      material.blending = dark ? THREE.AdditiveBlending : THREE.NormalBlending
+      material.needsUpdate = true
     }
     applyTheme()
     const themeObserver = new MutationObserver(applyTheme)
@@ -143,6 +182,7 @@ export default function Scene3D() {
     // ---- interaction ----
     const targetN = { x: 0, y: 0 }
     const curN = { x: 0, y: 0 }
+    let moveImpulse = 0
     let clickPulse = 0
     let dragging = false
     let lastX = 0
@@ -155,6 +195,7 @@ export default function Scene3D() {
     const onPointerMove = (e) => {
       targetN.x = (e.clientX / window.innerWidth) * 2 - 1
       targetN.y = -((e.clientY / window.innerHeight) * 2 - 1)
+      moveImpulse = Math.min(moveImpulse + 0.2, 1)
       if (dragging) {
         const dx = (e.clientX - lastX) / window.innerWidth
         const dy = (e.clientY - lastY) / window.innerHeight
@@ -201,6 +242,7 @@ export default function Scene3D() {
     const clock = new THREE.Clock()
     let raf
     let scroll = 0
+    const poke = new THREE.Vector3()
 
     const render = () => {
       raf = requestAnimationFrame(render)
@@ -210,7 +252,8 @@ export default function Scene3D() {
 
       curN.x += (targetN.x - curN.x) * 0.07
       curN.y += (targetN.y - curN.y) * 0.07
-      clickPulse *= 0.93
+      moveImpulse *= 0.95
+      clickPulse *= 0.94
 
       if (!dragging) {
         spinY += velY
@@ -222,26 +265,21 @@ export default function Scene3D() {
       const scTarget = Math.min(Math.max(window.scrollY / (window.innerHeight || 1), 0), 1)
       scroll += (scTarget - scroll) * 0.08
 
-      // orientation: slow tumble + cursor parallax + drag + SCROLL rotation
-      const idleY = reduceMotion ? 0 : t * 0.16
-      const idleX = reduceMotion ? 0 : Math.sin(t * 0.25) * 0.25
-      group.rotation.y = idleY + curN.x * 0.35 + spinY + scroll * 2.2
-      group.rotation.x = idleX + curN.y * -0.28 + spinX + scroll * 0.8
-      group.rotation.z = reduceMotion ? 0 : Math.sin(t * 0.18) * 0.1
+      uniforms.uTime.value = reduceMotion ? 0 : t
+      uniforms.uAmp.value = 0.34 + moveImpulse * 0.08
+      uniforms.uPulse.value = reduceMotion ? 0 : clickPulse
+      // cursor direction in view space; z carries the strength
+      poke.set(curN.x * 0.8, curN.y * 0.8, 0.6).normalize()
+      uniforms.uPoke.value.set(poke.x, poke.y, moveImpulse)
 
-      // drift toward the cursor + bob + click pop + scroll sink/shrink
-      group.position.x = curN.x * 0.18
-      const bob = reduceMotion ? 0 : Math.sin(t * 0.8) * 0.1
-      group.position.y = bob + curN.y * 0.12 - scroll * 1.2
-      const breathe = reduceMotion ? 1 : 1 + Math.sin(t * 0.7) * 0.008
-      group.scale.setScalar(SCALE * breathe * (1 + clickPulse * 0.06) * (1 - scroll * 0.15))
+      const idleY = reduceMotion ? 0 : t * 0.12
+      group.rotation.y = idleY + curN.x * 0.3 + spinY + scroll * 1.6
+      group.rotation.x = curN.y * -0.22 + spinX + scroll * 0.4
+      group.rotation.z = reduceMotion ? 0 : Math.sin(t * 0.15) * 0.06
 
-      if (!reduceMotion) {
-        // drifting lights keep the reflections alive
-        l1.position.x = Math.cos(t * 0.35) * 4
-        l1.position.z = Math.sin(t * 0.35) * 4
-        l2.position.y = Math.sin(t * 0.45) * 3
-      }
+      const bob = reduceMotion ? 0 : Math.sin(t * 0.8) * 0.08
+      group.position.y = bob - scroll * 1.1
+      group.scale.setScalar(SCALE * (1 + clickPulse * 0.04) * (1 - scroll * 0.14))
 
       renderer.render(scene, camera)
     }
@@ -258,8 +296,6 @@ export default function Scene3D() {
       themeObserver.disconnect()
       geometry.dispose()
       material.dispose()
-      envRT.dispose()
-      pmrem.dispose()
       renderer.dispose()
       if (renderer.domElement.parentNode === mount) mount.removeChild(renderer.domElement)
     }
