@@ -54,18 +54,19 @@ void main(){
   vec3 dir = normalize(position);
   float t = uTime;
 
-  // layered folds — a deep slow field plus fine detail
-  float n1 = snoise(dir * 1.35 + vec3(t * 0.12, t * 0.09, -t * 0.1));
-  float n2 = snoise(dir * 3.1 - vec3(t * 0.07));
-  float n3 = snoise(dir * 6.5 + vec3(t * 0.05));
+  // layered folds — a deep slow field plus fine detail.
+  // Gentle time rates keep the surface morphing fluid rather than busy.
+  float n1 = snoise(dir * 1.35 + vec3(t * 0.09, t * 0.07, -t * 0.08));
+  float n2 = snoise(dir * 3.1 - vec3(t * 0.05));
+  float n3 = snoise(dir * 6.5 + vec3(t * 0.035));
   float fold = n1 * 0.75 + n2 * 0.2 + n3 * 0.05;
 
   // cursor-facing bulge
   float facing = max(0.0, dot(dir, uPoke));
   fold += facing * facing * 0.25 * uPoke.z;
 
-  // click ripple sweeping across the sphere
-  fold += uPulse * 0.35 * sin(dot(dir, vec3(0.7, 0.5, 0.5)) * 10.0 - t * 12.0);
+  // click ripple sweeping across the sphere (soft, slow wave)
+  fold += uPulse * 0.32 * sin(dot(dir, vec3(0.7, 0.5, 0.5)) * 8.0 - t * 9.0);
 
   float r = length(position) * (1.0 + fold * uAmp);
   vec3 p = dir * r;
@@ -242,31 +243,44 @@ export default function Scene3D() {
     const clock = new THREE.Clock()
     let raf
     let scroll = 0
+    let elapsed = 0
     const poke = new THREE.Vector3()
+
+    // Frame-rate-independent smoothing helpers.
+    // damp() glides a value toward a target at a rate `lambda` (higher = snappier);
+    // decay() scales a value's per-frame falloff to real time. Both stay
+    // buttery whether the display runs at 60Hz or 120Hz.
+    const damp = THREE.MathUtils.damp
+    const decay = (rate, dt) => Math.exp(-rate * dt)
 
     const render = () => {
       raf = requestAnimationFrame(render)
       if (!visible || document.hidden) return
 
-      const t = clock.getElapsedTime()
+      // cap dt so returning from a background tab doesn't jump the animation
+      const dt = Math.min(clock.getDelta(), 0.05)
+      elapsed += dt
+      const t = elapsed
 
-      curN.x += (targetN.x - curN.x) * 0.07
-      curN.y += (targetN.y - curN.y) * 0.07
-      moveImpulse *= 0.95
-      clickPulse *= 0.94
+      // gentle cursor glide (lambda 3.4 → smoother, more gliding follow)
+      curN.x = damp(curN.x, targetN.x, 3.4, dt)
+      curN.y = damp(curN.y, targetN.y, 3.4, dt)
+      moveImpulse *= decay(3.1, dt)
+      clickPulse *= decay(3.7, dt)
 
       if (!dragging) {
-        spinY += velY
-        spinX = THREE.MathUtils.clamp(spinX + velX, -1.2, 1.2)
-        velY *= 0.95
-        velX *= 0.95
+        spinY += velY * dt * 60
+        spinX = THREE.MathUtils.clamp(spinX + velX * dt * 60, -1.2, 1.2)
+        velY *= decay(3.1, dt)
+        velX *= decay(3.1, dt)
       }
 
       const scTarget = Math.min(Math.max(window.scrollY / (window.innerHeight || 1), 0), 1)
-      scroll += (scTarget - scroll) * 0.08
+      scroll = damp(scroll, scTarget, 5, dt)
 
       uniforms.uTime.value = reduceMotion ? 0 : t
-      uniforms.uAmp.value = 0.34 + moveImpulse * 0.08
+      // ease amplitude toward its target too, so cursor-driven swells breathe in
+      uniforms.uAmp.value = damp(uniforms.uAmp.value, 0.34 + moveImpulse * 0.08, 6, dt)
       uniforms.uPulse.value = reduceMotion ? 0 : clickPulse
       // cursor direction in view space; z carries the strength
       poke.set(curN.x * 0.8, curN.y * 0.8, 0.6).normalize()
