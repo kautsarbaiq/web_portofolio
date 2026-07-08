@@ -48,7 +48,10 @@ uniform float uPulse;
 uniform float uSize;
 uniform float uPixelRatio;
 uniform vec3 uPoke;
+uniform vec3 uHitDir;   // local-space direction the cursor points to on the sphere
+uniform float uHit;     // 0..1 hover strength (eased)
 varying float vShade;
+varying float vHit;     // per-point hover glow
 ${SIMPLEX}
 void main(){
   vec3 dir = normalize(position);
@@ -61,9 +64,17 @@ void main(){
   float n3 = snoise(dir * 6.5 + vec3(t * 0.035));
   float fold = n1 * 0.75 + n2 * 0.2 + n3 * 0.05;
 
-  // cursor-facing bulge
+  // cursor-facing bulge (gentle whole-sphere lean toward the pointer)
   float facing = max(0.0, dot(dir, uPoke));
-  fold += facing * facing * 0.25 * uPoke.z;
+  fold += facing * facing * 0.16 * uPoke.z;
+
+  // ---- localised hover interaction: a magnetic swell exactly under the cursor ----
+  float ang = acos(clamp(dot(dir, uHitDir), -1.0, 1.0)); // 0 at the hovered point
+  float bump = exp(-ang * ang * 7.0);                     // tight gaussian around it
+  fold += uHit * bump * 0.55;                             // dots reach toward the cursor
+  // rings of ripple continuously radiating out from the hovered point
+  fold += uHit * 0.16 * sin(ang * 13.0 - t * 7.0) * smoothstep(1.3, 0.0, ang);
+  vHit = uHit * bump;
 
   // click ripple sweeping across the sphere (soft, slow wave)
   fold += uPulse * 0.32 * sin(dot(dir, vec3(0.7, 0.5, 0.5)) * 8.0 - t * 9.0);
@@ -76,7 +87,8 @@ void main(){
 
   vec4 mv = modelViewMatrix * vec4(p, 1.0);
   gl_Position = projectionMatrix * mv;
-  gl_PointSize = uSize * uPixelRatio * (5.2 / -mv.z);
+  // hovered dots grow and lift for a tactile response
+  gl_PointSize = uSize * uPixelRatio * (5.2 / -mv.z) * (1.0 + vHit * 1.6);
 }
 `
 
@@ -84,12 +96,17 @@ const FRAG = /* glsl */ `
 precision highp float;
 uniform vec3 uColor;
 uniform float uAlpha;
+uniform vec3 uHitColor;
 varying float vShade;
+varying float vHit;
 void main(){
   float d = length(gl_PointCoord - 0.5);
   if (d > 0.5) discard;
   float soft = smoothstep(0.5, 0.12, d);
-  gl_FragColor = vec4(uColor, soft * uAlpha * vShade);
+  // near the cursor, dots brighten and tint toward the hover colour
+  vec3 col = mix(uColor, uHitColor, clamp(vHit * 1.2, 0.0, 1.0));
+  float a = soft * uAlpha * (vShade + vHit * 1.1);
+  gl_FragColor = vec4(col, clamp(a, 0.0, 1.0));
 }
 `
 
@@ -153,6 +170,9 @@ export default function Scene3D() {
       uPoke: { value: new THREE.Vector3(0, 0, 0) },
       uColor: { value: new THREE.Color('#171716') },
       uAlpha: { value: 0.85 },
+      uHit: { value: 0 },
+      uHitDir: { value: new THREE.Vector3(0, 1, 0) },
+      uHitColor: { value: new THREE.Color('#171716') },
     }
     const material = new THREE.ShaderMaterial({
       uniforms,
@@ -172,6 +192,8 @@ export default function Scene3D() {
     const applyTheme = () => {
       const dark = document.documentElement.dataset.theme === 'dark'
       uniforms.uColor.value.set(dark ? '#f2f0e9' : '#1b1b1a')
+      // hovered dots glow bright (bone→white on dark, ink→pure black on light)
+      uniforms.uHitColor.value.set(dark ? '#ffffff' : '#000000')
       uniforms.uAlpha.value = dark ? 1.0 : 0.85
       material.blending = dark ? THREE.AdditiveBlending : THREE.NormalBlending
       material.needsUpdate = true
@@ -183,6 +205,7 @@ export default function Scene3D() {
     // ---- interaction ----
     const targetN = { x: 0, y: 0 }
     const curN = { x: 0, y: 0 }
+    const ndc = new THREE.Vector2(2, 2) // cursor in canvas NDC (offscreen by default)
     let moveImpulse = 0
     let clickPulse = 0
     let dragging = false
@@ -193,9 +216,21 @@ export default function Scene3D() {
     let velY = 0
     let velX = 0
 
+    // hover raycasting scratch
+    const raycaster = new THREE.Raycaster()
+    const hitSphere = new THREE.Sphere()
+    const worldCenter = new THREE.Vector3()
+    const hitPoint = new THREE.Vector3()
+    const hitDir = new THREE.Vector3(0, 1, 0)
+    let hoverTarget = 0
+
     const onPointerMove = (e) => {
       targetN.x = (e.clientX / window.innerWidth) * 2 - 1
       targetN.y = -((e.clientY / window.innerHeight) * 2 - 1)
+      // NDC relative to the canvas, for accurate raycasting onto the sphere
+      const rect = renderer.domElement.getBoundingClientRect()
+      ndc.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
+      ndc.y = -(((e.clientY - rect.top) / rect.height) * 2 - 1)
       moveImpulse = Math.min(moveImpulse + 0.2, 1)
       if (dragging) {
         const dx = (e.clientX - lastX) / window.innerWidth
@@ -278,9 +313,26 @@ export default function Scene3D() {
       const scTarget = Math.min(Math.max(window.scrollY / (window.innerHeight || 1), 0), 1)
       scroll = damp(scroll, scTarget, 5, dt)
 
+      // ---- hover raycast: is the cursor over the sphere, and where? ----
+      group.getWorldPosition(worldCenter)
+      hitSphere.set(worldCenter, R * 1.12 * group.scale.x)
+      raycaster.setFromCamera(ndc, camera)
+      const hit = raycaster.ray.intersectSphere(hitSphere, hitPoint)
+      if (hit) {
+        // convert the world hit into the sphere's local frame so the swell
+        // sticks to the surface as it rotates beneath the cursor
+        group.worldToLocal(hitPoint)
+        hitDir.copy(hitPoint).normalize()
+        hoverTarget = 1
+      } else {
+        hoverTarget = 0
+      }
+      uniforms.uHitDir.value.copy(hitDir)
+      uniforms.uHit.value = damp(uniforms.uHit.value, reduceMotion ? 0 : hoverTarget, 7, dt)
+
       uniforms.uTime.value = reduceMotion ? 0 : t
       // ease amplitude toward its target too, so cursor-driven swells breathe in
-      uniforms.uAmp.value = damp(uniforms.uAmp.value, 0.34 + moveImpulse * 0.08, 6, dt)
+      uniforms.uAmp.value = damp(uniforms.uAmp.value, 0.34 + moveImpulse * 0.08 + uniforms.uHit.value * 0.05, 6, dt)
       uniforms.uPulse.value = reduceMotion ? 0 : clickPulse
       // cursor direction in view space; z carries the strength
       poke.set(curN.x * 0.8, curN.y * 0.8, 0.6).normalize()
