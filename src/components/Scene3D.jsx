@@ -53,6 +53,12 @@ uniform float uHit;     // 0..1 hover strength (eased)
 varying float vShade;
 varying float vHit;     // per-point hover glow
 ${SIMPLEX}
+// Rodrigues rotation — spin a vector around an axis
+vec3 rotateAxis(vec3 v, vec3 axis, float angle){
+  float c = cos(angle);
+  float s = sin(angle);
+  return v * c + cross(axis, v) * s + axis * dot(axis, v) * (1.0 - c);
+}
 void main(){
   vec3 dir = normalize(position);
   float t = uTime;
@@ -68,19 +74,30 @@ void main(){
   float facing = max(0.0, dot(dir, uPoke));
   fold += facing * facing * 0.16 * uPoke.z;
 
-  // ---- localised hover interaction: a magnetic swell exactly under the cursor ----
+  // ---- dramatic hover: magnetic vortex under the cursor ----
   float ang = acos(clamp(dot(dir, uHitDir), -1.0, 1.0)); // 0 at the hovered point
-  float bump = exp(-ang * ang * 7.0);                     // tight gaussian around it
-  fold += uHit * bump * 0.55;                             // dots reach toward the cursor
-  // rings of ripple continuously radiating out from the hovered point
-  fold += uHit * 0.16 * sin(ang * 13.0 - t * 7.0) * smoothstep(1.3, 0.0, ang);
-  vHit = uHit * bump;
+  float bump = exp(-ang * ang * 6.0);                     // swell around it
+  // crater moat: a depression ring circling the swell → sculptural pinch
+  float moat = exp(-pow(ang - 0.62, 2.0) * 16.0);
+  fold += uHit * (bump * 0.9 - moat * 0.3);
+  // strong ripple rings continuously radiating from the hovered point
+  float rings = sin(ang * 14.0 - t * 8.0) * smoothstep(1.5, 0.0, ang);
+  fold += uHit * 0.26 * rings;
+  // glow follows the swell AND the travelling rings
+  vHit = uHit * clamp(bump + max(rings, 0.0) * 0.35, 0.0, 1.4);
 
   // click ripple sweeping across the sphere (soft, slow wave)
   fold += uPulse * 0.32 * sin(dot(dir, vec3(0.7, 0.5, 0.5)) * 8.0 - t * 9.0);
 
+  // vortex twist: contour lines spiral around the cursor point,
+  // with a slow breathing wobble so the whirlpool feels alive
+  float swirl = uHit * bump * (1.15 + 0.25 * sin(t * 0.9));
+  vec3 sdir = rotateAxis(dir, uHitDir, swirl);
+
   float r = length(position) * (1.0 + fold * uAmp);
-  vec3 p = dir * r;
+  vec3 p = sdir * r;
+  // magnetic pull — the swell leans out toward the cursor
+  p += uHitDir * uHit * bump * 0.3;
 
   // shade: compressed (inner) folds darker, crests brighter
   vShade = clamp(0.78 + fold * 0.5, 0.3, 1.3);
@@ -88,7 +105,7 @@ void main(){
   vec4 mv = modelViewMatrix * vec4(p, 1.0);
   gl_Position = projectionMatrix * mv;
   // hovered dots grow and lift for a tactile response
-  gl_PointSize = uSize * uPixelRatio * (5.2 / -mv.z) * (1.0 + vHit * 1.6);
+  gl_PointSize = uSize * uPixelRatio * (5.2 / -mv.z) * (1.0 + vHit * 2.2);
 }
 `
 
@@ -103,9 +120,9 @@ void main(){
   float d = length(gl_PointCoord - 0.5);
   if (d > 0.5) discard;
   float soft = smoothstep(0.5, 0.12, d);
-  // near the cursor, dots brighten and tint toward the hover colour
-  vec3 col = mix(uColor, uHitColor, clamp(vHit * 1.2, 0.0, 1.0));
-  float a = soft * uAlpha * (vShade + vHit * 1.1);
+  // near the cursor, dots blaze toward the hover colour
+  vec3 col = mix(uColor, uHitColor, clamp(vHit * 1.5, 0.0, 1.0));
+  float a = soft * uAlpha * (vShade + vHit * 1.6);
   gl_FragColor = vec4(col, clamp(a, 0.0, 1.0));
 }
 `
@@ -328,11 +345,13 @@ export default function Scene3D() {
         hoverTarget = 0
       }
       uniforms.uHitDir.value.copy(hitDir)
-      uniforms.uHit.value = damp(uniforms.uHit.value, reduceMotion ? 0 : hoverTarget, 7, dt)
+      // asymmetric ease: snaps in fast, lingers softly on the way out
+      const hitLambda = hoverTarget > uniforms.uHit.value ? 10 : 4
+      uniforms.uHit.value = damp(uniforms.uHit.value, reduceMotion ? 0 : hoverTarget, hitLambda, dt)
 
       uniforms.uTime.value = reduceMotion ? 0 : t
       // ease amplitude toward its target too, so cursor-driven swells breathe in
-      uniforms.uAmp.value = damp(uniforms.uAmp.value, 0.34 + moveImpulse * 0.08 + uniforms.uHit.value * 0.05, 6, dt)
+      uniforms.uAmp.value = damp(uniforms.uAmp.value, 0.34 + moveImpulse * 0.08 + uniforms.uHit.value * 0.09, 6, dt)
       uniforms.uPulse.value = reduceMotion ? 0 : clickPulse
       // cursor direction in view space; z carries the strength
       poke.set(curN.x * 0.8, curN.y * 0.8, 0.6).normalize()
