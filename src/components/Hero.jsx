@@ -29,6 +29,9 @@ export default function Hero({ start }) {
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0])
   const yMeta = useTransform(scrollYProgress, [0, 1], [0, 60])
   const yLockup = useTransform(scrollYProgress, [0, 1], [0, 170])
+  // cinematic exit: the name lockup melts out of focus as it leaves
+  const blur = useTransform(scrollYProgress, [0, 0.55], ['blur(0px)', 'blur(10px)'])
+  const lockupScale = useTransform(scrollYProgress, [0, 1], [1, 0.965])
 
   const animState = start ? 'show' : 'hidden'
 
@@ -57,7 +60,7 @@ export default function Hero({ start }) {
         </motion.div>
 
         {/* bottom-left name lockup */}
-        <motion.div className="hero__lockup" style={{ y: yLockup }}>
+        <motion.div className="hero__lockup" style={{ y: yLockup, filter: blur, scale: lockupScale }}>
           <h1 className="hero__name" aria-label="Kautsar Baiquni">
             <motion.span variants={lineVariants} initial="hidden" animate={animState} aria-hidden="true">
               <span className="hero__name-mask">
