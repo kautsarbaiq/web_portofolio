@@ -116,6 +116,7 @@ export default function Projects() {
             {t({ id: '03 — Karya Pilihan', en: '03 — Selected Work' })}
           </Reveal>
           <SplitReveal
+            drift={44}
             as="h2"
             className="projects__heading"
             segments={[

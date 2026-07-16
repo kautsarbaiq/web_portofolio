@@ -46,6 +46,7 @@ export default function Contact() {
         </Reveal>
 
         <SplitReveal
+          drift={44}
           as="h2"
           className="contact__title"
           segments={[

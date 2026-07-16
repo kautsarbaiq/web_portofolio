@@ -26,6 +26,7 @@ export default function Skills() {
           {t({ id: '04 — Keahlian', en: '04 — Capabilities' })}
         </Reveal>
         <SplitReveal
+          drift={44}
           as="h2"
           className="skills__heading"
           segments={[

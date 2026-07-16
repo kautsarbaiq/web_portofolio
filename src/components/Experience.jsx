@@ -41,6 +41,7 @@ export default function Experience() {
           {t({ id: '02 — Pengalaman', en: '02 — Experience' })}
         </Reveal>
         <SplitReveal
+          drift={44}
           as="h2"
           className="experience__heading"
           segments={[
