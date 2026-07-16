@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import Lenis from 'lenis'
 import 'lenis/dist/lenis.css'
 import Preloader from './components/Preloader'
@@ -14,6 +14,22 @@ import Experience from './components/Experience'
 import Projects from './components/Projects'
 import Skills from './components/Skills'
 import Contact from './components/Contact'
+
+/* Hairline that draws itself across the page as it scrolls into view —
+   an editorial "chapter rule" between sections. */
+function SectionRule() {
+  return (
+    <div className="container" aria-hidden="true">
+      <motion.div
+        className="srule"
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true, margin: '0px 0px -12% 0px' }}
+        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+      />
+    </div>
+  )
+}
 
 export default function App() {
   const [loading, setLoading] = useState(true)
@@ -82,10 +98,15 @@ export default function App() {
       <SectionNav />
       <main>
         <Hero start={!loading} />
+        <SectionRule />
         <About />
+        <SectionRule />
         <Experience />
+        <SectionRule />
         <Projects />
+        <SectionRule />
         <Skills />
+        <SectionRule />
         <Contact />
       </main>
     </>

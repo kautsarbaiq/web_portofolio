@@ -224,6 +224,14 @@ button {
   background-clip: padding-box;
 }
 
+/* editorial chapter rule between sections — draws in from the left */
+.srule {
+  height: 1px;
+  background: var(--line-strong);
+  transform-origin: left center;
+  will-change: transform;
+}
+
 /* ------------------------ Flat paper surfaces ------------------------ */
 .glass {
   background: var(--glass);
