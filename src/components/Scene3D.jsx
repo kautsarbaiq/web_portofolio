@@ -330,6 +330,9 @@ export default function Scene3D() {
       const scTarget = Math.min(Math.max(window.scrollY / (window.innerHeight || 1), 0), 1)
       scroll = damp(scroll, scTarget, 5, dt)
 
+      // scroll velocity churns the surface — fast flicks make it boil
+      const scrollVel = Math.min(Math.abs(window.__lenis?.velocity || 0) / 55, 1)
+
       // ---- hover raycast: is the cursor over the sphere, and where? ----
       group.getWorldPosition(worldCenter)
       hitSphere.set(worldCenter, R * 1.12 * group.scale.x)
@@ -351,11 +354,19 @@ export default function Scene3D() {
 
       uniforms.uTime.value = reduceMotion ? 0 : t
       // ease amplitude toward its target too, so cursor-driven swells breathe in
-      uniforms.uAmp.value = damp(uniforms.uAmp.value, 0.34 + moveImpulse * 0.08 + uniforms.uHit.value * 0.09, 6, dt)
+      uniforms.uAmp.value = damp(
+        uniforms.uAmp.value,
+        0.34 + moveImpulse * 0.08 + uniforms.uHit.value * 0.09 + scrollVel * 0.14,
+        6,
+        dt,
+      )
       uniforms.uPulse.value = reduceMotion ? 0 : clickPulse
       // cursor direction in view space; z carries the strength
       poke.set(curN.x * 0.8, curN.y * 0.8, 0.6).normalize()
       uniforms.uPoke.value.set(poke.x, poke.y, moveImpulse)
+
+      // fast scrolling also spins it up a touch
+      if (!reduceMotion) spinY += scrollVel * dt * 0.5
 
       const idleY = reduceMotion ? 0 : t * 0.12
       group.rotation.y = idleY + curN.x * 0.3 + spinY + scroll * 1.6
