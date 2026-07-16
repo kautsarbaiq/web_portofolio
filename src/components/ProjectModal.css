@@ -1,0 +1,169 @@
+.pmodal {
+  position: fixed;
+  inset: 0;
+  z-index: 180;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+
+/* top rail */
+.pmodal__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-block: 1.4rem;
+  border-bottom: 1px solid var(--line);
+}
+.pmodal__count {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.14em;
+  color: var(--text-faint);
+}
+.pmodal__close {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.06em;
+  color: var(--text);
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--line-strong);
+  transition: border-color 0.3s var(--ease);
+}
+.pmodal__close:hover {
+  border-color: var(--text);
+}
+
+/* scrollable body */
+.pmodal__scroll {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-block: clamp(1.4rem, 3.5vh, 2.6rem);
+}
+
+/* image plate — letterboxed, never cropped */
+.pmodal__plate {
+  height: min(52vh, 560px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, var(--cover-1), var(--cover-2));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  padding: clamp(0.8rem, 2vh, 1.6rem);
+}
+.pmodal__plate img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 2px;
+  box-shadow: 0 22px 44px -22px rgba(0, 0, 0, 0.4);
+}
+
+/* content grid */
+.pmodal__grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: clamp(1.6rem, 5vw, 5rem);
+  margin-top: clamp(1.6rem, 4vh, 2.8rem);
+}
+.pmodal__title {
+  font-family: var(--font-display);
+  font-size: var(--step-4);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.pmodal__tagline {
+  margin-top: 0.9rem;
+  color: var(--text-dim);
+  font-size: var(--step-1);
+  line-height: 1.5;
+  max-width: 34ch;
+}
+.pmodal__links {
+  display: flex;
+  gap: 1.8rem;
+  margin-top: 1.6rem;
+}
+.pmodal__links a {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.04em;
+  color: var(--text);
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--line-strong);
+  transition: border-color 0.3s var(--ease);
+}
+.pmodal__links a:hover {
+  border-color: var(--text);
+}
+
+/* meta column — ruled index rows */
+.pmodal__meta {
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+  border-top: 1px solid var(--line-strong);
+}
+.pmodal__meta-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 0.85rem 0.1rem;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--text);
+}
+.pmodal__meta-label {
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+.pmodal__meta-row--tech span:last-child {
+  text-align: right;
+  max-width: 60%;
+}
+
+/* prev / next rail */
+.pmodal__nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  width: 100%;
+  padding-block: 1.2rem;
+  border-top: 1px solid var(--line);
+}
+.pmodal__nav button {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  transition: color 0.3s var(--ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  min-width: 0;
+}
+.pmodal__nav button span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pmodal__nav button:hover {
+  color: var(--text);
+}
+
+@media (max-width: 760px) {
+  .pmodal__grid {
+    grid-template-columns: 1fr;
+    gap: 1.6rem;
+  }
+  .pmodal__plate {
+    height: 38vh;
+  }
+}

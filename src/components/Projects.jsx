@@ -4,6 +4,7 @@ import { projects } from '../content/data'
 import { useLang } from '../context/LanguageContext'
 import Reveal from './Reveal'
 import SplitReveal from './SplitReveal'
+import ProjectModal from './ProjectModal'
 import './Projects.css'
 
 function hostOf(url) {
@@ -14,7 +15,7 @@ function hostOf(url) {
   }
 }
 
-function ProjectCard({ project, index }) {
+function ProjectCard({ project, index, onOpen }) {
   const { t } = useLang()
   const ref = useRef(null)
   // gentle parallax of the screenshot inside its frame while scrolling
@@ -23,16 +24,11 @@ function ProjectCard({ project, index }) {
 
   const num = String(index + 1).padStart(2, '0')
   const { live, repo } = project.links
-  const primary = live || repo
   const isApp = project.type === 'app'
-  const Media = primary ? 'a' : 'div'
-  const mediaProps = primary
-    ? { href: primary, target: '_blank', rel: 'noreferrer', 'data-cursor': 'View' }
-    : {}
 
   return (
     <article ref={ref} className="pcard">
-      <Media className="pcard__media" {...mediaProps} aria-label={project.title}>
+      <button className="pcard__media" onClick={onOpen} data-cursor="View" aria-label={project.title}>
         {project.image ? (
           <div className={`frame ${isApp ? 'frame--app' : ''}`}>
             <div className="frame__bar">
@@ -63,7 +59,7 @@ function ProjectCard({ project, index }) {
             <span className="pcard__badge">{isApp ? 'App' : 'Web'}</span>
           </div>
         )}
-      </Media>
+      </button>
 
       <div className="pcard__body">
         <div className="pcard__row">
@@ -108,6 +104,7 @@ const FILTERS = [
 export default function Projects() {
   const { t } = useLang()
   const [filter, setFilter] = useState('all')
+  const [active, setActive] = useState(null) // index into `projects`, or null
   const list = filter === 'all' ? projects : projects.filter((p) => p.type === filter)
   const countOf = (f) => (f === 'all' ? projects.length : projects.filter((p) => p.type === f).length)
 
@@ -152,12 +149,18 @@ export default function Projects() {
           >
             {list.map((p) => (
               <Reveal key={p.title} delay={0.04}>
-                <ProjectCard project={p} index={projects.indexOf(p)} />
+                <ProjectCard
+                  project={p}
+                  index={projects.indexOf(p)}
+                  onOpen={() => setActive(projects.indexOf(p))}
+                />
               </Reveal>
             ))}
           </motion.div>
         </AnimatePresence>
       </div>
+
+      <ProjectModal index={active} onClose={() => setActive(null)} onNav={setActive} />
     </section>
   )
 }

@@ -53,10 +53,13 @@
   background: transparent;
 }
 
-/* media / preview */
+/* media / preview — a button that opens the case-study overlay */
 .pcard__media {
   position: relative;
   display: block;
+  width: 100%;
+  padding: 0;
+  text-align: inherit;
 }
 
 /* minimal plate frame */
