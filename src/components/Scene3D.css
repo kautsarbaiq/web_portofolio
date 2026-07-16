@@ -17,6 +17,7 @@
 @media (max-width: 720px) {
   .scene3d {
     transform: translate(0, -8%);
-    opacity: 0.85;
+    /* dots sit behind the name lockup on small screens — keep them quiet */
+    opacity: 0.5;
   }
 }

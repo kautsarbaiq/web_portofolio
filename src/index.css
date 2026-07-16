@@ -224,6 +224,13 @@ button {
   background-clip: padding-box;
 }
 
+/* marquees, drift headings and 3D transforms can create phantom
+   horizontal overflow — clip it at the root, never scroll sideways */
+html,
+body {
+  overflow-x: clip;
+}
+
 /* editorial chapter rule between sections — draws in from the left */
 .srule {
   height: 1px;
