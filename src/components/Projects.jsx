@@ -48,6 +48,7 @@ function ProjectCard({ project, index, onOpen }) {
                 src={project.image}
                 alt={`${project.title} preview`}
                 loading="lazy"
+                decoding="async"
                 style={{ y: imgY, scale: 1.12 }}
               />
             </motion.div>

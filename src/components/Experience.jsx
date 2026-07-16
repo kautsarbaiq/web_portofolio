@@ -97,7 +97,7 @@ export default function Experience() {
         transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
         aria-hidden="true"
       >
-        {src && <img src={src} alt="" />}
+        {src && <img src={src} alt="" decoding="async" />}
       </motion.div>
     </section>
   )

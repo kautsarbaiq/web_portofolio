@@ -88,6 +88,7 @@ export default function ProjectModal({ index, onClose, onNav }) {
                   <motion.img
                     src={project.image}
                     alt={`${project.title} preview`}
+                    decoding="async"
                     initial={{ clipPath: 'inset(0 0 100% 0)' }}
                     animate={{ clipPath: 'inset(0 0 0% 0)' }}
                     transition={{ duration: 0.8, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
